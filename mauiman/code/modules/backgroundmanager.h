@@ -74,7 +74,7 @@ signals:
     void wallpaperSourceDirChanged(QString wallpaperSourceDir);
 
 private:
-    QDBusInterface m_backgroundInterface;
+    QDBusInterface *m_interface = nullptr;
     MauiMan::SettingsStore *m_settings;
 
     QString m_wallpaperSource = "file:///home/camilo/Pictures/Wallpapers/new_wall (2).png";

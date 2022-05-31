@@ -7,11 +7,7 @@
 
 using namespace MauiMan;
 ThemeManager::ThemeManager(QObject *parent) : QObject(parent)
-  ,m_interface("org.mauiman.Manager",
-               "/Theme",
-               "org.mauiman.Theme",
-               QDBusConnection::sessionBus(), this)
-  ,m_settings(new MauiMan::SettingsStore(this))
+    ,m_settings(new MauiMan::SettingsStore(this))
 {
     qDebug( " INIT THEME MANAGER");
     m_settings->beginModule("Theme");
@@ -28,9 +24,13 @@ ThemeManager::ThemeManager(QObject *parent) : QObject(parent)
 
     connect(server, &MauiManUtils::serverRunningChanged, [this](bool state)
     {
+        qDebug() << "THEMEMANAGER MauiMan server running? " << state;
+
         if(state)
         {
             this->setConnections();
+            qDebug() <<"THEMEMANAGER MauiMan server running? " << state << m_interface->isValid();
+
         }
     });
 }
@@ -38,21 +38,32 @@ ThemeManager::ThemeManager(QObject *parent) : QObject(parent)
 
 void ThemeManager::sync(const QString &key, const QVariant &value)
 {
-    if (m_interface.isValid())
+    if (m_interface && m_interface->isValid())
     {
-        m_interface.call(key, value);
+        m_interface->call(key, value);
     }
 }
 
 void ThemeManager::setConnections()
 {
-    m_interface.disconnect();
-    if (m_interface.isValid())
+    if(m_interface)
     {
-        connect(&m_interface, SIGNAL(accentColorChanged(QString)), this, SLOT(onAccentColorChanged(QString)));
-        connect(&m_interface, SIGNAL(iconThemeChanged(QString)), this, SLOT(onIconThemeChanged(QString)));
-        connect(&m_interface, SIGNAL(windowControlsThemeChanged(QString)), this, SLOT(onWindowControlsThemeChanged(bool)));
-        connect(&m_interface, SIGNAL(styleTypeChanged(int)), this, SLOT(onStyleTypeChanged(int)));
+        m_interface->disconnect();
+        m_interface->deleteLater();
+        m_interface = nullptr;
+    }
+
+      m_interface = new QDBusInterface  ("org.mauiman.Manager",
+                   "/Theme",
+                   "org.mauiman.Theme",
+                   QDBusConnection::sessionBus(), this);
+
+    if (m_interface->isValid())
+    {
+        connect(m_interface, SIGNAL(accentColorChanged(QString)), this, SLOT(onAccentColorChanged(QString)));
+        connect(m_interface, SIGNAL(iconThemeChanged(QString)), this, SLOT(onIconThemeChanged(QString)));
+        connect(m_interface, SIGNAL(windowControlsThemeChanged(QString)), this, SLOT(onWindowControlsThemeChanged(bool)));
+        connect(m_interface, SIGNAL(styleTypeChanged(int)), this, SLOT(onStyleTypeChanged(int)));
     }
 }
 

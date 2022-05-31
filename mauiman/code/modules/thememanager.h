@@ -65,7 +65,7 @@ signals:
     void windowControlsThemeChanged(QString windowControlsTheme);
 
 private:
-    QDBusInterface m_interface;
+    QDBusInterface *m_interface = nullptr;
     MauiMan::SettingsStore *m_settings;
     int m_styleType;
     QString m_accentColor;

@@ -7,10 +7,6 @@
 
 using namespace MauiMan;
 BackgroundManager::BackgroundManager(QObject *parent) : QObject(parent)
-  ,m_backgroundInterface("org.mauiman.Manager",
-                         "/Background",
-                         "org.mauiman.Background",
-                         QDBusConnection::sessionBus(), this)
   ,m_settings(new MauiMan::SettingsStore(this))
 
 {
@@ -178,22 +174,32 @@ void BackgroundManager::onShowWallpaperChanged(const bool &showWallpaper)
 
 void BackgroundManager::sync(const QString &key, const QVariant &value)
 {
-    if (m_backgroundInterface.isValid())
+    if (m_interface && m_interface->isValid())
     {
-        m_backgroundInterface.call(key, value);
+        m_interface->call(key, value);
     }
 }
 
 void BackgroundManager::setConnections()
 {
-    m_backgroundInterface.disconnect();
-    if (m_backgroundInterface.isValid())
+    if(m_interface)
     {
-        connect(&m_backgroundInterface, SIGNAL(wallpaperSourceChanged(QString)), this, SLOT(onWallpaperChanged(QString)));
-        connect(&m_backgroundInterface, SIGNAL(solidColorChanged(QString)), this, SLOT(onSolidColorChanged(QString)));
-        connect(&m_backgroundInterface, SIGNAL(fitWallpaperChanged(bool)), this, SLOT(onFitWallpaperChanged(bool)));
-        connect(&m_backgroundInterface, SIGNAL(showWallpaperChanged(bool)), this, SLOT(onShowWallpaperChanged(bool)));
-        connect(&m_backgroundInterface, SIGNAL(dimWallpaperChanged(bool)), this, SLOT(onDimWallpaperChanged(bool)));
+        m_interface->disconnect();
+        m_interface->deleteLater();
+        m_interface = nullptr;
+    }
+
+     m_interface = new QDBusInterface ("org.mauiman.Manager",
+                             "/Background",
+                             "org.mauiman.Background",
+                             QDBusConnection::sessionBus(), this);
+    if (m_interface->isValid())
+    {
+        connect(m_interface, SIGNAL(wallpaperSourceChanged(QString)), this, SLOT(onWallpaperChanged(QString)));
+        connect(m_interface, SIGNAL(solidColorChanged(QString)), this, SLOT(onSolidColorChanged(QString)));
+        connect(m_interface, SIGNAL(fitWallpaperChanged(bool)), this, SLOT(onFitWallpaperChanged(bool)));
+        connect(m_interface, SIGNAL(showWallpaperChanged(bool)), this, SLOT(onShowWallpaperChanged(bool)));
+        connect(m_interface, SIGNAL(dimWallpaperChanged(bool)), this, SLOT(onDimWallpaperChanged(bool)));
 
     }
 }

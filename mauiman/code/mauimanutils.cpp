@@ -24,13 +24,13 @@ MauiManUtils::MauiManUtils(QObject *parent)
     auto watcher = new QDBusServiceWatcher(mauimanInterface, QDBusConnection::sessionBus(), QDBusServiceWatcher::WatchForRegistration | QDBusServiceWatcher::WatchForUnregistration, this);
 
     connect(watcher, &QDBusServiceWatcher::serviceRegistered, [=](const QString &name) {
-        qDebug() << "Found MauiMan server" << name;
+        qDebug() << "Connected to MauiMan server" << name;
         m_serverRunning = true;
         emit serverRunningChanged(m_serverRunning);
     });
 
     connect(watcher, &QDBusServiceWatcher::serviceUnregistered, [=](const QString &name) {
-        qDebug() << "Found MauiMan server" << name;
+        qDebug() << "Disconnected to MauiMan server" << name;
         m_serverRunning = false;
         emit serverRunningChanged(m_serverRunning);
     });
