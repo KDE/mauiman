@@ -12,17 +12,16 @@ BackgroundManager::BackgroundManager(QObject *parent) : QObject(parent)
 {
     qDebug( " INIT BACKGORUND MANAGER");
     m_settings->beginModule("Background");
-    m_wallpaperSource = m_settings->load("Wallpaper", m_wallpaperSource).toString();
-    m_dimWallpaper = m_settings->load("DimWallpaper", m_dimWallpaper).toBool();
-    m_showWallpaper = m_settings->load("ShowWallpaper", m_showWallpaper).toBool();
-    m_fitWallpaper = m_settings->load("FitWallpaper", m_fitWallpaper).toBool();
-    m_solidColor = m_settings->load("SolidColor", m_solidColor).toString();
 
     auto server = new MauiManUtils(this);
     if(server->serverRunning())
     {
         this->setConnections();
+
     }
+
+    loadSettings();
+
 
     connect(server, &MauiManUtils::serverRunningChanged, [this](bool state)
     {
@@ -189,10 +188,10 @@ void BackgroundManager::setConnections()
         m_interface = nullptr;
     }
 
-     m_interface = new QDBusInterface ("org.mauiman.Manager",
-                             "/Background",
-                             "org.mauiman.Background",
-                             QDBusConnection::sessionBus(), this);
+    m_interface = new QDBusInterface ("org.mauiman.Manager",
+                                      "/Background",
+                                      "org.mauiman.Background",
+                                      QDBusConnection::sessionBus(), this);
     if (m_interface->isValid())
     {
         connect(m_interface, SIGNAL(wallpaperSourceChanged(QString)), this, SLOT(onWallpaperChanged(QString)));
@@ -202,4 +201,23 @@ void BackgroundManager::setConnections()
         connect(m_interface, SIGNAL(dimWallpaperChanged(bool)), this, SLOT(onDimWallpaperChanged(bool)));
 
     }
+}
+
+void BackgroundManager::loadSettings()
+{
+    if(m_interface && m_interface->isValid())
+    {
+        m_wallpaperSource = m_interface->property("wallpaperSource").toString();
+        m_dimWallpaper = m_interface->property("dimWallpaper").toBool();
+        m_showWallpaper = m_interface->property("showWallpaper").toBool();
+        m_fitWallpaper = m_interface->property("fitWallpaper").toBool();
+        m_solidColor = m_interface->property("solidColor").toString();
+        return;
+    }
+
+    m_wallpaperSource = m_settings->load("Wallpaper", m_wallpaperSource).toString();
+    m_dimWallpaper = m_settings->load("DimWallpaper", m_dimWallpaper).toBool();
+    m_showWallpaper = m_settings->load("ShowWallpaper", m_showWallpaper).toBool();
+    m_fitWallpaper = m_settings->load("FitWallpaper", m_fitWallpaper).toBool();
+    m_solidColor = m_settings->load("SolidColor", m_solidColor).toString();
 }

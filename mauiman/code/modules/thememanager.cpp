@@ -11,16 +11,15 @@ ThemeManager::ThemeManager(QObject *parent) : QObject(parent)
 {
     qDebug( " INIT THEME MANAGER");
     m_settings->beginModule("Theme");
-    m_accentColor = m_settings->load("AccentColor", m_accentColor).toString();
-    m_styleType = m_settings->load("StyleType", m_styleType).toInt();
-    m_iconTheme = m_settings->load("IconTheme", m_iconTheme).toString();
-    m_windowControlsTheme = m_settings->load("WindowControlsTheme", m_windowControlsTheme).toString();
 
     auto server = new MauiManUtils(this);
     if(server->serverRunning())
     {
         this->setConnections();
     }
+
+    loadSettings();
+
 
     connect(server, &MauiManUtils::serverRunningChanged, [this](bool state)
     {
@@ -65,6 +64,23 @@ void ThemeManager::setConnections()
         connect(m_interface, SIGNAL(windowControlsThemeChanged(QString)), this, SLOT(onWindowControlsThemeChanged(bool)));
         connect(m_interface, SIGNAL(styleTypeChanged(int)), this, SLOT(onStyleTypeChanged(int)));
     }
+}
+
+void ThemeManager::loadSettings()
+{
+    if(m_interface && m_interface->isValid())
+    {
+        m_accentColor = m_interface->property("accentColor").toString();
+        m_styleType = m_interface->property("styleType").toInt();
+        m_iconTheme = m_interface->property("iconTheme").toString();
+        m_windowControlsTheme = m_interface->property("windowControlsTheme").toString();
+        return;
+    }
+
+    m_accentColor = m_settings->load("AccentColor", m_accentColor).toString();
+    m_styleType = m_settings->load("StyleType", m_styleType).toInt();
+    m_iconTheme = m_settings->load("IconTheme", m_iconTheme).toString();
+    m_windowControlsTheme = m_settings->load("WindowControlsTheme", m_windowControlsTheme).toString();
 }
 
 int ThemeManager::styleType() const

@@ -87,6 +87,7 @@ private:
 
     void sync(const QString &key, const QVariant &value);
     void setConnections();
+    void loadSettings();
 };
 }
 

@@ -73,6 +73,7 @@ private:
     QString m_windowControlsTheme;
     void sync(const QString &key, const QVariant &value);
    void setConnections();
+   void loadSettings();
 };
 }
 
