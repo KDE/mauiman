@@ -24,6 +24,7 @@ class MAUIMAN_EXPORT ThemeManager : public QObject
     Q_PROPERTY(QString accentColor READ accentColor WRITE setAccentColor NOTIFY accentColorChanged)
     Q_PROPERTY(QString iconTheme READ iconTheme WRITE setIconTheme NOTIFY iconThemeChanged)
     Q_PROPERTY(QString windowControlsTheme READ windowControlsTheme WRITE setWindowControlsTheme NOTIFY windowControlsThemeChanged)
+    Q_PROPERTY(bool enableCSD READ enableCSD WRITE setEnableCSD NOTIFY enableCSDChanged)
 
 public:
     explicit ThemeManager(QObject * parent = nullptr);
@@ -48,11 +49,15 @@ public:
     const QString &windowControlsTheme() const;
     void setWindowControlsTheme(const QString &newWindowControlsTheme);
 
+    bool enableCSD() const;
+    void setEnableCSD(bool enableCSD);
+
 private slots:
     void onStyleTypeChanged(const int &newStyleType);
     void onAccentColorChanged(const QString &newAccentColor);
     void onWindowControlsThemeChanged(const QString &newWindowControlsTheme);
     void onIconThemeChanged(const QString &newIconTheme);
+    void onEnableCSDChanged(const bool &enableCSD);
 
 signals:
 
@@ -64,6 +69,8 @@ signals:
 
     void windowControlsThemeChanged(QString windowControlsTheme);
 
+    void enableCSDChanged(bool enableCSD);
+
 private:
     QDBusInterface *m_interface = nullptr;
     MauiMan::SettingsStore *m_settings;
@@ -74,6 +81,7 @@ private:
     void sync(const QString &key, const QVariant &value);
    void setConnections();
    void loadSettings();
+   bool m_enableCSD;
 };
 }
 

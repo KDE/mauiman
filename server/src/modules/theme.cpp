@@ -21,6 +21,7 @@ MauiMan::SettingsStore settings;
     m_iconTheme = settings.load("IconTheme", m_iconTheme).toString();
     m_windowControlsTheme = settings.load("WindowControlsTheme", m_windowControlsTheme).toString();
     m_styleType = settings.load("StyleType", m_styleType).toInt();
+    m_enableCSD = settings.load("EnableCSD", m_enableCSD).toBool();
     settings.endModule();
 }
 
@@ -74,4 +75,18 @@ void Theme::setWindowControlsTheme(const QString &newWindowControlsTheme)
         return;
     m_windowControlsTheme = newWindowControlsTheme;
     emit windowControlsThemeChanged(m_windowControlsTheme);
+}
+
+bool Theme::enableCSD() const
+{
+    return m_enableCSD;
+}
+
+void Theme::setEnableCSD(bool enableCSD)
+{
+    if (m_enableCSD == enableCSD)
+        return;
+
+    m_enableCSD = enableCSD;
+    emit enableCSDChanged(m_enableCSD);
 }
