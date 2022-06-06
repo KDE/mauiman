@@ -15,13 +15,15 @@ Theme::Theme(QObject *parent) : QObject(parent)
         qDebug() << "FAILED TO REGISTER THEME DBUS OBJECT";
         return;
     }
-MauiMan::SettingsStore settings;
+
+    MauiMan::SettingsStore settings;
     settings.beginModule("Theme");
     m_accentColor = settings.load("AccentColor", m_accentColor).toString();
     m_iconTheme = settings.load("IconTheme", m_iconTheme).toString();
     m_windowControlsTheme = settings.load("WindowControlsTheme", m_windowControlsTheme).toString();
     m_styleType = settings.load("StyleType", m_styleType).toInt();
     m_enableCSD = settings.load("EnableCSD", m_enableCSD).toBool();
+    m_borderRadius = settings.load("BorderRadius", m_borderRadius).toUInt();
     settings.endModule();
 }
 

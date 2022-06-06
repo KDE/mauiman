@@ -54,5 +54,5 @@ private:
     QString m_iconTheme;
     QString m_windowControlsTheme = "Nitrux";
     bool m_enableCSD = true;
-    uint m_borderRadius;
+    uint m_borderRadius = 6;
 };
