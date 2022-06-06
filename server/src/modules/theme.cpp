@@ -90,3 +90,16 @@ void Theme::setEnableCSD(bool enableCSD)
     m_enableCSD = enableCSD;
     emit enableCSDChanged(m_enableCSD);
 }
+
+uint Theme::borderRadius() const
+{
+    return m_borderRadius;
+}
+
+void Theme::setBorderRadius(uint newBorderRadius)
+{
+    if (m_borderRadius == newBorderRadius)
+        return;
+    m_borderRadius = newBorderRadius;
+    emit borderRadiusChanged(m_borderRadius);
+}

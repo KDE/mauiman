@@ -11,6 +11,7 @@ class Theme : public QObject
     Q_PROPERTY(QString iconTheme READ iconTheme WRITE setIconTheme NOTIFY iconThemeChanged)
     Q_PROPERTY(QString windowControlsTheme READ windowControlsTheme WRITE setWindowControlsTheme NOTIFY windowControlsThemeChanged)
     Q_PROPERTY(bool enableCSD READ enableCSD WRITE setEnableCSD NOTIFY enableCSDChanged)
+    Q_PROPERTY(uint borderRadius READ borderRadius WRITE setBorderRadius NOTIFY borderRadiusChanged)
 
 public:
     explicit Theme(QObject * parent = nullptr);
@@ -29,6 +30,9 @@ public:
 
     bool enableCSD() const;
 
+    uint borderRadius() const;
+    void setBorderRadius(uint newBorderRadius);
+
 public slots:
     void setEnableCSD(bool enableCSD);
 
@@ -42,10 +46,13 @@ signals:
 
     void enableCSDChanged(bool enableCSD);
 
+    void borderRadiusChanged(uint radius);
+
 private:
     int m_styleType = 1;
     QString m_accentColor;
     QString m_iconTheme;
     QString m_windowControlsTheme = "Nitrux";
     bool m_enableCSD = true;
+    uint m_borderRadius;
 };

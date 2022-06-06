@@ -25,6 +25,7 @@ class MAUIMAN_EXPORT ThemeManager : public QObject
     Q_PROPERTY(QString iconTheme READ iconTheme WRITE setIconTheme NOTIFY iconThemeChanged)
     Q_PROPERTY(QString windowControlsTheme READ windowControlsTheme WRITE setWindowControlsTheme NOTIFY windowControlsThemeChanged)
     Q_PROPERTY(bool enableCSD READ enableCSD WRITE setEnableCSD NOTIFY enableCSDChanged)
+    Q_PROPERTY(uint borderRadius READ borderRadius WRITE setBorderRadius NOTIFY borderRadiusChanged)
 
 public:
     explicit ThemeManager(QObject * parent = nullptr);
@@ -52,12 +53,16 @@ public:
     bool enableCSD() const;
     void setEnableCSD(bool enableCSD);
 
+    uint borderRadius() const;
+    void setBorderRadius(uint newBorderRadius);
+
 private slots:
     void onStyleTypeChanged(const int &newStyleType);
     void onAccentColorChanged(const QString &newAccentColor);
     void onWindowControlsThemeChanged(const QString &newWindowControlsTheme);
     void onIconThemeChanged(const QString &newIconTheme);
     void onEnableCSDChanged(const bool &enableCSD);
+    void onBorderRadiusChanged(const uint &radius);
 
 signals:
 
@@ -71,17 +76,22 @@ signals:
 
     void enableCSDChanged(bool enableCSD);
 
+    void borderRadiusChanged(uint radius);
+
 private:
     QDBusInterface *m_interface = nullptr;
     MauiMan::SettingsStore *m_settings;
-    int m_styleType;
-    QString m_accentColor;
-    QString m_iconTheme;
-    QString m_windowControlsTheme;
+
+    int m_styleType = 0;
+    QString m_accentColor = "#26c6da";
+    QString m_iconTheme = "Luv";
+    QString m_windowControlsTheme = "Nitrux";
+    bool m_enableCSD = true;
+    uint m_borderRadius = 6;
+
     void sync(const QString &key, const QVariant &value);
-   void setConnections();
-   void loadSettings();
-   bool m_enableCSD;
+    void setConnections();
+    void loadSettings();
 };
 }
 

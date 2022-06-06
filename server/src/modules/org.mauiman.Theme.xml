@@ -16,12 +16,16 @@
 <method name="setEnableCSD">
 <arg name="enableCSD" type="b" direction="in"/>
 </method>
+<method name="setBorderRadius">
+<arg name="enableCSD" type="u" direction="in"/>
+</method>
 
 <property name="accentColor" type="s" access="read"/>
 <property name="styleType" type="i" access="read"/>
 <property name="iconTheme" type="s" access="read"/>
 <property name="windowControlsTheme" type="s" access="read"/>
 <property name="enableCSD" type="b" access="read"/>
+<property name="borderRadius" type="u" access="read"/>
 
 <signal name="accentColorChanged">
 <arg type="s"/>
@@ -37,6 +41,9 @@
 </signal>
 <signal name="enableCSDChanged">
 <arg type="b"/>
+</signal>
+<signal name="borderRadiusChanged">
+<arg type="u"/>
 </signal>
 </interface>
 </node>

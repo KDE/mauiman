@@ -63,6 +63,7 @@ void ThemeManager::setConnections()
         connect(m_interface, SIGNAL(windowControlsThemeChanged(QString)), this, SLOT(onWindowControlsThemeChanged(QString)));
         connect(m_interface, SIGNAL(styleTypeChanged(int)), this, SLOT(onStyleTypeChanged(int)));
         connect(m_interface, SIGNAL(enableCSDChanged(bool)), this, SLOT(onEnableCSDChanged(bool)));
+        connect(m_interface, SIGNAL(borderRadiusChanged(uint)), this, SLOT(onBorderRadiusChanged(uint)));
     }
 }
 
@@ -75,6 +76,7 @@ void ThemeManager::loadSettings()
         m_iconTheme = m_interface->property("iconTheme").toString();
         m_windowControlsTheme = m_interface->property("windowControlsTheme").toString();
         m_enableCSD = m_interface->property("enableCSD").toBool();
+        m_borderRadius = m_interface->property("borderRadius").toUInt();
         return;
     }
 
@@ -83,6 +85,7 @@ void ThemeManager::loadSettings()
     m_iconTheme = m_settings->load("IconTheme", m_iconTheme).toString();
     m_windowControlsTheme = m_settings->load("WindowControlsTheme", m_windowControlsTheme).toString();
     m_enableCSD = m_settings->load("EnableCSD", m_enableCSD).toBool();
+    m_borderRadius = m_settings->load("BorderRadius", m_borderRadius).toUInt();
 }
 
 int ThemeManager::styleType() const
@@ -211,4 +214,27 @@ void ThemeManager::onEnableCSDChanged(const bool &enableCSD)
 
     m_enableCSD = enableCSD;
     emit enableCSDChanged(m_enableCSD);
+}
+
+void ThemeManager::onBorderRadiusChanged(const uint &radius)
+{
+    if (m_borderRadius == radius)
+        return;
+    m_borderRadius = radius;
+    emit borderRadiusChanged(m_borderRadius);
+}
+
+uint ThemeManager::borderRadius() const
+{
+    return m_borderRadius;
+}
+
+void ThemeManager::setBorderRadius(uint newBorderRadius)
+{
+    if (m_borderRadius == newBorderRadius)
+        return;
+    m_borderRadius = newBorderRadius;
+    m_settings->save("BorderRadius", m_borderRadius);
+    sync("setBorderRadius", m_borderRadius);
+    emit borderRadiusChanged(m_borderRadius);
 }
