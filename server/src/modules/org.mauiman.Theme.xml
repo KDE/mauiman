@@ -17,7 +17,7 @@
 <arg name="enableCSD" type="b" direction="in"/>
 </method>
 <method name="setBorderRadius">
-<arg name="enableCSD" type="u" direction="in"/>
+<arg name="radius" type="u" direction="in"/>
 </method>
 
 <property name="accentColor" type="s" access="read"/>
