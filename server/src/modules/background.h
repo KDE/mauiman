@@ -2,6 +2,7 @@
 
 #include <QObject>
 #include <QString>
+#include "code/modules/backgroundmanager.h"
 
 class Background : public QObject
 {
@@ -47,10 +48,10 @@ signals:
     void showWallpaperChanged(bool showWallpaper);
 
 private:
-    QString m_wallpaperSource;
-    bool m_dimWallpaper;
-    bool m_fitWallpaper;
-    QString m_solidColor;
-    bool m_showWallpaper;
+    QString m_wallpaperSource = MauiMan::BackgroundManager::DefaultValues::wallpaperSource;
+    bool m_dimWallpaper = MauiMan::BackgroundManager::DefaultValues::dimWallpaper;
+    bool m_fitWallpaper = MauiMan::BackgroundManager::DefaultValues::fitWallpaper;
+    QString m_solidColor = MauiMan::BackgroundManager::DefaultValues::solidColor;
+    bool m_showWallpaper = MauiMan::BackgroundManager::DefaultValues::showWallpaper;
 
 };

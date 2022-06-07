@@ -5,17 +5,14 @@
 #include <QDBusInterface>
 #include "mauiman_export.h"
 
-namespace MauiMan
-{
-class SettingsStore;
-}
-
 /**
  * @brief The BackgroundManager class
  * Helpfull for third parties to connect to property cahnges form the Background module setting changes.
  */
 namespace MauiMan
 {
+class SettingsStore;
+
 class MAUIMAN_EXPORT BackgroundManager : public QObject
 {
     Q_OBJECT
@@ -28,6 +25,16 @@ class MAUIMAN_EXPORT BackgroundManager : public QObject
     Q_PROPERTY(QString wallpaperSourceDir READ wallpaperSourceDir WRITE setWallpaperSourceDir NOTIFY wallpaperSourceDirChanged)
 
 public:
+    struct DefaultValues
+    {
+        static inline const QString wallpaperSource = "qrc:/wallpapers/maui_shell_dev_bg.png";
+        static inline const bool dimWallpaper = false;
+        static inline const bool fitWallpaper = false; //false is to fill, true to fit
+        static inline const QString solidColor = "#333";
+        static inline const bool showWallpaper = true;
+        static inline const QString wallpaperSourceDir = "file:///usr/share/wallpapers/Cask";
+    } ;
+
     explicit BackgroundManager(QObject * parent = nullptr);
 
     QString wallpaperSource() const;
@@ -77,13 +84,13 @@ private:
     QDBusInterface *m_interface = nullptr;
     MauiMan::SettingsStore *m_settings;
 
-    QString m_wallpaperSource = "file:///home/camilo/Pictures/Wallpapers/new_wall (2).png";
-    bool m_dimWallpaper = false;
-    bool m_fitWallpaper = false; //false is to fill, true to fit
-    QString m_solidColor = "#333";
-    bool m_showWallpaper = true;
+    QString m_wallpaperSource = MauiMan::BackgroundManager::DefaultValues::wallpaperSource;
+    bool m_dimWallpaper = MauiMan::BackgroundManager::DefaultValues::dimWallpaper;
+    bool m_fitWallpaper = MauiMan::BackgroundManager::DefaultValues::fitWallpaper; //false is to fill, true to fit
+    QString m_solidColor = MauiMan::BackgroundManager::DefaultValues::solidColor;
+    bool m_showWallpaper = MauiMan::BackgroundManager::DefaultValues::showWallpaper;
 
-    QString m_wallpaperSourceDir = "file:///usr/share/wallpapers/Cask";
+    QString m_wallpaperSourceDir = MauiMan::BackgroundManager::DefaultValues::wallpaperSourceDir;
 
     void sync(const QString &key, const QVariant &value);
     void setConnections();

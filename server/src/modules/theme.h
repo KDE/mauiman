@@ -2,6 +2,7 @@
 
 #include <QObject>
 #include <QString>
+#include "code/modules/thememanager.h"
 
 class Theme : public QObject
 {
@@ -12,6 +13,7 @@ class Theme : public QObject
     Q_PROPERTY(QString windowControlsTheme READ windowControlsTheme WRITE setWindowControlsTheme NOTIFY windowControlsThemeChanged)
     Q_PROPERTY(bool enableCSD READ enableCSD WRITE setEnableCSD NOTIFY enableCSDChanged)
     Q_PROPERTY(uint borderRadius READ borderRadius WRITE setBorderRadius NOTIFY borderRadiusChanged)
+    Q_PROPERTY(uint iconSize READ iconSize WRITE setIconSize NOTIFY iconSizeChanged)
 
 public:
     explicit Theme(QObject * parent = nullptr);
@@ -29,12 +31,13 @@ public:
     void setWindowControlsTheme(const QString &newWindowControlsTheme);
 
     bool enableCSD() const;
+    void setEnableCSD(bool enableCSD);
 
     uint borderRadius() const;
     void setBorderRadius(uint newBorderRadius);
 
-public slots:
-    void setEnableCSD(bool enableCSD);
+    uint iconSize() const;
+    void setIconSize(uint newIconSize);
 
 signals:
     void styleTypeChanged(int styleStype);
@@ -48,11 +51,14 @@ signals:
 
     void borderRadiusChanged(uint radius);
 
+    void iconSizeChanged(uint size);
+
 private:
-    int m_styleType = 1;
-    QString m_accentColor;
-    QString m_iconTheme;
-    QString m_windowControlsTheme = "Nitrux";
-    bool m_enableCSD = true;
-    uint m_borderRadius = 6;
+    int m_styleType = MauiMan::ThemeManager::DefaultValues::styleType;
+    QString m_accentColor = MauiMan::ThemeManager::DefaultValues::accentColor;
+    QString m_iconTheme = MauiMan::ThemeManager::DefaultValues::iconTheme;
+    QString m_windowControlsTheme = MauiMan::ThemeManager::DefaultValues::windowControlsTheme;
+    bool m_enableCSD = MauiMan::ThemeManager::DefaultValues::enableCSD;
+    uint m_borderRadius = MauiMan::ThemeManager::DefaultValues::borderRadius;
+    uint m_iconSize = MauiMan::ThemeManager::DefaultValues::iconSize;
 };

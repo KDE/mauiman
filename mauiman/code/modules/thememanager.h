@@ -6,17 +6,15 @@
 #include "mauiman_export.h"
 
 
-namespace MauiMan
-{
-class SettingsStore;
-}
-
 /**
  * @brief The ThemeManager class
  * Helpfull for third parties to connect to property cahnges form the Background module setting changes.
  */
 namespace MauiMan
 {
+
+
+class SettingsStore;
 class MAUIMAN_EXPORT ThemeManager : public QObject
 {
     Q_OBJECT
@@ -26,17 +24,22 @@ class MAUIMAN_EXPORT ThemeManager : public QObject
     Q_PROPERTY(QString windowControlsTheme READ windowControlsTheme WRITE setWindowControlsTheme NOTIFY windowControlsThemeChanged)
     Q_PROPERTY(bool enableCSD READ enableCSD WRITE setEnableCSD NOTIFY enableCSDChanged)
     Q_PROPERTY(uint borderRadius READ borderRadius WRITE setBorderRadius NOTIFY borderRadiusChanged)
+    Q_PROPERTY(uint iconSize READ iconSize WRITE setIconSize NOTIFY iconSizeChanged)
 
 public:
-    explicit ThemeManager(QObject * parent = nullptr);
 
-    enum StyleType
-    {
-        Light = 0,
-        Dark = 1,
-        Adaptive = 2,
-        Auto = 3
-    };
+    struct DefaultValues
+   {
+       static inline const int styleType = 0;
+       static inline const QString accentColor = "#26c6da";
+       static inline const QString iconTheme = "Luv";
+       static inline const QString windowControlsTheme = "Nitrux";
+       static inline const bool enableCSD = true;
+       static inline const uint borderRadius = 6;
+       static inline const uint iconSize = 22;
+   } ;
+
+    explicit ThemeManager(QObject * parent = nullptr);
 
     int styleType() const;
     void setStyleType(int newStyleType);
@@ -56,6 +59,9 @@ public:
     uint borderRadius() const;
     void setBorderRadius(uint newBorderRadius);
 
+    uint iconSize() const;
+    void setIconSize(uint newIconSize);
+
 private slots:
     void onStyleTypeChanged(const int &newStyleType);
     void onAccentColorChanged(const QString &newAccentColor);
@@ -63,6 +69,7 @@ private slots:
     void onIconThemeChanged(const QString &newIconTheme);
     void onEnableCSDChanged(const bool &enableCSD);
     void onBorderRadiusChanged(const uint &radius);
+    void onIconSizeChanged(const uint &size);
 
 signals:
 
@@ -78,16 +85,19 @@ signals:
 
     void borderRadiusChanged(uint radius);
 
+    void iconSizeChanged(uint size);
+
 private:
     QDBusInterface *m_interface = nullptr;
     MauiMan::SettingsStore *m_settings;
 
-    int m_styleType = 0;
-    QString m_accentColor = "#26c6da";
-    QString m_iconTheme = "Luv";
-    QString m_windowControlsTheme = "Nitrux";
-    bool m_enableCSD = true;
-    uint m_borderRadius = 6;
+    int m_styleType = ThemeManager::DefaultValues::styleType;
+    QString m_accentColor = ThemeManager::DefaultValues::accentColor;
+    QString m_iconTheme = ThemeManager::DefaultValues::iconTheme;
+    QString m_windowControlsTheme = ThemeManager::DefaultValues::windowControlsTheme;
+    bool m_enableCSD = ThemeManager::DefaultValues::enableCSD;
+    uint m_borderRadius = ThemeManager::DefaultValues::borderRadius;
+    uint m_iconSize = ThemeManager::DefaultValues::iconSize;
 
     void sync(const QString &key, const QVariant &value);
     void setConnections();

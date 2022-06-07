@@ -64,6 +64,7 @@ void ThemeManager::setConnections()
         connect(m_interface, SIGNAL(styleTypeChanged(int)), this, SLOT(onStyleTypeChanged(int)));
         connect(m_interface, SIGNAL(enableCSDChanged(bool)), this, SLOT(onEnableCSDChanged(bool)));
         connect(m_interface, SIGNAL(borderRadiusChanged(uint)), this, SLOT(onBorderRadiusChanged(uint)));
+        connect(m_interface, SIGNAL(iconSizeChanged(uint)), this, SLOT(onIconSizeChanged(uint)));
     }
 }
 
@@ -77,6 +78,7 @@ void ThemeManager::loadSettings()
         m_windowControlsTheme = m_interface->property("windowControlsTheme").toString();
         m_enableCSD = m_interface->property("enableCSD").toBool();
         m_borderRadius = m_interface->property("borderRadius").toUInt();
+        m_iconSize = m_interface->property("iconSize").toUInt();
         return;
     }
 
@@ -86,6 +88,7 @@ void ThemeManager::loadSettings()
     m_windowControlsTheme = m_settings->load("WindowControlsTheme", m_windowControlsTheme).toString();
     m_enableCSD = m_settings->load("EnableCSD", m_enableCSD).toBool();
     m_borderRadius = m_settings->load("BorderRadius", m_borderRadius).toUInt();
+    m_iconSize = m_settings->load("IconSize", m_iconSize).toUInt();
 }
 
 int ThemeManager::styleType() const
@@ -101,7 +104,7 @@ void ThemeManager::setStyleType(int newStyleType)
     m_styleType = newStyleType;
     m_settings->save("StyleType", m_styleType);
     sync("setStyleType", newStyleType);
-    emit styleTypeChanged(m_styleType);
+    Q_EMIT styleTypeChanged(m_styleType);
 
 }
 
@@ -120,7 +123,7 @@ void ThemeManager::setAccentColor(const QString &newAccentColor)
     m_accentColor = newAccentColor;
     m_settings->save("AccentColor", m_accentColor);
     sync("setAccentColor", m_accentColor);
-    emit accentColorChanged(m_accentColor);
+    Q_EMIT accentColorChanged(m_accentColor);
 }
 
 const QString &ThemeManager::iconTheme() const
@@ -136,7 +139,7 @@ void ThemeManager::setIconTheme(const QString &newIconTheme)
     m_iconTheme = newIconTheme;
     m_settings->save("IconTheme", m_iconTheme);
     sync("setIconTheme", m_iconTheme);
-    emit iconThemeChanged(m_iconTheme);
+    Q_EMIT iconThemeChanged(m_iconTheme);
 }
 
 const QString &ThemeManager::windowControlsTheme() const
@@ -152,7 +155,7 @@ void ThemeManager::setWindowControlsTheme(const QString &newWindowControlsTheme)
     m_windowControlsTheme = newWindowControlsTheme;
     m_settings->save("WindowControlsTheme", m_windowControlsTheme);
     sync("setWindowControlsTheme", m_windowControlsTheme);
-    emit windowControlsThemeChanged(m_windowControlsTheme);
+    Q_EMIT windowControlsThemeChanged(m_windowControlsTheme);
 }
 
 bool ThemeManager::enableCSD() const
@@ -168,7 +171,7 @@ void ThemeManager::setEnableCSD(bool enableCSD)
     m_enableCSD = enableCSD;
     m_settings->save("EnableCSD", m_enableCSD);
     sync("setEnableCSD", m_enableCSD);
-    emit enableCSDChanged(m_enableCSD);
+    Q_EMIT enableCSDChanged(m_enableCSD);
 }
 
 void ThemeManager::onStyleTypeChanged(const int &newStyleType)
@@ -177,7 +180,7 @@ void ThemeManager::onStyleTypeChanged(const int &newStyleType)
         return;
 
     m_styleType = newStyleType;
-    emit styleTypeChanged(m_styleType);
+    Q_EMIT styleTypeChanged(m_styleType);
 }
 
 void ThemeManager::onAccentColorChanged(const QString &newAccentColor)
@@ -186,7 +189,7 @@ void ThemeManager::onAccentColorChanged(const QString &newAccentColor)
         return;
 
     m_accentColor = newAccentColor;
-    emit accentColorChanged(m_accentColor);
+    Q_EMIT accentColorChanged(m_accentColor);
 }
 
 void ThemeManager::onWindowControlsThemeChanged(const QString &newWindowControlsTheme)
@@ -195,7 +198,7 @@ void ThemeManager::onWindowControlsThemeChanged(const QString &newWindowControls
         return;
 
     m_windowControlsTheme = newWindowControlsTheme;
-    emit windowControlsThemeChanged(m_windowControlsTheme);
+    Q_EMIT windowControlsThemeChanged(m_windowControlsTheme);
 }
 
 void ThemeManager::onIconThemeChanged(const QString &newIconTheme)
@@ -204,7 +207,7 @@ void ThemeManager::onIconThemeChanged(const QString &newIconTheme)
         return;
 
     m_iconTheme = newIconTheme;
-    emit iconThemeChanged(m_iconTheme);
+    Q_EMIT iconThemeChanged(m_iconTheme);
 }
 
 void ThemeManager::onEnableCSDChanged(const bool &enableCSD)
@@ -213,7 +216,7 @@ void ThemeManager::onEnableCSDChanged(const bool &enableCSD)
         return;
 
     m_enableCSD = enableCSD;
-    emit enableCSDChanged(m_enableCSD);
+    Q_EMIT enableCSDChanged(m_enableCSD);
 }
 
 void ThemeManager::onBorderRadiusChanged(const uint &radius)
@@ -221,7 +224,15 @@ void ThemeManager::onBorderRadiusChanged(const uint &radius)
     if (m_borderRadius == radius)
         return;
     m_borderRadius = radius;
-    emit borderRadiusChanged(m_borderRadius);
+    Q_EMIT borderRadiusChanged(m_borderRadius);
+}
+
+void ThemeManager::onIconSizeChanged(const uint &size)
+{
+    if (m_iconSize == size)
+        return;
+    m_iconSize = size;
+    Q_EMIT iconSizeChanged(m_iconSize);
 }
 
 uint ThemeManager::borderRadius() const
@@ -236,5 +247,20 @@ void ThemeManager::setBorderRadius(uint newBorderRadius)
     m_borderRadius = newBorderRadius;
     m_settings->save("BorderRadius", m_borderRadius);
     sync("setBorderRadius", m_borderRadius);
-    emit borderRadiusChanged(m_borderRadius);
+    Q_EMIT borderRadiusChanged(m_borderRadius);
+}
+
+uint ThemeManager::iconSize() const
+{
+    return m_iconSize;
+}
+
+void ThemeManager::setIconSize(uint newIconSize)
+{
+    if (m_iconSize == newIconSize)
+        return;
+    m_iconSize = newIconSize;
+    m_settings->save("IconSize", m_iconSize);
+    sync("setIconSize", m_iconSize);
+    Q_EMIT iconSizeChanged(m_iconSize);
 }
