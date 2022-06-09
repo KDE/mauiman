@@ -13,14 +13,13 @@ BackgroundManager::BackgroundManager(QObject *parent) : QObject(parent)
     qDebug( " INIT BACKGORUND MANAGER");
     m_settings->beginModule("Background");
 
+#if !defined Q_OS_ANDROID
     auto server = new MauiManUtils(this);
     if(server->serverRunning())
     {
         this->setConnections();
 
     }
-
-    loadSettings();
 
 
     connect(server, &MauiManUtils::serverRunningChanged, [this](bool state)
@@ -30,6 +29,10 @@ BackgroundManager::BackgroundManager(QObject *parent) : QObject(parent)
             this->setConnections();
         }
     });
+#endif
+
+    loadSettings();
+
 }
 
 QString BackgroundManager::wallpaperSource() const
@@ -173,14 +176,21 @@ void BackgroundManager::onShowWallpaperChanged(const bool &showWallpaper)
 
 void BackgroundManager::sync(const QString &key, const QVariant &value)
 {
+#if !defined Q_OS_ANDROID
     if (m_interface && m_interface->isValid())
     {
         m_interface->call(key, value);
     }
+#else
+    Q_UNUSED(key)
+    Q_UNUSED(value)
+#endif
 }
 
 void BackgroundManager::setConnections()
 {
+#if !defined Q_OS_ANDROID
+
     if(m_interface)
     {
         m_interface->disconnect();
@@ -201,10 +211,13 @@ void BackgroundManager::setConnections()
         connect(m_interface, SIGNAL(dimWallpaperChanged(bool)), this, SLOT(onDimWallpaperChanged(bool)));
 
     }
+#endif
 }
 
 void BackgroundManager::loadSettings()
 {
+#if !defined Q_OS_ANDROID
+
     if(m_interface && m_interface->isValid())
     {
         m_wallpaperSource = m_interface->property("wallpaperSource").toString();
@@ -214,6 +227,7 @@ void BackgroundManager::loadSettings()
         m_solidColor = m_interface->property("solidColor").toString();
         return;
     }
+#endif
 
     m_wallpaperSource = m_settings->load("Wallpaper", m_wallpaperSource).toString();
     m_dimWallpaper = m_settings->load("DimWallpaper", m_dimWallpaper).toBool();

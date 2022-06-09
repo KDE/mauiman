@@ -2,7 +2,11 @@
 
 #include <QObject>
 #include <QString>
+
+#if !defined Q_OS_ANDROID
 #include <QDBusInterface>
+#endif
+
 #include "mauiman_export.h"
 
 /**
@@ -81,7 +85,9 @@ signals:
     void wallpaperSourceDirChanged(QString wallpaperSourceDir);
 
 private:
+#if !defined Q_OS_ANDROID
     QDBusInterface *m_interface = nullptr;
+#endif
     MauiMan::SettingsStore *m_settings;
 
     QString m_wallpaperSource = MauiMan::BackgroundManager::DefaultValues::wallpaperSource;

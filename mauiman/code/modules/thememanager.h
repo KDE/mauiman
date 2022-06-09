@@ -2,7 +2,11 @@
 
 #include <QObject>
 #include <QString>
+
+#if !defined Q_OS_ANDROID
 #include <QDBusInterface>
+#endif
+
 #include "mauiman_export.h"
 
 
@@ -36,7 +40,7 @@ public:
        static inline const QString windowControlsTheme = "Nitrux";
        static inline const bool enableCSD = true;
        static inline const uint borderRadius = 6;
-       static inline const uint iconSize = 22;
+       static inline const uint iconSize = 16;
    } ;
 
     explicit ThemeManager(QObject * parent = nullptr);
@@ -88,7 +92,10 @@ signals:
     void iconSizeChanged(uint size);
 
 private:
+#if !defined Q_OS_ANDROID
     QDBusInterface *m_interface = nullptr;
+#endif
+
     MauiMan::SettingsStore *m_settings;
 
     int m_styleType = ThemeManager::DefaultValues::styleType;

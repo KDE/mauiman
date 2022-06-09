@@ -25,15 +25,15 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 
 include(GenerateExportHeader)
 include(GNUInstallDirs)
-include(KDEInstallDirs)
-include(KDECMakeSettings)
-include(KDECompilerSettings)
 include(FeatureSummary)
 include(ECMPoQmTools)
 include(ECMSetupVersion)
 include(ECMGenerateQmlTypes)
 include(CMakePackageConfigHelpers)
 include(KDEPackageAppTemplates)
+include(KDECompilerSettings)
+include(KDEInstallDirs)
+include(KDECMakeSettings)
 
 ##CMAKE PARTS
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/MauiMan")
@@ -64,7 +64,11 @@ ecm_setup_version(${PROJECT_VERSION}
     SOVERSION ${PROJECT_VERSION_MAJOR}
     )
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS DBus Core)
+find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS  Core)
+
+if(UNIX AND NOT APPLE AND NOT ANDROID)
+    find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS DBus)
+endif()
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -103,10 +107,16 @@ target_include_directories(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR};>")
 
+if(UNIX AND NOT APPLE AND NOT ANDROID)
+    target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+        Qt5::DBus
+        )
+endif()
+
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     Qt5::Core
-    Qt5::DBus
     )
 
 install(FILES
