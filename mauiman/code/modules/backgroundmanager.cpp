@@ -11,8 +11,6 @@ BackgroundManager::BackgroundManager(QObject *parent) : QObject(parent)
 
 {
     qDebug( " INIT BACKGORUND MANAGER");
-    m_settings->beginModule("Background");
-
 #if !defined Q_OS_ANDROID
     auto server = new MauiManUtils(this);
     if(server->serverRunning())
@@ -20,7 +18,6 @@ BackgroundManager::BackgroundManager(QObject *parent) : QObject(parent)
         this->setConnections();
 
     }
-
 
     connect(server, &MauiManUtils::serverRunningChanged, [this](bool state)
     {
@@ -216,6 +213,8 @@ void BackgroundManager::setConnections()
 
 void BackgroundManager::loadSettings()
 {
+    m_settings->beginModule("Background");
+
 #if !defined Q_OS_ANDROID
 
     if(m_interface && m_interface->isValid())

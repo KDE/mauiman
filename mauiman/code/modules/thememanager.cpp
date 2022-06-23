@@ -10,7 +10,6 @@ ThemeManager::ThemeManager(QObject *parent) : QObject(parent)
   ,m_settings(new MauiMan::SettingsStore(this))
 {
     qDebug( " INIT THEME MANAGER");
-    m_settings->beginModule("Theme");
 
 #if !defined Q_OS_ANDROID
     auto server = new MauiManUtils(this);
@@ -79,6 +78,7 @@ void ThemeManager::setConnections()
 
 void ThemeManager::loadSettings()
 {
+    m_settings->beginModule("Theme");
 
 #if !defined Q_OS_ANDROID
     if(m_interface && m_interface->isValid())

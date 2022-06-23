@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=MauiManServer
+Exec=MauiManServer
+Icon=settings-configure
+Comment=MauiManServer autostart at login
+Terminal=false
+X-KDE-autostart-phase=2

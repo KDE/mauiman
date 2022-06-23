@@ -16,7 +16,7 @@ Theme::Theme(QObject *parent) : QObject(parent)
         return;
     }
 
-                bool ok = false;
+    bool ok = false;
     MauiMan::SettingsStore settings;
     settings.beginModule("Theme");
     m_accentColor = settings.load("AccentColor", m_accentColor).toString();

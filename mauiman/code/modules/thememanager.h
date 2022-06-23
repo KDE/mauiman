@@ -33,15 +33,32 @@ class MAUIMAN_EXPORT ThemeManager : public QObject
 public:
 
     struct DefaultValues
-   {
-       static inline const int styleType = 0;
-       static inline const QString accentColor = "#26c6da";
-       static inline const QString iconTheme = "Luv";
-       static inline const QString windowControlsTheme = "Nitrux";
-       static inline const bool enableCSD = true;
-       static inline const uint borderRadius = 6;
-       static inline const uint iconSize = 16;
-   } ;
+    {
+        static int preferredStyleType()
+        {
+
+#ifdef Q_OS_ANDROID
+            return 1;
+#endif
+#ifdef Q_OS_LINUX
+            if(qEnvironmentVariableIsSet("DESKTOP_SESSION"))
+            {
+                qEnvironmentVariable("DESKTOP_SESSION") == "plasma";
+                return 3; //if it is plasma use the system color scheme by setting the style to 3=auto
+            }
+#endif
+            return 0;
+        }
+
+        static inline const int styleType = ThemeManager::DefaultValues::preferredStyleType();
+        static inline const QString accentColor = "#26c6da";
+        static inline const QString iconTheme = "Luv";
+        static inline const QString windowControlsTheme = "Nitrux";
+        static inline const bool enableCSD = true;
+        static inline const uint borderRadius = 6;
+        static inline const uint iconSize = 16;
+
+    } ;
 
     explicit ThemeManager(QObject * parent = nullptr);
 
