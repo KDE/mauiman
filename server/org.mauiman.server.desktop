@@ -1,7 +1,23 @@
 [Desktop Entry]
 Name=MauiManServer
+Name[ca]=MauiManServer
+Name[ca@valencia]=MauiManServer
+Name[fr]=MauiManServer
+Name[nl]=MauiManServer
+Name[pt]=Servidor do MauiMan
+Name[tr]=MauiManServer
+Name[uk]=MauiManServer
+Name[x-test]=xxMauiManServerxx
 Exec=MauiManServer
 Icon=settings-configure
 Comment=MauiManServer autostart at login
+Comment[ca]=Inici automàtic del MauiManServer en iniciar la sessió
+Comment[ca@valencia]=Inici automàtic de MauiManServer en iniciar la sessió
+Comment[fr]=Démarrage automatique de « MauiManServer » à la connexion
+Comment[nl]=MauiManServer automatisch starten bij aanmelden
+Comment[pt]=Arranque do servidor do MauiMan no início da sessão
+Comment[tr]=MauiManServer'ı açılışta kendiliğinden başlat
+Comment[uk]=Автоматичний запуск MauiManServer після входу до системи
+Comment[x-test]=xxMauiManServer autostart at loginxx
 Terminal=false
 X-KDE-autostart-phase=2
