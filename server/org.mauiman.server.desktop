@@ -2,6 +2,7 @@
 Name=MauiManServer
 Name[ca]=MauiManServer
 Name[ca@valencia]=MauiManServer
+Name[cs]=MauiManServer
 Name[de]=MauiManServer
 Name[es]=MauiManServer
 Name[fr]=MauiManServer
@@ -17,6 +18,7 @@ Icon=settings-configure
 Comment=MauiManServer autostart at login
 Comment[ca]=Inici automàtic del MauiManServer en iniciar la sessió
 Comment[ca@valencia]=Inici automàtic de MauiManServer en iniciar la sessió
+Comment[cs]=Automaticky spustit MauiManServer při přihlášení
 Comment[de]=Autostart von MauiManServer bei der Anmeldung
 Comment[es]=Inicio automático de MauiManServer al iniciar sesión
 Comment[fr]=Démarrage automatique de « MauiManServer » à la connexion
