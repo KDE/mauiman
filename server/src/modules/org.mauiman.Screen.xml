@@ -5,10 +5,18 @@
 <arg name="scaleFactor" type="d" direction="in"/>
 </method>
 
+<method name="setOrientation">
+<arg name="orientation" type="u" direction="in"/>
+</method>
+
 <property name="scaleFactor" type="d" access="read"/>
+<property name="orientation" type="u" access="read"/>
 
 <signal name="scaleFactorChanged">
 <arg type="d"/>
+</signal>
+<signal name="orientationChanged">
+<arg type="u"/>
 </signal>
 </interface>
 </node>

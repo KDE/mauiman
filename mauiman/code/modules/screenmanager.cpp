@@ -51,6 +51,22 @@ void ScreenManager::setScaleFactor(double scaleFactor)
     Q_EMIT scaleFactorChanged(m_scaleFactor);
 }
 
+uint ScreenManager::orientation() const
+{
+    return m_orientation;
+}
+
+void ScreenManager::setOrientation(uint orientation)
+{
+    if (m_orientation == orientation)
+        return;
+
+    m_orientation = orientation;
+    sync("setOrientation", m_scaleFactor);
+    m_settings->save("Orientation", m_scaleFactor);
+    emit orientationChanged(m_orientation);
+}
+
 void ScreenManager::onScaleFactorChanged(double scale)
 {
     if (m_scaleFactor == scale)
@@ -58,6 +74,15 @@ void ScreenManager::onScaleFactorChanged(double scale)
 
     m_scaleFactor = scale;
     Q_EMIT scaleFactorChanged(m_scaleFactor);
+}
+
+void ScreenManager::onOrientationChanged(uint orientation)
+{
+    if (m_orientation == orientation)
+        return;
+
+    m_orientation = orientation;
+    emit orientationChanged(m_orientation);
 }
 
 void ScreenManager::sync(const QString &key, const QVariant &value)
@@ -90,7 +115,8 @@ void ScreenManager::setConnections()
                                       QDBusConnection::sessionBus(), this);
     if (m_interface->isValid())
     {
-        connect(m_interface, SIGNAL(scaleFactorCChanged(double)), this, SLOT(onScaleFactorChanged(double)));
+        connect(m_interface, SIGNAL(scaleFactorChanged(double)), this, SLOT(onScaleFactorChanged(double)));
+        connect(m_interface, SIGNAL(orientationChanged(uint)), this, SLOT(onOrientationChanged(double)));
 
     }
 #endif
@@ -105,9 +131,11 @@ void ScreenManager::loadSettings()
     if(m_interface && m_interface->isValid())
     {
         m_scaleFactor = m_interface->property("scaleFactor").toDouble();
+        m_orientation = m_interface->property("orientation").toUInt();
         return;
     }
 #endif
 
     m_scaleFactor = m_settings->load("ScaleFactor", m_scaleFactor).toDouble();
+    m_orientation = m_settings->load("Orientation", m_orientation).toUInt();
 }

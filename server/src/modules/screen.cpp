@@ -18,6 +18,7 @@ Screen::Screen(QObject *parent) : QObject(parent)
     MauiMan::SettingsStore settings;
     settings.beginModule("Screen");
     m_scaleFactor = settings.load("ScaleFactor", m_scaleFactor).toFloat();
+    m_orientation = settings.load("Orientation", m_scaleFactor).toUInt();
     settings.endModule();
 }
 
@@ -33,4 +34,18 @@ void Screen::setScaleFactor(double scaleFactor)
 
     m_scaleFactor = scaleFactor;
     emit scaleFactorChanged(m_scaleFactor);
+}
+
+uint Screen::orientation() const
+{
+    return m_orientation;
+}
+
+void Screen::setOrientation(uint orientation)
+{
+    if (m_orientation == orientation)
+        return;
+
+    m_orientation = orientation;
+    emit orientationChanged(m_orientation);
 }
