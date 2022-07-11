@@ -8,7 +8,7 @@
 
 Background::Background(QObject *parent) : QObject(parent)
 {
-    qDebug( " INIT BACKGORUND MANAGER");
+    qDebug( " INIT BACKGORUND MODULE");
     new BackgroundAdaptor(this);
     if(!QDBusConnection::sessionBus().registerObject(QStringLiteral("/Background"), this))
     {

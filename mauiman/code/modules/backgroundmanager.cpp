@@ -8,7 +8,6 @@
 using namespace MauiMan;
 BackgroundManager::BackgroundManager(QObject *parent) : QObject(parent)
   ,m_settings(new MauiMan::SettingsStore(this))
-
 {
     qDebug( " INIT BACKGORUND MANAGER");
 #if !defined Q_OS_ANDROID
@@ -65,7 +64,7 @@ void BackgroundManager::setWallpaperSource(QString wallpaperSource)
     m_wallpaperSource = wallpaperSource;
     m_settings->save("Wallpaper", m_wallpaperSource);
     sync("setWallpaperSource", m_wallpaperSource);
-    emit wallpaperSourceChanged(m_wallpaperSource);
+    Q_EMIT wallpaperSourceChanged(m_wallpaperSource);
 }
 
 void BackgroundManager::setDimWallpaper(bool dimWallpaper)
@@ -76,7 +75,7 @@ void BackgroundManager::setDimWallpaper(bool dimWallpaper)
     m_dimWallpaper = dimWallpaper;
     m_settings->save("DimWallpaper", m_dimWallpaper);
     sync("setDimWallpaper", m_dimWallpaper);
-    emit dimWallpaperChanged(m_dimWallpaper);
+    Q_EMIT dimWallpaperChanged(m_dimWallpaper);
 }
 
 void BackgroundManager::setFitWallpaper(bool fitWallpaper)
@@ -87,7 +86,7 @@ void BackgroundManager::setFitWallpaper(bool fitWallpaper)
     m_fitWallpaper = fitWallpaper;
     m_settings->save("FitWallpaper", m_fitWallpaper);
     sync("setFitWallpaper", m_fitWallpaper);
-    emit fitWallpaperChanged(m_fitWallpaper);
+    Q_EMIT fitWallpaperChanged(m_fitWallpaper);
 }
 
 void BackgroundManager::setSolidColor(QString solidColor)
@@ -98,7 +97,7 @@ void BackgroundManager::setSolidColor(QString solidColor)
     m_solidColor = solidColor;
     m_settings->save("SolidColor", m_solidColor);
     sync("setSolidColor", m_solidColor);
-    emit solidColorChanged(m_solidColor);
+    Q_EMIT solidColorChanged(m_solidColor);
 }
 
 void BackgroundManager::setShowWallpaper(bool showWallpaper)
@@ -109,7 +108,7 @@ void BackgroundManager::setShowWallpaper(bool showWallpaper)
     m_showWallpaper = showWallpaper;
     sync("setShowWallpaper", m_showWallpaper);
     m_settings->save("ShowWallpaper", m_showWallpaper);
-    emit showWallpaperChanged(m_showWallpaper);
+    Q_EMIT showWallpaperChanged(m_showWallpaper);
 }
 
 QString BackgroundManager::wallpaperSourceDir() const
@@ -123,7 +122,7 @@ void BackgroundManager::setWallpaperSourceDir(QString wallpaperSourceDir)
         return;
 
     m_wallpaperSourceDir = wallpaperSourceDir;
-    emit wallpaperSourceDirChanged(m_wallpaperSourceDir);
+    Q_EMIT wallpaperSourceDirChanged(m_wallpaperSourceDir);
 }
 
 void BackgroundManager::onWallpaperChanged(const QString &wallpaperSource)
@@ -132,7 +131,7 @@ void BackgroundManager::onWallpaperChanged(const QString &wallpaperSource)
         return;
 
     m_wallpaperSource = wallpaperSource;
-    emit wallpaperSourceChanged(m_wallpaperSource);
+    Q_EMIT wallpaperSourceChanged(m_wallpaperSource);
 }
 
 void BackgroundManager::onSolidColorChanged(const QString &solidColor)
@@ -141,7 +140,7 @@ void BackgroundManager::onSolidColorChanged(const QString &solidColor)
         return;
 
     m_solidColor = solidColor;
-    emit solidColorChanged(m_solidColor);
+    Q_EMIT solidColorChanged(m_solidColor);
 }
 
 void BackgroundManager::onFitWallpaperChanged(const bool &fitWallpaper)
@@ -150,7 +149,7 @@ void BackgroundManager::onFitWallpaperChanged(const bool &fitWallpaper)
         return;
 
     m_fitWallpaper = fitWallpaper;
-    emit fitWallpaperChanged(m_fitWallpaper);
+    Q_EMIT fitWallpaperChanged(m_fitWallpaper);
 }
 
 void BackgroundManager::onDimWallpaperChanged(const bool &dimWallpaper)
@@ -159,7 +158,7 @@ void BackgroundManager::onDimWallpaperChanged(const bool &dimWallpaper)
         return;
 
     m_dimWallpaper = dimWallpaper;
-    emit dimWallpaperChanged(m_dimWallpaper);
+    Q_EMIT dimWallpaperChanged(m_dimWallpaper);
 }
 
 void BackgroundManager::onShowWallpaperChanged(const bool &showWallpaper)
@@ -168,7 +167,7 @@ void BackgroundManager::onShowWallpaperChanged(const bool &showWallpaper)
         return;
 
     m_showWallpaper = showWallpaper;
-    emit showWallpaperChanged(m_showWallpaper);
+    Q_EMIT showWallpaperChanged(m_showWallpaper);
 }
 
 void BackgroundManager::sync(const QString &key, const QVariant &value)

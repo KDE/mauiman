@@ -4,6 +4,7 @@
 
 #include "src/modules/background.h"
 #include "src/modules/theme.h"
+#include "src/modules/screen.h"
 
 Server::Server(int &argc, char **argv) : QCoreApplication(argc, argv)
 {
@@ -41,5 +42,6 @@ bool Server::init()
 
     m_modules << new Background(this);
     m_modules << new Theme(this);
+    m_modules << new Screen(this);
     return true;
 }

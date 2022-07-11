@@ -82,6 +82,7 @@ set(mauiman_HDRS
     code/settingsstore.h
     code/modules/backgroundmanager.h
     code/modules/thememanager.h
+    code/modules/screenmanager.h
     code/mauimanutils.h
     )
 
@@ -89,6 +90,7 @@ set(mauiman_SRCS
     code/settingsstore.cpp
     code/modules/backgroundmanager.cpp
     code/modules/thememanager.cpp
+    code/modules/screenmanager.cpp
     code/mauimanutils.cpp
     )
 
