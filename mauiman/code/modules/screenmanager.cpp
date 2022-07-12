@@ -62,8 +62,8 @@ void ScreenManager::setOrientation(uint orientation)
         return;
 
     m_orientation = orientation;
-    sync("setOrientation", m_scaleFactor);
-    m_settings->save("Orientation", m_scaleFactor);
+    sync("setOrientation", m_orientation);
+    m_settings->save("Orientation", m_orientation);
     emit orientationChanged(m_orientation);
 }
 
@@ -116,7 +116,7 @@ void ScreenManager::setConnections()
     if (m_interface->isValid())
     {
         connect(m_interface, SIGNAL(scaleFactorChanged(double)), this, SLOT(onScaleFactorChanged(double)));
-        connect(m_interface, SIGNAL(orientationChanged(uint)), this, SLOT(onOrientationChanged(double)));
+        connect(m_interface, SIGNAL(orientationChanged(uint)), this, SLOT(onOrientationChanged(uint)));
 
     }
 #endif
