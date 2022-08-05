@@ -1,5 +1,4 @@
-#ifndef MAUIMANUTILS_H
-#define MAUIMANUTILS_H
+#pragma once
 
 #include <QObject>
 #include "mauiman_export.h"
@@ -24,4 +23,3 @@ private:
     bool m_serverRunning = false;
 };
 
-#endif // MAUIMANUTILS_H

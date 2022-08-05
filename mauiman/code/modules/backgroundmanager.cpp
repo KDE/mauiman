@@ -5,6 +5,10 @@
 
 #include <QDebug>
 
+#if !defined Q_OS_ANDROID
+#include <QDBusInterface>
+#endif
+
 using namespace MauiMan;
 BackgroundManager::BackgroundManager(QObject *parent) : QObject(parent)
   ,m_settings(new MauiMan::SettingsStore(this))

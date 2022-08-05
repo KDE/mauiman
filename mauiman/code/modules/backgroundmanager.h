@@ -3,11 +3,11 @@
 #include <QObject>
 #include <QString>
 
-#if !defined Q_OS_ANDROID
-#include <QDBusInterface>
-#endif
-
 #include "mauiman_export.h"
+
+#if !defined Q_OS_ANDROID
+class QDBusInterface;
+#endif
 
 /**
  * @brief The BackgroundManager class
