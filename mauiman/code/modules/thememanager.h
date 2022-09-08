@@ -29,6 +29,7 @@ class MAUIMAN_EXPORT ThemeManager : public QObject
     Q_PROPERTY(bool enableCSD READ enableCSD WRITE setEnableCSD NOTIFY enableCSDChanged)
     Q_PROPERTY(uint borderRadius READ borderRadius WRITE setBorderRadius NOTIFY borderRadiusChanged)
     Q_PROPERTY(uint iconSize READ iconSize WRITE setIconSize NOTIFY iconSizeChanged)
+    Q_PROPERTY(bool enableEffects READ enableEffects WRITE setEnableEffects NOTIFY enableEffectsChanged)
 
 public:
 
@@ -57,7 +58,7 @@ public:
         static inline const bool enableCSD = true;
         static inline const uint borderRadius = 6;
         static inline const uint iconSize = 16;
-
+        static inline const bool enableEffects = true;
     } ;
 
     explicit ThemeManager(QObject * parent = nullptr);
@@ -83,6 +84,9 @@ public:
     uint iconSize() const;
     void setIconSize(uint newIconSize);
 
+    bool enableEffects() const;
+    void setEnableEffects(bool enableEffects);
+
 private slots:
     void onStyleTypeChanged(const int &newStyleType);
     void onAccentColorChanged(const QString &newAccentColor);
@@ -91,6 +95,7 @@ private slots:
     void onEnableCSDChanged(const bool &enableCSD);
     void onBorderRadiusChanged(const uint &radius);
     void onIconSizeChanged(const uint &size);
+    void onEnableEffectsChanged(bool enableEffects);
 
 signals:
 
@@ -108,6 +113,8 @@ signals:
 
     void iconSizeChanged(uint size);
 
+    void enableEffectsChanged(bool enableEffects);
+
 private:
 #if !defined Q_OS_ANDROID
     QDBusInterface *m_interface = nullptr;
@@ -122,6 +129,7 @@ private:
     bool m_enableCSD = ThemeManager::DefaultValues::enableCSD;
     uint m_borderRadius = ThemeManager::DefaultValues::borderRadius;
     uint m_iconSize = ThemeManager::DefaultValues::iconSize;
+    bool m_enableEffects = ThemeManager::DefaultValues::enableEffects;
 
     void sync(const QString &key, const QVariant &value);
     void setConnections();

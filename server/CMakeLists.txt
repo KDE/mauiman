@@ -45,6 +45,7 @@ set(mauimanserver_HDRS
     src/modules/background.h
     src/modules/theme.h
     src/modules/screen.h
+    src/modules/locale.h
     )
 
 set(mauimanserver_SRCS
@@ -53,6 +54,7 @@ set(mauimanserver_SRCS
     src/modules/background.cpp
     src/modules/theme.cpp
     src/modules/screen.cpp
+    src/modules/locale.cpp
     )
 
 qt5_add_dbus_adaptor(DBUS_SOURCES src/modules/org.mauiman.Background.xml src/modules/background.h Background)

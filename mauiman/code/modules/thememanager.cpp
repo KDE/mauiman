@@ -72,6 +72,7 @@ void ThemeManager::setConnections()
         connect(m_interface, SIGNAL(enableCSDChanged(bool)), this, SLOT(onEnableCSDChanged(bool)));
         connect(m_interface, SIGNAL(borderRadiusChanged(uint)), this, SLOT(onBorderRadiusChanged(uint)));
         connect(m_interface, SIGNAL(iconSizeChanged(uint)), this, SLOT(onIconSizeChanged(uint)));
+        connect(m_interface, SIGNAL(enableEffectsChanged(bool)), this, SLOT(onEnableEffectsChanged(bool)));
     }
 #endif
 }
@@ -90,6 +91,7 @@ void ThemeManager::loadSettings()
         m_enableCSD = m_interface->property("enableCSD").toBool();
         m_borderRadius = m_interface->property("borderRadius").toUInt();
         m_iconSize = m_interface->property("iconSize").toUInt();
+        m_enableEffects = m_interface->property("enableEffects").toBool();
         return;
     }
 #endif
@@ -101,6 +103,7 @@ void ThemeManager::loadSettings()
     m_enableCSD = m_settings->load("EnableCSD", m_enableCSD).toBool();
     m_borderRadius = m_settings->load("BorderRadius", m_borderRadius).toUInt();
     m_iconSize = m_settings->load("IconSize", m_iconSize).toUInt();
+    m_enableEffects = m_settings->load("EnableEffects", m_enableEffects).toBool();
 }
 
 int ThemeManager::styleType() const
@@ -117,7 +120,6 @@ void ThemeManager::setStyleType(int newStyleType)
     m_settings->save("StyleType", m_styleType);
     sync("setStyleType", newStyleType);
     Q_EMIT styleTypeChanged(m_styleType);
-
 }
 
 const QString &ThemeManager::accentColor() const
@@ -247,6 +249,16 @@ void ThemeManager::onIconSizeChanged(const uint &size)
     Q_EMIT iconSizeChanged(m_iconSize);
 }
 
+void ThemeManager::onEnableEffectsChanged(bool enableEffects)
+{
+    qDebug() << "ENABLE EFEFCTS MODIFIED" << enableEffects;
+    if (m_enableEffects == enableEffects)
+        return;
+
+    m_enableEffects = enableEffects;
+    Q_EMIT enableEffectsChanged(m_enableEffects);
+}
+
 uint ThemeManager::borderRadius() const
 {
     return m_borderRadius;
@@ -275,4 +287,20 @@ void ThemeManager::setIconSize(uint newIconSize)
     m_settings->save("IconSize", m_iconSize);
     sync("setIconSize", m_iconSize);
     Q_EMIT iconSizeChanged(m_iconSize);
+}
+
+bool ThemeManager::enableEffects() const
+{
+    return m_enableEffects;
+}
+
+void ThemeManager::setEnableEffects(bool enableEffects)
+{
+    if (m_enableEffects == enableEffects)
+        return;
+
+    m_enableEffects = enableEffects;
+    m_settings->save("EnableEffects", m_enableEffects);
+    sync("setEnableEffects", m_enableEffects);
+    Q_EMIT enableEffectsChanged(m_enableEffects);
 }

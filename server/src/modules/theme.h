@@ -2,9 +2,12 @@
 
 #include <QObject>
 #include <QString>
+#include <QDBusContext>
+
 #include "code/modules/thememanager.h"
 
 class Theme : public QObject
+        , protected QDBusContext
 {
     Q_OBJECT
     Q_PROPERTY(int styleType READ styleType WRITE setStyleType NOTIFY styleTypeChanged)
@@ -14,6 +17,7 @@ class Theme : public QObject
     Q_PROPERTY(bool enableCSD READ enableCSD WRITE setEnableCSD NOTIFY enableCSDChanged)
     Q_PROPERTY(uint borderRadius READ borderRadius WRITE setBorderRadius NOTIFY borderRadiusChanged)
     Q_PROPERTY(uint iconSize READ iconSize WRITE setIconSize NOTIFY iconSizeChanged)
+    Q_PROPERTY(bool enableEffects READ enableEffects WRITE setEnableEffects NOTIFY enableEffectsChanged)
 
 public:
     explicit Theme(QObject * parent = nullptr);
@@ -39,6 +43,9 @@ public:
     uint iconSize() const;
     void setIconSize(uint newIconSize);
 
+    bool enableEffects() const;
+    void setEnableEffects(bool enableEffects);
+
 signals:
     void styleTypeChanged(int styleStype);
     void accentColorChanged(QString accentColor);
@@ -53,6 +60,8 @@ signals:
 
     void iconSizeChanged(uint size);
 
+    void enableEffectsChanged(bool enableEffects);
+
 private:
     int m_styleType = MauiMan::ThemeManager::DefaultValues::styleType;
     QString m_accentColor = MauiMan::ThemeManager::DefaultValues::accentColor;
@@ -61,4 +70,5 @@ private:
     bool m_enableCSD = MauiMan::ThemeManager::DefaultValues::enableCSD;
     uint m_borderRadius = MauiMan::ThemeManager::DefaultValues::borderRadius;
     uint m_iconSize = MauiMan::ThemeManager::DefaultValues::iconSize;
+    bool m_enableEffects = MauiMan::ThemeManager::DefaultValues::enableEffects;
 };

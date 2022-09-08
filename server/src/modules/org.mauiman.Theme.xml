@@ -22,6 +22,9 @@
 <method name="setIconSize">
 <arg name="size" type="u" direction="in"/>
 </method>
+<method name="setEnableEffects">
+<arg name="enableEffects" type="b" direction="in"/>
+</method>
 
 <property name="accentColor" type="s" access="read"/>
 <property name="styleType" type="i" access="read"/>
@@ -30,6 +33,7 @@
 <property name="enableCSD" type="b" access="read"/>
 <property name="borderRadius" type="u" access="read"/>
 <property name="iconSize" type="u" access="read"/>
+<property name="enableEffects" type="b" access="read"/>
 
 <signal name="accentColorChanged">
 <arg type="s"/>
@@ -51,6 +55,9 @@
 </signal>
 <signal name="iconSizeChanged">
 <arg type="u"/>
+</signal>
+<signal name="enableEffectsChanged">
+<arg type="b"/>
 </signal>
 </interface>
 </node>

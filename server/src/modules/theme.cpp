@@ -26,6 +26,7 @@ Theme::Theme(QObject *parent) : QObject(parent)
     m_enableCSD = settings.load("EnableCSD", m_enableCSD).toBool();
     m_borderRadius = settings.load("BorderRadius", m_borderRadius).toUInt();
     m_iconSize = settings.load("IconSize", m_iconSize).toUInt(&ok);
+    m_enableEffects = settings.load("EnableEffects", m_enableEffects).toBool();
     settings.endModule();
 }
 
@@ -49,6 +50,8 @@ const QString &Theme::accentColor() const
 
 void Theme::setAccentColor(const QString &newAccentColor)
 {
+    qDebug() << "SET ACCENT COLOR" << this->connection().baseService() << this->message().path() << this->message().member();
+
     if (m_accentColor == newAccentColor)
         return;
     m_accentColor = newAccentColor;
@@ -119,4 +122,18 @@ void Theme::setIconSize(uint newIconSize)
         return;
     m_iconSize = newIconSize;
     Q_EMIT iconSizeChanged(m_iconSize);
+}
+
+bool Theme::enableEffects() const
+{
+    return m_enableEffects;
+}
+
+void Theme::setEnableEffects(bool enableEffects)
+{
+    if (m_enableEffects == enableEffects)
+        return;
+
+    m_enableEffects = enableEffects;
+    Q_EMIT enableEffectsChanged(m_enableEffects);
 }
