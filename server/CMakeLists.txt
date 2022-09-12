@@ -83,6 +83,12 @@ target_link_libraries(${PROJECT_NAME}
     Qt5::DBus
     )
 
+configure_file(org.mauiman.server.service.in
+    ${CMAKE_CURRENT_BINARY_DIR}/org.mauiman.server.service)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.mauiman.server.service
+    DESTINATION ${KDE_INSTALL_DBUSSERVICEDIR})
+
 install(TARGETS ${PROJECT_NAME} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
