@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(MauiManLib)
 
-set(MAUIMAN_VERSION 1.0.1)
+set(MAUIMAN_VERSION 1.0.2)
 
 add_subdirectory(mauiman) #adds mauiman libs
 
