@@ -84,7 +84,7 @@ target_link_libraries(${PROJECT_NAME}
     )
 
 configure_file(org.mauiman.Manager.service.in
-    ${CMAKE_CURRENT_BINARY_DIR}/org.mauiman.server.service)
+    ${CMAKE_CURRENT_BINARY_DIR}/org.mauiman.Manager.service)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.mauiman.Manager.service
     DESTINATION ${KDE_INSTALL_DBUSSERVICEDIR})
