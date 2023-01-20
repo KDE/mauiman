@@ -2,7 +2,7 @@
 #include "backgroundadaptor.h"
 #include <QDBusInterface>
 
-#include "code/settingsstore.h"
+#include "settingsstore.h"
 
 #include <QDebug>
 

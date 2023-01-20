@@ -27,61 +27,14 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
 include(FeatureSummary)
-include(ECMPoQmTools)
 include(ECMSetupVersion)
-include(ECMGenerateQmlTypes)
 include(CMakePackageConfigHelpers)
 include(KDEPackageAppTemplates)
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Core DBus)
+find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Core DBus Gui)
+find_package(Qt5SystemInfo)
 
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}
-    )
-
-set(mauimanserver_HDRS
-    src/server.h
-    src/modules/background.h
-    src/modules/theme.h
-    src/modules/screen.h
-    src/modules/locale.h
-    )
-
-set(mauimanserver_SRCS
-    src/main.cpp
-    src/server.cpp
-    src/modules/background.cpp
-    src/modules/theme.cpp
-    src/modules/screen.cpp
-    src/modules/locale.cpp
-    )
-
-qt5_add_dbus_adaptor(DBUS_SOURCES src/modules/org.mauiman.Background.xml src/modules/background.h Background)
-qt5_add_dbus_adaptor(DBUS_SOURCES src/modules/org.mauiman.Theme.xml src/modules/theme.h Theme)
-qt5_add_dbus_adaptor(DBUS_SOURCES src/modules/org.mauiman.Screen.xml src/modules/screen.h Screen)
-
-set_source_files_properties(${DBUS_SOURCES} PROPERTIES SKIP_AUTOGEN ON)
-
-add_executable(${PROJECT_NAME}
-
-    ${mauimanserver_SRCS}
-    ${mauimanserver_HDRS}
-
-    ${DBUS_SOURCES}
-)
-
-target_include_directories(${PROJECT_NAME}
-    INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/MauiManServer>")
-
-target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR};>")
-
-target_link_libraries(${PROJECT_NAME}
-    PRIVATE
-    MauiMan
-    Qt5::Core
-    Qt5::DBus
-    )
+add_subdirectory(src)
 
 configure_file(org.mauiman.Manager.service.in
     ${CMAKE_CURRENT_BINARY_DIR}/org.mauiman.Manager.service)
@@ -89,6 +42,5 @@ configure_file(org.mauiman.Manager.service.in
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.mauiman.Manager.service
     DESTINATION ${KDE_INSTALL_DBUSSERVICEDIR})
 
-install(TARGETS ${PROJECT_NAME} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

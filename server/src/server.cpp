@@ -2,9 +2,10 @@
 #include <QDBusConnectionInterface>
 #include <QDebug>
 
-#include "src/modules/background.h"
-#include "src/modules/theme.h"
-#include "src/modules/screen.h"
+#include "modules/background.h"
+#include "modules/theme.h"
+#include "modules/screen.h"
+#include "modules/formfactor.h"
 
 Server::Server(int &argc, char **argv) : QCoreApplication(argc, argv)
 {
@@ -40,8 +41,9 @@ bool Server::init()
         return false;
     }
 
-    m_modules << new Background(this);
-    m_modules << new Theme(this);
-    m_modules << new Screen(this);
+    m_modules << new Background();
+    m_modules << new Theme();
+    m_modules << new Screen();
+    m_modules << new FormFactor();
     return true;
 }

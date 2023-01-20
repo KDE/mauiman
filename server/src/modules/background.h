@@ -2,7 +2,7 @@
 
 #include <QObject>
 #include <QString>
-#include "code/modules/backgroundmanager.h"
+#include "modules/backgroundmanager.h"
 
 class Background : public QObject
 {

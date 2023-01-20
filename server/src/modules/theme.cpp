@@ -2,7 +2,7 @@
 #include "themeadaptor.h"
 #include <QDBusInterface>
 
-#include "code/settingsstore.h"
+#include "settingsstore.h"
 
 #include <QDebug>
 
@@ -50,8 +50,6 @@ const QString &Theme::accentColor() const
 
 void Theme::setAccentColor(const QString &newAccentColor)
 {
-    qDebug() << "SET ACCENT COLOR" << this->connection().baseService() << this->message().path() << this->message().member();
-
     if (m_accentColor == newAccentColor)
         return;
     m_accentColor = newAccentColor;

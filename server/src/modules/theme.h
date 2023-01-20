@@ -2,12 +2,10 @@
 
 #include <QObject>
 #include <QString>
-#include <QDBusContext>
 
-#include "code/modules/thememanager.h"
+#include "modules/thememanager.h"
 
 class Theme : public QObject
-        , protected QDBusContext
 {
     Q_OBJECT
     Q_PROPERTY(int styleType READ styleType WRITE setStyleType NOTIFY styleTypeChanged)

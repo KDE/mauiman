@@ -2,7 +2,7 @@
 
 #include <QObject>
 #include <QString>
-#include "code/modules/screenmanager.h"
+#include "modules/screenmanager.h"
 
 #include <QObject>
 

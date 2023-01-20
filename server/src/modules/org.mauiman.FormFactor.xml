@@ -1,0 +1,39 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+<interface name="org.mauiman.FormFactor">
+
+<method name="setPreferredMode">
+<arg name="preferredMode" type="u" direction="in"/>
+</method>
+
+
+<property name="hasKeyboard" type="b" access="read"/>
+<property name="hasTouchscreen" type="b" access="read"/>
+<property name="hasMouse" type="b" access="read"/>
+
+<property name="preferredMode" type="u" access="read"/>
+<property name="bestMode" type="u" access="read"/>
+<property name="defaultMode" type="u" access="read"/>
+
+<signal name="hasKeyboardChanged">
+<arg type="b"/>
+</signal>
+
+<signal name="hasTouchscreenChanged">
+<arg type="b"/>
+</signal>
+
+<signal name="hasMouseChanged">
+<arg type="b"/>
+</signal>
+
+<signal name="preferredModeChanged">
+<arg type="u"/>
+</signal>
+
+<signal name="bestModeChanged">
+<arg type="b"/>
+</signal>
+
+</interface>
+</node>
