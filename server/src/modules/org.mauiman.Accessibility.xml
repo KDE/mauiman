@@ -1,0 +1,22 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+<interface name="org.mauiman.Screen">
+<method name="setScaleFactor">
+<arg name="scaleFactor" type="d" direction="in"/>
+</method>
+
+<method name="setOrientation">
+<arg name="orientation" type="u" direction="in"/>
+</method>
+
+<property name="scaleFactor" type="d" access="read"/>
+<property name="orientation" type="u" access="read"/>
+
+<signal name="scaleFactorChanged">
+<arg type="d"/>
+</signal>
+<signal name="orientationChanged">
+<arg type="u"/>
+</signal>
+</interface>
+</node>

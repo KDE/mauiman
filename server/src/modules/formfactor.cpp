@@ -225,3 +225,13 @@ void FormFactor::checkInputs(const QInputInfoManager *inputManager)
     qDebug() << "Number of mice:" << mouseCount;
     qDebug() << "Number of touchscreens:" << touchCount;
 }
+
+QRect FormFactor::screenSize()
+{
+
+}
+
+Qt::Orientation FormFactor::screenOrientation()
+{
+
+}

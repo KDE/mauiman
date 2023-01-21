@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QObject>
+#include <QRect>
+
 #include "modules/formfactormanager.h"
 
 class QInputInfoManager;
@@ -76,6 +78,9 @@ private:
 
     bool hasTouchScreen() const;
     void checkInputs(const QInputInfoManager *inputManager);
+
+    QRect screenSize();
+    Qt::Orientation screenOrientation();
 
 signals:
 
