@@ -15,10 +15,10 @@ class MAUIMAN_EXPORT FormFactorManager : public QObject
     Q_PROPERTY(uint bestMode READ bestMode NOTIFY bestModeChanged FINAL)
     Q_PROPERTY(uint defaultMode READ defaultMode CONSTANT FINAL)
 
-    Q_PROPERTY(bool hasKeyboard READ hasKeyboard WRITE setHasKeyboard NOTIFY hasKeyboardChanged FINAL)
-    Q_PROPERTY(bool hasTouchscreen READ hasTouchscreen WRITE setHasTouchscreen NOTIFY hasTouchscreenChanged FINAL)
-    Q_PROPERTY(bool hasMouse READ hasMouse WRITE setHasMouse NOTIFY hasMouseChanged FINAL)
-
+    Q_PROPERTY(bool hasKeyboard READ hasKeyboard NOTIFY hasKeyboardChanged FINAL)
+    Q_PROPERTY(bool hasTouchscreen READ hasTouchscreen NOTIFY hasTouchscreenChanged FINAL)
+    Q_PROPERTY(bool hasMouse READ hasMouse  NOTIFY hasMouseChanged FINAL)
+    Q_PROPERTY(bool hasTouchpad READ hasTouchpad NOTIFY hasTouchpadChanged)
 public:
     enum Mode
     {
@@ -46,8 +46,17 @@ public:
 
     bool hasMouse() const;
 
+    bool hasTouchpad() const;
+
 public slots:
     void setPreferredMode(uint preferredMode);
+
+
+private slots:
+    void onPreferredModeChanged(uint preferredMode);
+
+    void setBestMode(uint mode);
+    void setDefaultMode(uint mode);
 
     void setHasKeyboard(bool hasKeyboard);
 
@@ -55,8 +64,7 @@ public slots:
 
     void setHasMouse(bool hasMouse);
 
-private slots:
-    void onPreferredModeChanged(uint preferredMode);
+    void setHasTouchpad(bool hasTouchpad);
 
 private:
 #if !defined Q_OS_ANDROID
@@ -75,8 +83,7 @@ private:
     bool m_hasTouchscreen;
 
     bool m_hasMouse;
-
-    bool m_serverRunning = false;
+    bool m_hasTouchpad;
 
     void sync(const QString &key, const QVariant &value);
     void setConnections();
@@ -86,8 +93,11 @@ signals:
 
     void preferredModeChanged(uint preferredMode);
     void bestModeChanged(uint bestMode);
+    void defaultModeChanged(uint defaultMode);
+
     void hasKeyboardChanged(bool hasKeyboard);
     void hasTouchscreenChanged(bool hasTouchscreen);
     void hasMouseChanged(bool hasMouse);
+    void hasTouchpadChanged(bool hasTouchpad);
 };
 }

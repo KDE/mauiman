@@ -3,13 +3,6 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     )
 
-set(mauimanserver_HDRS
-    server.h
-    modules/background.h
-    modules/theme.h
-    modules/screen.h
-    modules/locale.h
-    )
 
 set(mauimanserver_SRCS
     main.cpp
@@ -19,12 +12,14 @@ set(mauimanserver_SRCS
     modules/screen.cpp
     modules/locale.cpp
     modules/formfactor.cpp
+    modules/accessibility.cpp
     )
 
 qt5_add_dbus_adaptor(DBUS_SOURCES modules/org.mauiman.Background.xml modules/background.h Background)
 qt5_add_dbus_adaptor(DBUS_SOURCES modules/org.mauiman.Theme.xml modules/theme.h Theme)
 qt5_add_dbus_adaptor(DBUS_SOURCES modules/org.mauiman.Screen.xml modules/screen.h Screen)
 qt5_add_dbus_adaptor(DBUS_SOURCES modules/org.mauiman.FormFactor.xml modules/formfactor.h FormFactor)
+qt5_add_dbus_adaptor(DBUS_SOURCES modules/org.mauiman.Accessibility.xml modules/accessibility.h Accessibility)
 
 set_source_files_properties(${DBUS_SOURCES} PROPERTIES SKIP_AUTOGEN ON)
 

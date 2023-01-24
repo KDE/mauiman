@@ -6,6 +6,7 @@
 #include "modules/theme.h"
 #include "modules/screen.h"
 #include "modules/formfactor.h"
+#include "modules/accessibility.h"
 
 Server::Server(int &argc, char **argv) : QCoreApplication(argc, argv)
 {
@@ -45,5 +46,6 @@ bool Server::init()
     m_modules << new Theme();
     m_modules << new Screen();
     m_modules << new FormFactor();
+    m_modules << new Accessibility();
     return true;
 }

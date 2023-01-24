@@ -13,10 +13,13 @@ class FormFactor : public QObject
     Q_PROPERTY(uint bestMode READ bestMode NOTIFY bestModeChanged)
     Q_PROPERTY(uint defaultMode READ defaultMode CONSTANT)
 
-    Q_PROPERTY(bool hasKeyboard READ hasKeyboard WRITE setHasKeyboard NOTIFY hasKeyboardChanged)
-    Q_PROPERTY(bool hasTouchscreen READ hasTouchscreen WRITE setHasTouchscreen NOTIFY hasTouchscreenChanged)
-    Q_PROPERTY(bool hasMouse READ hasMouse WRITE setHasMouse NOTIFY hasMouseChanged)
+    Q_PROPERTY(bool hasKeyboard READ hasKeyboard NOTIFY hasKeyboardChanged)
+    Q_PROPERTY(bool hasTouchscreen READ hasTouchscreen NOTIFY hasTouchscreenChanged)
+    Q_PROPERTY(bool hasMouse READ hasMouse NOTIFY hasMouseChanged)
+    Q_PROPERTY(bool hasTouchpad READ hasTouchpad NOTIFY hasTouchpadChanged)
 
+    Q_PROPERTY(QRect screenSize READ screenSize NOTIFY screenSizeChanged)
+    Q_PROPERTY(Qt::ScreenOrientation screenOrientation READ screenOrientation NOTIFY screenOrientationChanged)
 
 public:
     explicit FormFactor(QObject *parent = nullptr);
@@ -50,18 +53,16 @@ public:
 
     bool hasMouse() const;
 
+    bool hasTouchpad() const;
+
 public slots:
     void setPreferredMode(uint preferredMode);
 
     void setBestMode(uint bestMode);
 
     void setDefaultMode(uint defaultMode);
-
-    void setHasKeyboard(bool hasKeyboard);
-
-    void setHasTouchscreen(bool hasTouchscreen);
-
-    void setHasMouse(bool hasMouse);
+    QRect screenSize();
+    Qt::ScreenOrientation screenOrientation();
 
 private:
     uint m_preferredMode = MauiMan::FormFactorManager::DefaultValues::preferredMode;
@@ -76,11 +77,16 @@ private:
 
     bool m_hasMouse = false;
 
+    bool m_hasTouchpad= false;
+
     bool hasTouchScreen() const;
+
+    QRect m_screenSize;
+    Qt::ScreenOrientation m_screenOrientation;
+
     void checkInputs(const QInputInfoManager *inputManager);
 
-    QRect screenSize();
-    Qt::Orientation screenOrientation();
+    void findBestMode();
 
 signals:
 
@@ -90,5 +96,8 @@ signals:
     void hasKeyboardChanged(bool hasKeyboard);
     void hasTouchscreenChanged(bool hasTouchscreen);
     void hasMouseChanged(bool hasMouse);
+    void hasTouchpadChanged(bool hasTouchpad);
+    void screenSizeChanged(QRect screenSize);
+    void screenOrientationChanged(Qt::ScreenOrientation screenOrientation);
 };
 

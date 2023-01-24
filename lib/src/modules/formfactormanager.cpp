@@ -36,13 +36,10 @@ void FormFactorManager::setConnections()
     if (m_interface->isValid())
     {
         connect(m_interface, SIGNAL(preferredModeChanged(uint)), this, SLOT(onPreferredModeChanged(uint)));
-//        connect(m_interface, SIGNAL(iconThemeChanged(QString)), this, SLOT(onIconThemeChanged(QString)));
-//        connect(m_interface, SIGNAL(windowControlsThemeChanged(QString)), this, SLOT(onWindowControlsThemeChanged(QString)));
-//        connect(m_interface, SIGNAL(styleTypeChanged(int)), this, SLOT(onStyleTypeChanged(int)));
-//        connect(m_interface, SIGNAL(enableCSDChanged(bool)), this, SLOT(onEnableCSDChanged(bool)));
-//        connect(m_interface, SIGNAL(borderRadiusChanged(uint)), this, SLOT(onBorderRadiusChanged(uint)));
-//        connect(m_interface, SIGNAL(iconSizeChanged(uint)), this, SLOT(onIconSizeChanged(uint)));
-//        connect(m_interface, SIGNAL(enableEffectsChanged(bool)), this, SLOT(onEnableEffectsChanged(bool)));
+        connect(m_interface, SIGNAL(hasKeyboardChanged(bool)), this, SLOT(setHasKeyboard(bool)));
+        connect(m_interface, SIGNAL(hasMouseChanged(bool)), this, SLOT(setHasMouse(bool)));
+        connect(m_interface, SIGNAL(hasTouchscreenChanged(bool)), this, SLOT(setHasTouchscreen(bool)));
+        connect(m_interface, SIGNAL(hasToucpadChanged(bool)), this, SLOT(setHasTouchpad(bool)));
     }
 }
 
@@ -51,15 +48,30 @@ void FormFactorManager::loadSettings()
     m_settings->beginModule("FormFactor");
 
 #if !defined Q_OS_ANDROID
-
     if(m_interface && m_interface->isValid())
     {
         m_preferredMode = m_interface->property("preferredMode").toUInt();
+        m_defaultMode = m_interface->property("defaultMode").toUInt();
+        m_bestMode = m_interface->property("bestMode").toUInt();
+
+        m_hasKeyboard = m_interface->property("hasKeyboard").toBool();
+        m_hasMouse = m_interface->property("hasMouse").toBool();
+        m_hasTouchpad = m_interface->property("hasTouchpad").toBool();
+        m_hasTouchscreen = m_interface->property("hasTouchscreen").toBool();
+
         return;
     }
 #endif
 
     m_preferredMode = m_settings->load("PreferredMode", m_preferredMode).toUInt();
+    m_defaultMode = m_settings->load("DefaultMode", m_defaultMode).toUInt();
+    m_bestMode = m_settings->load("BestMode", m_bestMode).toUInt();
+
+    m_hasKeyboard = m_settings->load("HasKeyboard", m_hasKeyboard).toBool();
+    m_hasMouse =  m_settings->load("HasMouse", m_hasMouse).toBool();
+    m_hasTouchpad =  m_settings->load("HasTouchpad", m_hasTouchpad).toBool();
+    m_hasTouchscreen = m_settings->load("HasTouchscreen", m_hasTouchscreen).toBool();
+
 }
 
 FormFactorManager::FormFactorManager(QObject *parent) : QObject(parent)
@@ -117,6 +129,11 @@ bool FormFactorManager::hasMouse() const
     return m_hasMouse;
 }
 
+bool FormFactorManager::hasTouchpad() const
+{
+    return m_hasTouchpad;
+}
+
 void FormFactorManager::setPreferredMode(uint preferredMode)
 {
     if (m_preferredMode == preferredMode)
@@ -128,6 +145,15 @@ void FormFactorManager::setPreferredMode(uint preferredMode)
     m_settings->save("PreferredMode", m_preferredMode);
 
     Q_EMIT preferredModeChanged(m_preferredMode);
+}
+
+void FormFactorManager::setHasTouchpad(bool hasTouchpad)
+{
+    if (m_hasTouchpad == hasTouchpad)
+        return;
+
+    m_hasTouchpad = hasTouchpad;
+    emit hasTouchpadChanged(m_hasTouchpad);
 }
 
 void FormFactorManager::setHasKeyboard(bool hasKeyboard)
@@ -165,3 +191,22 @@ void FormFactorManager::onPreferredModeChanged(uint preferredMode)
     m_preferredMode = preferredMode;
     Q_EMIT preferredModeChanged(m_preferredMode);
 }
+
+void FormFactorManager::setBestMode(uint mode)
+{
+    if(m_bestMode == mode)
+        return;
+
+    m_bestMode = mode;
+    Q_EMIT bestModeChanged(m_bestMode);
+}
+
+void FormFactorManager::setDefaultMode(uint mode)
+{
+    if(m_defaultMode == mode)
+        return;
+
+    m_defaultMode = mode;
+    Q_EMIT defaultModeChanged(m_defaultMode);
+}
+
