@@ -15,6 +15,8 @@ class Theme : public QObject
     Q_PROPERTY(bool enableCSD READ enableCSD WRITE setEnableCSD NOTIFY enableCSDChanged)
     Q_PROPERTY(uint borderRadius READ borderRadius WRITE setBorderRadius NOTIFY borderRadiusChanged)
     Q_PROPERTY(uint iconSize READ iconSize WRITE setIconSize NOTIFY iconSizeChanged)
+    Q_PROPERTY(uint paddingSize READ paddingSize WRITE setPaddingSize NOTIFY paddingSizeChanged)
+    Q_PROPERTY(uint marginSize READ marginSize WRITE setMarginSize NOTIFY marginSizeChanged)
     Q_PROPERTY(bool enableEffects READ enableEffects WRITE setEnableEffects NOTIFY enableEffectsChanged)
 
 public:
@@ -44,6 +46,12 @@ public:
     bool enableEffects() const;
     void setEnableEffects(bool enableEffects);
 
+    void setPaddingSize(uint paddingSize);
+    uint paddingSize() const;
+
+    void setMarginSize(uint marginSize);
+    uint marginSize() const;
+
 signals:
     void styleTypeChanged(int styleStype);
     void accentColorChanged(QString accentColor);
@@ -60,6 +68,10 @@ signals:
 
     void enableEffectsChanged(bool enableEffects);
 
+    void paddingSizeChanged(uint paddingSize);
+
+    void marginSizeChanged(uint marginSize);
+
 private:
     int m_styleType = MauiMan::ThemeManager::DefaultValues::styleType;
     QString m_accentColor = MauiMan::ThemeManager::DefaultValues::accentColor;
@@ -69,4 +81,6 @@ private:
     uint m_borderRadius = MauiMan::ThemeManager::DefaultValues::borderRadius;
     uint m_iconSize = MauiMan::ThemeManager::DefaultValues::iconSize;
     bool m_enableEffects = MauiMan::ThemeManager::DefaultValues::enableEffects;
+    uint m_paddingSize = MauiMan::ThemeManager::DefaultValues::paddingSize;
+    uint m_marginSize = MauiMan::ThemeManager::DefaultValues::marginSize;
 };

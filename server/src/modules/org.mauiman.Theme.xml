@@ -4,6 +4,7 @@
 <method name="setAccentColor">
 <arg name="accentColor" type="s" direction="in"/>
 </method>
+
 <method name="setStyleType">
 <arg name="styleType" type="i" direction="in"/>
 </method>
@@ -19,12 +20,22 @@
 <method name="setBorderRadius">
 <arg name="radius" type="u" direction="in"/>
 </method>
+
 <method name="setIconSize">
 <arg name="size" type="u" direction="in"/>
 </method>
 <method name="setEnableEffects">
 <arg name="enableEffects" type="b" direction="in"/>
 </method>
+<method name="setMarginSize">
+<arg name="size" type="u" direction="in"/>
+</method>
+
+<method name="setPaddingSize">
+<arg name="size" type="u" direction="in"/>
+</method>
+
+
 
 <property name="accentColor" type="s" access="read"/>
 <property name="styleType" type="i" access="read"/>
@@ -33,6 +44,8 @@
 <property name="enableCSD" type="b" access="read"/>
 <property name="borderRadius" type="u" access="read"/>
 <property name="iconSize" type="u" access="read"/>
+<property name="paddingSize" type="u" access="read"/>
+<property name="marginSize" type="u" access="read"/>
 <property name="enableEffects" type="b" access="read"/>
 
 <signal name="accentColorChanged">
@@ -54,6 +67,12 @@
 <arg type="u"/>
 </signal>
 <signal name="iconSizeChanged">
+<arg type="u"/>
+</signal>
+<signal name="paddingSizeChanged">
+<arg type="u"/>
+</signal>
+<signal name="marginSizeChanged">
 <arg type="u"/>
 </signal>
 <signal name="enableEffectsChanged">

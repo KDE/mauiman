@@ -72,6 +72,8 @@ void ThemeManager::setConnections()
         connect(m_interface, SIGNAL(enableCSDChanged(bool)), this, SLOT(onEnableCSDChanged(bool)));
         connect(m_interface, SIGNAL(borderRadiusChanged(uint)), this, SLOT(onBorderRadiusChanged(uint)));
         connect(m_interface, SIGNAL(iconSizeChanged(uint)), this, SLOT(onIconSizeChanged(uint)));
+        connect(m_interface, SIGNAL(paddingSizeChanged(uint)), this, SLOT(onPaddingSizeChanged(uint)));
+        connect(m_interface, SIGNAL(marginSizeChanged(uint)), this, SLOT(onMarginSizeChanged(uint)));
         connect(m_interface, SIGNAL(enableEffectsChanged(bool)), this, SLOT(onEnableEffectsChanged(bool)));
     }
 #endif
@@ -91,6 +93,8 @@ void ThemeManager::loadSettings()
         m_enableCSD = m_interface->property("enableCSD").toBool();
         m_borderRadius = m_interface->property("borderRadius").toUInt();
         m_iconSize = m_interface->property("iconSize").toUInt();
+        m_paddingSize = m_interface->property("paddingSize").toUInt();
+        m_marginSize = m_interface->property("marginSize").toUInt();
         m_enableEffects = m_interface->property("enableEffects").toBool();
         return;
     }
@@ -103,6 +107,8 @@ void ThemeManager::loadSettings()
     m_enableCSD = m_settings->load("EnableCSD", m_enableCSD).toBool();
     m_borderRadius = m_settings->load("BorderRadius", m_borderRadius).toUInt();
     m_iconSize = m_settings->load("IconSize", m_iconSize).toUInt();
+    m_paddingSize = m_settings->load("PaddingSize", m_paddingSize).toUInt();
+    m_marginSize = m_settings->load("MarginSize", m_marginSize).toUInt();
     m_enableEffects = m_settings->load("EnableEffects", m_enableEffects).toBool();
 }
 
@@ -138,6 +144,11 @@ void ThemeManager::setAccentColor(const QString &newAccentColor)
     m_settings->save("AccentColor", m_accentColor);
     sync("setAccentColor", m_accentColor);
     Q_EMIT accentColorChanged(m_accentColor);
+}
+
+void ThemeManager::resetAccentColor()
+{
+    this->setAccentColor(ThemeManager::DefaultValues::accentColor);
 }
 
 const QString &ThemeManager::iconTheme() const
@@ -249,6 +260,24 @@ void ThemeManager::onIconSizeChanged(const uint &size)
     Q_EMIT iconSizeChanged(m_iconSize);
 }
 
+void ThemeManager::onPaddingSizeChanged(const uint &paddingSize)
+{
+    if (m_paddingSize == paddingSize)
+        return;
+
+    m_paddingSize = paddingSize;
+    Q_EMIT paddingSizeChanged(m_paddingSize);
+}
+
+void ThemeManager::onMarginSizeChanged(const uint &marginSize)
+{
+    if (m_marginSize == marginSize)
+        return;
+
+    m_marginSize = marginSize;
+    Q_EMIT marginSizeChanged(m_marginSize);
+}
+
 void ThemeManager::onEnableEffectsChanged(bool enableEffects)
 {
     qDebug() << "ENABLE EFEFCTS MODIFIED" << enableEffects;
@@ -272,6 +301,11 @@ void ThemeManager::setBorderRadius(uint newBorderRadius)
     m_settings->save("BorderRadius", m_borderRadius);
     sync("setBorderRadius", m_borderRadius);
     Q_EMIT borderRadiusChanged(m_borderRadius);
+}
+
+void ThemeManager::resetBorderRadius()
+{
+    this->setBorderRadius(ThemeManager::DefaultValues::borderRadius);
 }
 
 uint ThemeManager::iconSize() const
@@ -303,4 +337,46 @@ void ThemeManager::setEnableEffects(bool enableEffects)
     m_settings->save("EnableEffects", m_enableEffects);
     sync("setEnableEffects", m_enableEffects);
     Q_EMIT enableEffectsChanged(m_enableEffects);
+}
+
+uint ThemeManager::paddingSize() const
+{
+    return m_paddingSize;
+}
+
+uint ThemeManager::marginSize() const
+{
+    return m_marginSize;
+}
+
+void ThemeManager::setPaddingSize(uint paddingSize)
+{
+    if (m_paddingSize == paddingSize)
+        return;
+
+    m_paddingSize = paddingSize;
+    m_settings->save("PaddingSize", m_paddingSize);
+    sync("setPaddingSize", m_paddingSize);
+    Q_EMIT paddingSizeChanged(m_paddingSize);
+}
+
+void ThemeManager::resetPaddingSize()
+{
+    this->setPaddingSize(ThemeManager::DefaultValues::paddingSize);
+}
+
+void ThemeManager::setMarginSize(uint marginSize)
+{
+    if (m_marginSize == marginSize)
+        return;
+
+    m_marginSize = marginSize;
+    m_settings->save("MarginSize", m_marginSize);
+    sync("setMarginSize", m_marginSize);
+    Q_EMIT marginSizeChanged(m_marginSize);
+}
+
+void ThemeManager::resetMarginSize()
+{
+    this->setMarginSize(ThemeManager::DefaultValues::marginSize);
 }

@@ -26,6 +26,8 @@ Theme::Theme(QObject *parent) : QObject(parent)
     m_enableCSD = settings.load("EnableCSD", m_enableCSD).toBool();
     m_borderRadius = settings.load("BorderRadius", m_borderRadius).toUInt();
     m_iconSize = settings.load("IconSize", m_iconSize).toUInt(&ok);
+    m_paddingSize = settings.load("PaddingSize", m_paddingSize).toUInt(&ok);
+    m_marginSize = settings.load("MarginSize", m_marginSize).toUInt(&ok);
     m_enableEffects = settings.load("EnableEffects", m_enableEffects).toBool();
     settings.endModule();
 }
@@ -134,4 +136,32 @@ void Theme::setEnableEffects(bool enableEffects)
 
     m_enableEffects = enableEffects;
     Q_EMIT enableEffectsChanged(m_enableEffects);
+}
+
+uint Theme::paddingSize() const
+{
+    return m_paddingSize;
+}
+
+uint Theme::marginSize() const
+{
+    return m_marginSize;
+}
+
+void Theme::setPaddingSize(uint paddingSize)
+{
+    if (m_paddingSize == paddingSize)
+        return;
+
+    m_paddingSize = paddingSize;
+    Q_EMIT paddingSizeChanged(m_paddingSize);
+}
+
+void Theme::setMarginSize(uint marginSize)
+{
+    if (m_marginSize == marginSize)
+        return;
+
+    m_marginSize = marginSize;
+    Q_EMIT marginSizeChanged(m_marginSize);
 }
