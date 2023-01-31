@@ -39,7 +39,7 @@ void FormFactorManager::setConnections()
         connect(m_interface, SIGNAL(hasKeyboardChanged(bool)), this, SLOT(setHasKeyboard(bool)));
         connect(m_interface, SIGNAL(hasMouseChanged(bool)), this, SLOT(setHasMouse(bool)));
         connect(m_interface, SIGNAL(hasTouchscreenChanged(bool)), this, SLOT(setHasTouchscreen(bool)));
-        connect(m_interface, SIGNAL(hasToucpadChanged(bool)), this, SLOT(setHasTouchpad(bool)));
+        connect(m_interface, SIGNAL(hasTouchpadChanged(bool)), this, SLOT(setHasTouchpad(bool)));
     }
 }
 
