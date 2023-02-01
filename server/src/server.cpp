@@ -8,6 +8,24 @@
 #include "modules/formfactor.h"
 #include "modules/accessibility.h"
 
+#include <signal.h>
+
+
+void sigtermHandler(int signalNumber)
+{
+    qDebug() << "terminating cask session" << signalNumber;
+    if (QCoreApplication::instance()) {
+        QCoreApplication::instance()->exit(-1);
+        qDebug() << "terminating caks session FINISHED" << signalNumber;
+
+    }
+}
+
+void sigHandler(int signalNumber)
+{
+    qDebug() << "terminating MauiManServer session" << signalNumber;
+}
+
 Server::Server(int &argc, char **argv) : QCoreApplication(argc, argv)
 {
 
@@ -40,7 +58,10 @@ bool Server::init()
                  qPrintable(registration.error().message()));
 
         return false;
-    }
+    }    
+
+    signal(SIGTERM, sigtermHandler);
+    signal(SIGINT, sigHandler);
 
     m_modules << new Background();
     m_modules << new Theme();
