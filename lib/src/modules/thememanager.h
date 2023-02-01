@@ -28,7 +28,7 @@ class MAUIMAN_EXPORT ThemeManager : public QObject
     Q_PROPERTY(QString windowControlsTheme READ windowControlsTheme WRITE setWindowControlsTheme NOTIFY windowControlsThemeChanged)
     Q_PROPERTY(bool enableCSD READ enableCSD WRITE setEnableCSD NOTIFY enableCSDChanged)
     Q_PROPERTY(uint borderRadius READ borderRadius WRITE setBorderRadius NOTIFY borderRadiusChanged RESET resetBorderRadius)
-    Q_PROPERTY(uint iconSize READ iconSize WRITE setIconSize NOTIFY iconSizeChanged)
+    Q_PROPERTY(uint iconSize READ iconSize WRITE setIconSize NOTIFY iconSizeChanged RESET resetIconSize)
     Q_PROPERTY(uint paddingSize READ paddingSize WRITE setPaddingSize NOTIFY paddingSizeChanged RESET resetPaddingSize)
     Q_PROPERTY(uint marginSize READ marginSize WRITE setMarginSize NOTIFY marginSizeChanged RESET resetMarginSize)
     Q_PROPERTY(bool enableEffects READ enableEffects WRITE setEnableEffects NOTIFY enableEffectsChanged)
@@ -89,6 +89,7 @@ public:
 
     uint iconSize() const;
     void setIconSize(uint newIconSize);
+    void resetIconSize();
 
     bool enableEffects() const;
     void setEnableEffects(bool enableEffects);

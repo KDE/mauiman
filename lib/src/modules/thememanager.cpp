@@ -380,3 +380,8 @@ void ThemeManager::resetMarginSize()
 {
     this->setMarginSize(ThemeManager::DefaultValues::marginSize);
 }
+
+void MauiMan::ThemeManager::resetIconSize()
+{
+    this->setIconSize(ThemeManager::DefaultValues::iconSize);
+}

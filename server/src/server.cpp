@@ -10,7 +10,6 @@
 
 #include <signal.h>
 
-
 void sigtermHandler(int signalNumber)
 {
     qDebug() << "terminating cask session" << signalNumber;
