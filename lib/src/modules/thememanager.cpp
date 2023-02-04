@@ -4,8 +4,45 @@
 #include "mauimanutils.h"
 
 #include <QDebug>
+#include <QDir>
+#include <QStandardPaths>
+#include <QSettings>
 
 using namespace MauiMan;
+
+static QString gtkRc2Path()
+{
+    return QDir::homePath() + QLatin1String("/.gtkrc-2.0");
+}
+
+static QString gtk3SettingsIniPath()
+{
+    return QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1String("/gtk-3.0/settings.ini");
+}
+
+void ThemeManager::updateGtk3Config()
+{
+    qDebug() << "Request to update GTK3 configs";
+
+    QSettings settings(gtk3SettingsIniPath(), QSettings::IniFormat);
+    settings.clear();
+    settings.setIniCodec("UTF-8");
+    settings.beginGroup("Settings");
+
+    // font
+//    settings.setValue("gtk-font-name", QString("%1 %2").arg(systemFont()).arg(systemFontPointSize()));
+    // dark mode
+    settings.setValue("gtk-application-prefer-dark-theme", m_styleType == 1);
+    // icon theme
+    settings.setValue("gtk-icon-theme-name", m_iconTheme);
+    // other
+    settings.setValue("gtk-enable-animations", true);
+    // theme
+//    settings.setValue("gtk-theme-name", isDarkMode() ? "Cutefish-dark" : "Cutefish-light");
+    settings.sync();
+}
+
+
 ThemeManager::ThemeManager(QObject *parent) : QObject(parent)
   ,m_settings(new MauiMan::SettingsStore(this))
 {
@@ -32,6 +69,13 @@ ThemeManager::ThemeManager(QObject *parent) : QObject(parent)
 #endif
 
     loadSettings();
+
+    connect(this, &ThemeManager::iconThemeChanged, [this](QString)
+    {
+        qDebug() << "Request to update IconTheme";
+
+       updateGtk3Config();
+    });
 }
 
 

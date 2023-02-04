@@ -8,7 +8,7 @@
 #endif
 
 #include "mauiman_export.h"
-
+#include "mauimanutils.h"
 
 /**
  * @brief The ThemeManager class
@@ -44,10 +44,9 @@ public:
             return 1;
 #endif
 #ifdef Q_OS_LINUX
-            if(qEnvironmentVariableIsSet("DESKTOP_SESSION"))
+            if(!MauiManUtils::isMauiSession())
             {
-                qEnvironmentVariable("DESKTOP_SESSION") == "plasma";
-                return 3; //if it is plasma use the system color scheme by setting the style to 3=auto
+                return 3; //if it is plasma or other session use the system color scheme by setting the style to 3=auto
             }
 #endif
             return 0;
@@ -117,23 +116,14 @@ private slots:
 signals:
 
     void styleTypeChanged(int styleType);
-
     void accentColorChanged(QString accentColor);
-
     void iconThemeChanged(QString iconTheme);
-
     void windowControlsThemeChanged(QString windowControlsTheme);
-
     void enableCSDChanged(bool enableCSD);
-
     void borderRadiusChanged(uint radius);
-
     void iconSizeChanged(uint size);
-
     void enableEffectsChanged(bool enableEffects);
-
     void paddingSizeChanged(uint paddingSize);
-
     void marginSizeChanged(uint marginSize);
 
 private:
@@ -157,6 +147,7 @@ private:
     void sync(const QString &key, const QVariant &value);
     void setConnections();
     void loadSettings();
+    void updateGtk3Config();
 
 };
 }

@@ -16,6 +16,11 @@ public:
     static void startServer();
     static void invokeManager(const QString &module);
 
+    static QString currentDesktopSession();
+    static bool isMauiSession();
+    static bool isPlasmaSession();
+    static bool isGnomeSession();
+
 signals:
     void serverRunningChanged(bool state);
 

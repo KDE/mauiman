@@ -7,6 +7,7 @@
 #endif
 
 #include <QDebug>
+#include <QStringList>
 
 #include <QProcess>
 
@@ -55,4 +56,30 @@ void MauiManUtils::startServer()
 void MauiManUtils::invokeManager(const QString &module)
 {
     QProcess::startDetached("MauiSettings", QStringList() << "-m" << module);
+}
+
+QString MauiManUtils::currentDesktopSession()
+{
+    if(qEnvironmentVariableIsSet("XDG_CURRENT_DESKTOP"))
+    {
+        const auto names = qEnvironmentVariable("XDG_CURRENT_DESKTOP").split(";");
+        return names.first();
+    }
+
+    return QString();
+}
+
+bool MauiManUtils::isMauiSession()
+{
+  return currentDesktopSession() == "CASK";
+}
+
+bool MauiManUtils::isPlasmaSession()
+{
+    return currentDesktopSession() == "KDE";
+}
+
+bool MauiManUtils::isGnomeSession()
+{
+    return currentDesktopSession() == "Gnome";
 }
