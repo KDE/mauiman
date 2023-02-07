@@ -31,6 +31,7 @@ class MAUIMAN_EXPORT ThemeManager : public QObject
     Q_PROPERTY(uint iconSize READ iconSize WRITE setIconSize NOTIFY iconSizeChanged RESET resetIconSize)
     Q_PROPERTY(uint paddingSize READ paddingSize WRITE setPaddingSize NOTIFY paddingSizeChanged RESET resetPaddingSize)
     Q_PROPERTY(uint marginSize READ marginSize WRITE setMarginSize NOTIFY marginSizeChanged RESET resetMarginSize)
+    Q_PROPERTY(uint spacingSize READ spacingSize WRITE setSpacingSize NOTIFY spacingSizeChanged RESET resetSPacingSize)
     Q_PROPERTY(bool enableEffects READ enableEffects WRITE setEnableEffects NOTIFY enableEffectsChanged)
 
 public:
@@ -62,6 +63,7 @@ public:
         static inline const bool enableEffects = true;
         static inline const uint paddingSize = 6;
         static inline const uint marginSize = 8;
+        static inline const uint spacingSize = 6;
     } ;
 
     explicit ThemeManager(QObject * parent = nullptr);
@@ -101,6 +103,10 @@ public:
     void setMarginSize(uint marginSize);
     void resetMarginSize();
 
+    uint spacingSize() const;
+    void setSpacingSize(uint spacingSize);
+    void resetSPacingSize();
+
 private slots:
     void onStyleTypeChanged(const int &newStyleType);
     void onAccentColorChanged(const QString &newAccentColor);
@@ -111,6 +117,7 @@ private slots:
     void onIconSizeChanged(const uint &size);
     void onPaddingSizeChanged(const uint &paddingSize);
     void onMarginSizeChanged(const uint &marginSize);
+    void onSpacingSizeChanged(const uint &spacingSize);
     void onEnableEffectsChanged(bool enableEffects);
 
 signals:
@@ -124,7 +131,8 @@ signals:
     void iconSizeChanged(uint size);
     void enableEffectsChanged(bool enableEffects);
     void paddingSizeChanged(uint paddingSize);
-    void marginSizeChanged(uint marginSize);
+    void marginSizeChanged(uint marginSize);    
+    void spacingSizeChanged(uint spacingSize);
 
 private:
 #if !defined Q_OS_ANDROID
@@ -149,6 +157,7 @@ private:
     void loadSettings();
     void updateGtk3Config();
 
+    uint m_spacingSize;
 };
 }
 

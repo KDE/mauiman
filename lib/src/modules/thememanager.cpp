@@ -118,6 +118,7 @@ void ThemeManager::setConnections()
         connect(m_interface, SIGNAL(iconSizeChanged(uint)), this, SLOT(onIconSizeChanged(uint)));
         connect(m_interface, SIGNAL(paddingSizeChanged(uint)), this, SLOT(onPaddingSizeChanged(uint)));
         connect(m_interface, SIGNAL(marginSizeChanged(uint)), this, SLOT(onMarginSizeChanged(uint)));
+        connect(m_interface, SIGNAL(spacingSizeChanged(uint)), this, SLOT(onSpacingSizeChanged(uint)));
         connect(m_interface, SIGNAL(enableEffectsChanged(bool)), this, SLOT(onEnableEffectsChanged(bool)));
     }
 #endif
@@ -139,6 +140,7 @@ void ThemeManager::loadSettings()
         m_iconSize = m_interface->property("iconSize").toUInt();
         m_paddingSize = m_interface->property("paddingSize").toUInt();
         m_marginSize = m_interface->property("marginSize").toUInt();
+        m_spacingSize = m_interface->property("spacingSize").toUInt();
         m_enableEffects = m_interface->property("enableEffects").toBool();
         return;
     }
@@ -153,6 +155,7 @@ void ThemeManager::loadSettings()
     m_iconSize = m_settings->load("IconSize", m_iconSize).toUInt();
     m_paddingSize = m_settings->load("PaddingSize", m_paddingSize).toUInt();
     m_marginSize = m_settings->load("MarginSize", m_marginSize).toUInt();
+    m_spacingSize = m_settings->load("SpacingSize", m_spacingSize).toUInt();
     m_enableEffects = m_settings->load("EnableEffects", m_enableEffects).toBool();
 }
 
@@ -322,6 +325,15 @@ void ThemeManager::onMarginSizeChanged(const uint &marginSize)
     Q_EMIT marginSizeChanged(m_marginSize);
 }
 
+void ThemeManager::onSpacingSizeChanged(const uint &spacingSize)
+{
+    if (m_spacingSize == spacingSize)
+        return;
+
+    m_spacingSize = spacingSize;
+    Q_EMIT spacingSizeChanged(m_spacingSize);
+}
+
 void ThemeManager::onEnableEffectsChanged(bool enableEffects)
 {
     qDebug() << "ENABLE EFEFCTS MODIFIED" << enableEffects;
@@ -423,6 +435,27 @@ void ThemeManager::setMarginSize(uint marginSize)
 void ThemeManager::resetMarginSize()
 {
     this->setMarginSize(ThemeManager::DefaultValues::marginSize);
+}
+
+uint ThemeManager::spacingSize() const
+{
+    return m_spacingSize;
+}
+
+void ThemeManager::setSpacingSize(uint spacingSize)
+{
+    if (m_spacingSize == spacingSize)
+        return;
+
+    m_spacingSize = spacingSize;
+    m_settings->save("SpacingSize", m_spacingSize);
+    sync("setSpacingSize", m_spacingSize);
+    emit spacingSizeChanged(m_spacingSize);
+}
+
+void ThemeManager::resetSPacingSize()
+{
+    this->setSpacingSize(ThemeManager::DefaultValues::spacingSize);
 }
 
 void MauiMan::ThemeManager::resetIconSize()

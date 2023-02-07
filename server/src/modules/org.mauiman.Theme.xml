@@ -35,7 +35,9 @@
 <arg name="size" type="u" direction="in"/>
 </method>
 
-
+<method name="setSpacingSize">
+<arg name="size" type="u" direction="in"/>
+</method>
 
 <property name="accentColor" type="s" access="read"/>
 <property name="styleType" type="i" access="read"/>
@@ -46,6 +48,7 @@
 <property name="iconSize" type="u" access="read"/>
 <property name="paddingSize" type="u" access="read"/>
 <property name="marginSize" type="u" access="read"/>
+<property name="spacingSize" type="u" access="read"/>
 <property name="enableEffects" type="b" access="read"/>
 
 <signal name="accentColorChanged">
@@ -73,6 +76,9 @@
 <arg type="u"/>
 </signal>
 <signal name="marginSizeChanged">
+<arg type="u"/>
+</signal>
+<signal name="spacingSizeChanged">
 <arg type="u"/>
 </signal>
 <signal name="enableEffectsChanged">

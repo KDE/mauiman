@@ -17,6 +17,7 @@ class Theme : public QObject
     Q_PROPERTY(uint iconSize READ iconSize WRITE setIconSize NOTIFY iconSizeChanged)
     Q_PROPERTY(uint paddingSize READ paddingSize WRITE setPaddingSize NOTIFY paddingSizeChanged)
     Q_PROPERTY(uint marginSize READ marginSize WRITE setMarginSize NOTIFY marginSizeChanged)
+    Q_PROPERTY(uint spacingSize READ spacingSize WRITE setSpacingSize NOTIFY spacingSizeChanged)
     Q_PROPERTY(bool enableEffects READ enableEffects WRITE setEnableEffects NOTIFY enableEffectsChanged)
 
 public:
@@ -52,6 +53,9 @@ public:
     void setMarginSize(uint marginSize);
     uint marginSize() const;
 
+    uint spacingSize() const;
+    void setSpacingSize(uint spacingSize);
+
 signals:
     void styleTypeChanged(int styleStype);
     void accentColorChanged(QString accentColor);
@@ -72,6 +76,8 @@ signals:
 
     void marginSizeChanged(uint marginSize);
 
+    void spacingSizeChanged(uint spacingSize);
+
 private:
     int m_styleType = MauiMan::ThemeManager::DefaultValues::styleType;
     QString m_accentColor = MauiMan::ThemeManager::DefaultValues::accentColor;
@@ -83,4 +89,5 @@ private:
     bool m_enableEffects = MauiMan::ThemeManager::DefaultValues::enableEffects;
     uint m_paddingSize = MauiMan::ThemeManager::DefaultValues::paddingSize;
     uint m_marginSize = MauiMan::ThemeManager::DefaultValues::marginSize;
+    uint m_spacingSize = MauiMan::ThemeManager::DefaultValues::spacingSize;
 };

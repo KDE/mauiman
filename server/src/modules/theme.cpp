@@ -28,6 +28,7 @@ Theme::Theme(QObject *parent) : QObject(parent)
     m_iconSize = settings.load("IconSize", m_iconSize).toUInt(&ok);
     m_paddingSize = settings.load("PaddingSize", m_paddingSize).toUInt(&ok);
     m_marginSize = settings.load("MarginSize", m_marginSize).toUInt(&ok);
+    m_spacingSize = settings.load("SpacingSize", m_spacingSize).toUInt(&ok);
     m_enableEffects = settings.load("EnableEffects", m_enableEffects).toBool();
     settings.endModule();
 }
@@ -146,6 +147,20 @@ uint Theme::paddingSize() const
 uint Theme::marginSize() const
 {
     return m_marginSize;
+}
+
+uint Theme::spacingSize() const
+{
+    return m_spacingSize;
+}
+
+void Theme::setSpacingSize(uint spacingSize)
+{
+    if (m_spacingSize == spacingSize)
+        return;
+
+    m_spacingSize = spacingSize;
+    emit spacingSizeChanged(m_spacingSize);
 }
 
 void Theme::setPaddingSize(uint paddingSize)
