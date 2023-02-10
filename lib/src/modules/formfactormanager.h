@@ -82,12 +82,12 @@ private:
 
     uint m_defaultMode = FormFactorManager::DefaultValues::defaultMode;
 
-    bool m_hasKeyboard;
+    bool m_hasKeyboard = true;
 
-    bool m_hasTouchscreen;
+    bool m_hasTouchscreen = true;
 
-    bool m_hasMouse;
-    bool m_hasTouchpad;
+    bool m_hasMouse = true;
+    bool m_hasTouchpad = true;
 
     void sync(const QString &key, const QVariant &value);
     void setConnections();
