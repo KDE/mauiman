@@ -32,7 +32,7 @@ include(CMakePackageConfigHelpers)
 include(KDEPackageAppTemplates)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Core DBus Gui)
-find_package(Qt5SystemInfo)
+find_package(Qt5SystemInfo 5.4.0 REQUIRED)
 
 add_subdirectory(src)
 
