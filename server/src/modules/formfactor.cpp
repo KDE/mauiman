@@ -52,8 +52,6 @@ FormFactor::FormFactor(QObject *parent) : QObject(parent)
     //grab default values
     #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(UBUNTU_TOUCH)
     m_defaultMode = MauiMan::FormFactorManager::Mode::Phone;
-#else
-    m_defaultMode = QByteArrayList{"1", "true"}.contains(qgetenv("QT_QUICK_CONTROLS_MOBILE")) ? MauiMan::FormFactorManager::Mode::Phone : MauiMan::FormFactorManager::Mode::Desktop;
 #endif
 
     m_preferredMode = m_defaultMode;

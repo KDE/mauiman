@@ -29,7 +29,11 @@ public:
 
     struct DefaultValues
     {
-        static inline const uint preferredMode = Mode::Desktop;
+        static uint getDefaultMode()
+        {
+            return QByteArrayList{"1", "true"}.contains(qgetenv("QT_QUICK_CONTROLS_MOBILE")) ? MauiMan::FormFactorManager::Mode::Phone : MauiMan::FormFactorManager::Mode::Desktop;
+        }
+        static inline const uint defaultMode = DefaultValues::getDefaultMode();
     } ;
 
     explicit FormFactorManager(QObject *parent = nullptr);
@@ -72,11 +76,11 @@ private:
 #endif
     MauiMan::SettingsStore *m_settings;
 
-    uint m_preferredMode = FormFactorManager::DefaultValues::preferredMode;
+    uint m_preferredMode = FormFactorManager::DefaultValues::defaultMode;
 
-    uint m_bestMode;
+    uint m_bestMode = FormFactorManager::DefaultValues::defaultMode;
 
-    uint m_defaultMode;
+    uint m_defaultMode = FormFactorManager::DefaultValues::defaultMode;
 
     bool m_hasKeyboard;
 

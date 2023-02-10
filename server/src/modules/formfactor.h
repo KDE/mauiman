@@ -65,11 +65,11 @@ public slots:
     Qt::ScreenOrientation screenOrientation();
 
 private:
-    uint m_preferredMode = MauiMan::FormFactorManager::DefaultValues::preferredMode;
+    uint m_preferredMode = MauiMan::FormFactorManager::DefaultValues::defaultMode;
 
-    uint m_bestMode = 0;
+    uint m_bestMode = MauiMan::FormFactorManager::DefaultValues::defaultMode;
 
-    uint m_defaultMode = 0;
+    uint m_defaultMode = MauiMan::FormFactorManager::DefaultValues::defaultMode;
 
     bool m_hasKeyboard = false;
 
