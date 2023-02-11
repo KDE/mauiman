@@ -4,12 +4,47 @@
 #include "mauimanutils.h"
 
 #include <QDebug>
+#include <QSize>
+#include <QScreen>
+#include <QGuiApplication>
 
 #if !defined Q_OS_ANDROID
 #include <QDBusInterface>
 #endif
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <QTouchDevice>
+#else
+#include <QInputDevice>
+#endif
+
+#include <QtSystemInfo/qinputinfo.h>
+
 using namespace MauiMan;
+
+static
+QString typeToString(QInputDevice::InputTypeFlags type)
+{
+    qDebug() << type;
+    QStringList typeString;
+    if (type.testFlag(QInputDevice::Button))
+        typeString << QStringLiteral("Button");
+    if (type.testFlag(QInputDevice::Mouse))
+        typeString << QStringLiteral("Mouse");
+    if (type.testFlag(QInputDevice::TouchPad))
+        typeString << QStringLiteral("TouchPad");
+    if (type.testFlag(QInputDevice::TouchScreen))
+        typeString << QStringLiteral("TouchScreen");
+    if (type.testFlag(QInputDevice::Keyboard))
+        typeString << QStringLiteral("Keyboard");
+    if (type.testFlag(QInputDevice::Switch))
+        typeString << QStringLiteral("Switch");
+
+    if (typeString.isEmpty())
+        typeString << QStringLiteral("Unknown");
+    return typeString.join((", "));
+}
+
 
 void FormFactorManager::sync(const QString &key, const QVariant &value)
 {
@@ -36,10 +71,6 @@ void FormFactorManager::setConnections()
     if (m_interface->isValid())
     {
         connect(m_interface, SIGNAL(preferredModeChanged(uint)), this, SLOT(onPreferredModeChanged(uint)));
-        connect(m_interface, SIGNAL(hasKeyboardChanged(bool)), this, SLOT(setHasKeyboard(bool)));
-        connect(m_interface, SIGNAL(hasMouseChanged(bool)), this, SLOT(setHasMouse(bool)));
-        connect(m_interface, SIGNAL(hasTouchscreenChanged(bool)), this, SLOT(setHasTouchscreen(bool)));
-        connect(m_interface, SIGNAL(hasTouchpadChanged(bool)), this, SLOT(setHasTouchpad(bool)));
     }
 }
 
@@ -51,32 +82,16 @@ void FormFactorManager::loadSettings()
     if(m_interface && m_interface->isValid())
     {
         m_preferredMode = m_interface->property("preferredMode").toUInt();
-        m_defaultMode = m_interface->property("defaultMode").toUInt();
-        m_bestMode = m_interface->property("bestMode").toUInt();
-
-        m_hasKeyboard = m_interface->property("hasKeyboard").toBool();
-        m_hasMouse = m_interface->property("hasMouse").toBool();
-        m_hasTouchpad = m_interface->property("hasTouchpad").toBool();
-        m_hasTouchscreen = m_interface->property("hasTouchscreen").toBool();
-
         return;
     }
 #endif
 
     m_preferredMode = m_settings->load("PreferredMode", m_preferredMode).toUInt();
-    m_defaultMode = m_settings->load("DefaultMode", m_defaultMode).toUInt();
-    m_bestMode = m_settings->load("BestMode", m_bestMode).toUInt();
-
-    m_hasKeyboard = m_settings->load("HasKeyboard", m_hasKeyboard).toBool();
-    m_hasMouse =  m_settings->load("HasMouse", m_hasMouse).toBool();
-    m_hasTouchpad =  m_settings->load("HasTouchpad", m_hasTouchpad).toBool();
-    m_hasTouchscreen = m_settings->load("HasTouchscreen", m_hasTouchscreen).toBool();
-
 }
 
-FormFactorManager::FormFactorManager(QObject *parent) : QObject(parent)
+FormFactorManager::FormFactorManager(QObject *parent) : MauiMan::FormFactorInfo(parent)
   ,m_settings(new MauiMan::SettingsStore(this))
-
+  ,m_info(new MauiMan::FormFactorInfo(this))
 {
     qDebug( " INIT FORMFACTOR MANAGER");
 
@@ -95,6 +110,7 @@ FormFactorManager::FormFactorManager(QObject *parent) : QObject(parent)
         }
     });
 #endif
+    m_preferredMode = defaultMode();
 
     loadSettings();
 }
@@ -104,32 +120,32 @@ uint FormFactorManager::preferredMode() const
     return m_preferredMode;
 }
 
-uint FormFactorManager::bestMode() const
+uint FormFactorInfo::bestMode() const
 {
     return m_bestMode;
 }
 
-uint FormFactorManager::defaultMode() const
+uint FormFactorInfo::defaultMode() const
 {
     return m_defaultMode;
 }
 
-bool FormFactorManager::hasKeyboard() const
+bool FormFactorInfo::hasKeyboard() const
 {
     return m_hasKeyboard;
 }
 
-bool FormFactorManager::hasTouchscreen() const
+bool FormFactorInfo::hasTouchscreen() const
 {
     return m_hasTouchscreen;
 }
 
-bool FormFactorManager::hasMouse() const
+bool FormFactorInfo::hasMouse() const
 {
     return m_hasMouse;
 }
 
-bool FormFactorManager::hasTouchpad() const
+bool FormFactorInfo::hasTouchpad() const
 {
     return m_hasTouchpad;
 }
@@ -147,42 +163,6 @@ void FormFactorManager::setPreferredMode(uint preferredMode)
     Q_EMIT preferredModeChanged(m_preferredMode);
 }
 
-void FormFactorManager::setHasTouchpad(bool hasTouchpad)
-{
-    if (m_hasTouchpad == hasTouchpad)
-        return;
-
-    m_hasTouchpad = hasTouchpad;
-    emit hasTouchpadChanged(m_hasTouchpad);
-}
-
-void FormFactorManager::setHasKeyboard(bool hasKeyboard)
-{
-    if (m_hasKeyboard == hasKeyboard)
-        return;
-
-    m_hasKeyboard = hasKeyboard;
-    Q_EMIT hasKeyboardChanged(m_hasKeyboard);
-}
-
-void FormFactorManager::setHasTouchscreen(bool hasTouchscreen)
-{
-    if (m_hasTouchscreen == hasTouchscreen)
-        return;
-
-    m_hasTouchscreen = hasTouchscreen;
-    Q_EMIT hasTouchscreenChanged(m_hasTouchscreen);
-}
-
-void FormFactorManager::setHasMouse(bool hasMouse)
-{
-    if (m_hasMouse == hasMouse)
-        return;
-
-    m_hasMouse = hasMouse;
-    Q_EMIT hasMouseChanged(m_hasMouse);
-}
-
 void FormFactorManager::onPreferredModeChanged(uint preferredMode)
 {
     if (m_preferredMode == preferredMode)
@@ -192,21 +172,170 @@ void FormFactorManager::onPreferredModeChanged(uint preferredMode)
     Q_EMIT preferredModeChanged(m_preferredMode);
 }
 
-void FormFactorManager::setBestMode(uint mode)
+void FormFactorInfo::findBestMode()
 {
-    if(m_bestMode == mode)
-        return;
+    uint bestMode = m_defaultMode;
+    /*
+     * 0- desktop
+     * 1- tablet
+     * 2- phone
+     * */
 
-    m_bestMode = mode;
+    if(m_hasTouchscreen)
+    {
+        if(m_screenSize.width() > 1500)
+        {
+            if(m_hasKeyboard || m_hasMouse || m_hasTouchpad)
+            {
+                bestMode = 0; //A big touch screen and with keyboard/mouse/trackpad
+            }else
+            {
+                bestMode = 1; //A big touch screen alone
+            }
+        }
+        else if(m_screenSize.width()  > 500)
+        {
+            bestMode = 1; //A tablet size touch screen
+        }
+        else
+        {
+            bestMode = 2; //A mobile size touch screen
+        }
+
+    }else
+    {
+
+        if(m_screenSize.width() > 1500)
+        {
+            bestMode = 0; // A big screen
+
+        }
+        else if(m_screenSize.width()  > 500)
+        {
+            if(m_hasTouchpad)
+            {
+                bestMode = 1; // A small screen with a trackpad
+            }else
+            {
+                bestMode = 0;
+            }
+        }
+        else
+        {
+            bestMode = 1; //A mobile size touch screen
+        }
+    }
+
+    m_bestMode = bestMode;
     Q_EMIT bestModeChanged(m_bestMode);
 }
 
-void FormFactorManager::setDefaultMode(uint mode)
+void FormFactorInfo::checkInputs(const QInputInfoManager *inputManager)
 {
-    if(m_defaultMode == mode)
-        return;
 
-    m_defaultMode = mode;
-    Q_EMIT defaultModeChanged(m_defaultMode);
+    //        qDebug() <<"Found"<<  inputDeviceManager->deviceMap().count() << "input devices";
+    //        QMapIterator<QString, QInputDevice*> i(inputDeviceManager->deviceMap());
+    //        while (i.hasNext())
+    //        {
+    //            i.next();
+    //            qDebug() << i.value()->name() << i.value()->identifier();
+    //            qDebug() << "buttons count"<< i.value()->buttons().count();
+    //            qDebug() << "switch count"<< i.value()->switches().count();
+    //            qDebug() << "relativeAxes count"<< i.value()->relativeAxes().count();
+    //            qDebug() << "absoluteAxes count"<< i.value()->absoluteAxes().count();
+    //            qDebug() << "type" << typeToString(i.value()->types());
+
+    //            qDebug();
+    //            //       qDebug() << i.value()->name();
+    //        }
+
+    const int keyboardsCount = inputManager->count(QInputDevice::Keyboard);
+    const int mouseCount = inputManager->count(QInputDevice::Mouse);
+    const int touchCount = inputManager->count(QInputDevice::TouchScreen);
+    const int trackpadCount = inputManager->count(QInputDevice::TouchPad);
+
+    m_hasKeyboard = keyboardsCount > 0;
+    m_hasMouse = mouseCount > 0;
+    m_hasTouchscreen = touchCount > 0;
+    m_hasTouchpad = trackpadCount > 0;
+
+    Q_EMIT hasKeyboardChanged(m_hasKeyboard);
+    Q_EMIT hasMouseChanged(m_hasMouse);
+    Q_EMIT hasTouchscreenChanged(m_hasTouchscreen);
+    Q_EMIT hasTouchpadChanged(m_hasTouchpad);
+
+    qDebug() << "Number of keyboards:" << keyboardsCount;
+    qDebug() << "Number of mice:" << mouseCount;
+    qDebug() << "Number of touchscreens:" << touchCount;
+    qDebug() << "Number of touchpads:" << trackpadCount;
 }
 
+QRect FormFactorInfo::screenSize()
+{
+    QScreen *screen = qApp->primaryScreen();
+    return screen->geometry();
+}
+
+Qt::ScreenOrientation FormFactorInfo::screenOrientation()
+{
+    QScreen *screen = qApp->primaryScreen();
+    return screen->orientation();
+}
+
+
+FormFactorInfo::FormFactorInfo(QObject *parent) : QObject(parent)
+{
+    qDebug( " INIT FORMFACTOR INFO");
+
+    auto inputDeviceManager = new QInputInfoManager(this);
+    connect(inputDeviceManager, &QInputInfoManager::ready,[ inputDeviceManager]()
+    {
+        inputDeviceManager->setFilter(QInputDevice::Mouse | QInputDevice::Keyboard | QInputDevice::TouchScreen | QInputDevice::TouchPad);
+    });
+
+    connect(inputDeviceManager, &QInputInfoManager::filterChanged,this,[this, inputDeviceManager](QInputDevice::InputTypeFlags )
+    {
+        checkInputs(inputDeviceManager);
+        findBestMode();
+    });
+
+    connect(inputDeviceManager, &QInputInfoManager::deviceAdded,[this, inputDeviceManager](QInputDevice *)
+    {
+        checkInputs(inputDeviceManager);
+        findBestMode();
+    });
+
+    connect(inputDeviceManager, &QInputInfoManager::deviceRemoved,[this, inputDeviceManager](QString)
+    {
+        checkInputs(inputDeviceManager);
+        findBestMode();
+    });
+
+
+    //** Ask for screen sizes and dimension etc to Cask via CaskServer**//
+
+//    auto dummyApp = new QGuiApplication(0, []);
+//    QScreen *screen = QGuiApplication::primaryScreen();
+//    connect(screen, &QScreen::geometryChanged, [this](QRect rect)
+//    {
+//        m_screenSize = rect;
+//        Q_EMIT screenSizeChanged(m_screenSize);
+
+//        findBestMode();
+//    });
+
+//    connect(screen, &QScreen::primaryOrientationChanged, [this](Qt::ScreenOrientation orientation)
+//    {
+//        m_screenOrientation = orientation;
+//        Q_EMIT screenOrientationChanged(m_screenOrientation);
+
+//        findBestMode();
+//    });
+
+   // m_screenSize = screen->geometry();
+//    m_screenOrientation = screen->primaryOrientation();
+
+
+    findBestMode();
+
+}

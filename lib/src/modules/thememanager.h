@@ -150,6 +150,8 @@ private:
     uint m_iconSize = ThemeManager::DefaultValues::iconSize;
     uint m_paddingSize = ThemeManager::DefaultValues::paddingSize;
     uint m_marginSize = ThemeManager::DefaultValues::marginSize;
+        uint m_spacingSize = ThemeManager::DefaultValues::spacingSize;
+
     bool m_enableEffects = ThemeManager::DefaultValues::enableEffects;
 
     void sync(const QString &key, const QVariant &value);
@@ -157,7 +159,6 @@ private:
     void loadSettings();
     void updateGtk3Config();
 
-    uint m_spacingSize;
 };
 }
 

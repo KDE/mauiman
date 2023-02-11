@@ -10,6 +10,7 @@
 <property name="hasKeyboard" type="b" access="read"/>
 <property name="hasTouchscreen" type="b" access="read"/>
 <property name="hasMouse" type="b" access="read"/>
+<property name="hasTouchpad" type="b" access="read"/>
 
 <property name="preferredMode" type="u" access="read"/>
 <property name="bestMode" type="u" access="read"/>
@@ -20,6 +21,10 @@
 </signal>
 
 <signal name="hasTouchscreenChanged">
+<arg type="b"/>
+</signal>
+
+<signal name="hasTouchpadChanged">
 <arg type="b"/>
 </signal>
 

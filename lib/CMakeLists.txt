@@ -62,7 +62,14 @@ ecm_setup_version(${PROJECT_VERSION}
     SOVERSION ${PROJECT_VERSION_MAJOR}
     )
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Core)
+find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Core Gui)
+find_package(Qt5SystemInfo 5.4.0 REQUIRED)
+set_package_properties(Qt5SystemInfo PROPERTIES
+    TYPE REQUIRED
+    DESCRIPTION "Qt Systems."
+    URL "https://github.com/qt/qtsystems"
+    PURPOSE "Qt5SystemInfo is needed to detect the system form factor based on the input methods."
+)
 
 if(UNIX AND NOT APPLE AND NOT ANDROID)
     find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS DBus)

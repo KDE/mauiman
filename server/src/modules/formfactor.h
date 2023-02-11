@@ -1,11 +1,9 @@
 #pragma once
 
 #include <QObject>
-#include <QRect>
 
 #include "modules/formfactormanager.h"
 
-class QInputInfoManager;
 class FormFactor : public QObject
 {
     Q_OBJECT
@@ -18,8 +16,6 @@ class FormFactor : public QObject
     Q_PROPERTY(bool hasMouse READ hasMouse NOTIFY hasMouseChanged)
     Q_PROPERTY(bool hasTouchpad READ hasTouchpad NOTIFY hasTouchpadChanged)
 
-    Q_PROPERTY(QRect screenSize READ screenSize NOTIFY screenSizeChanged)
-    Q_PROPERTY(Qt::ScreenOrientation screenOrientation READ screenOrientation NOTIFY screenOrientationChanged)
 
 public:
     explicit FormFactor(QObject *parent = nullptr);
@@ -58,13 +54,16 @@ public:
 public slots:
     void setPreferredMode(uint preferredMode);
 
+    
+private slots:    
     void setBestMode(uint bestMode);
-
-    void setDefaultMode(uint defaultMode);
-    QRect screenSize();
-    Qt::ScreenOrientation screenOrientation();
+    void setHasKeyboard(bool value);
+    void setHasMouse(bool value);
+    void setHasTouchpad(bool value);
+    void setHasTouchscreen(bool value);
 
 private:
+    MauiMan::FormFactorInfo *m_manager;
     uint m_preferredMode = MauiMan::FormFactorManager::DefaultValues::defaultMode;
 
     uint m_bestMode = MauiMan::FormFactorManager::DefaultValues::defaultMode;
@@ -81,15 +80,8 @@ private:
 
     bool hasTouchScreen() const;
 
-    QRect m_screenSize;
-    Qt::ScreenOrientation m_screenOrientation;
-
-    void checkInputs(const QInputInfoManager *inputManager);
-
-    void findBestMode();
 
 signals:
-
     void preferredModeChanged(uint preferredMode);
     void bestModeChanged(uint bestMode);
     void defaultModeChanged(uint defaultMode);
@@ -97,7 +89,5 @@ signals:
     void hasTouchscreenChanged(bool hasTouchscreen);
     void hasMouseChanged(bool hasMouse);
     void hasTouchpadChanged(bool hasTouchpad);
-    void screenSizeChanged(QRect screenSize);
-    void screenOrientationChanged(Qt::ScreenOrientation screenOrientation);
 };
 

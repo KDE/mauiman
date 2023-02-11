@@ -38,8 +38,6 @@ target_link_libraries(${PROJECT_NAME}
     MauiMan
     Qt5::Core
     Qt5::DBus
-    Qt5::Gui
-    Qt5SystemInfo
     )
 
 install(TARGETS ${PROJECT_NAME} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

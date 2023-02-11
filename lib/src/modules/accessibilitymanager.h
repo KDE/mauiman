@@ -14,12 +14,15 @@ class MAUIMAN_EXPORT AccessibilityManager : public QObject
     Q_OBJECT
     Q_PROPERTY(bool singleClick READ singleClick WRITE setSingleClick NOTIFY singleClickChanged)
 
-
 public:
 
     struct DefaultValues
     {
-        static inline const bool singleClick = false;
+         static bool isMobile()
+        {
+            return QByteArrayList{"1", "true"}.contains(qgetenv("QT_QUICK_CONTROLS_MOBILE"));
+        }
+        static inline const bool singleClick = DefaultValues::isMobile();
     };
 
     explicit AccessibilityManager(QObject *parent = nullptr);
