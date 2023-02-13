@@ -39,12 +39,27 @@ public:
         {
 
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(UBUNTU_TOUCH)
-return MauiMan::FormFactorManager::Mode::Phone;
-#endif
+return MauiMan::FormFactorInfo::Mode::Phone;
+#else
 
             return QByteArrayList{"1", "true"}.contains(qgetenv("QT_QUICK_CONTROLS_MOBILE")) ? MauiMan::FormFactorInfo::Mode::Phone : MauiMan::FormFactorInfo::Mode::Desktop;
+            #endif
         }
+
+        static bool getHasTouchScreen()
+        {
+
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(UBUNTU_TOUCH)
+return true;
+#else
+
+            return false;
+            #endif
+        }
+
         static inline const uint defaultMode = DefaultValues::getDefaultMode();
+
+        static inline const bool hasTouchscreen = DefaultValues::getHasTouchScreen();
     } ;
 
     explicit FormFactorInfo(QObject *parent);
@@ -72,7 +87,7 @@ private:
 
      bool m_hasKeyboard = true;
 
-    bool m_hasTouchscreen = false;
+    bool m_hasTouchscreen = FormFactorInfo::DefaultValues::hasTouchscreen;
 
     bool m_hasMouse = true;
     bool m_hasTouchpad = true;

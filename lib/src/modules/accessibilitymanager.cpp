@@ -63,14 +63,17 @@ void AccessibilityManager::onSingleClickChanged(bool singleClick)
 
 void AccessibilityManager::sync(const QString &key, const QVariant &value)
 {
+#if !defined Q_OS_ANDROID
     if (m_interface && m_interface->isValid())
     {
         m_interface->call(key, value);
     }
+#endif
 }
 
 void AccessibilityManager::setConnections()
 {
+#if !defined Q_OS_ANDROID
     if(m_interface)
     {
         m_interface->disconnect();
@@ -87,6 +90,7 @@ void AccessibilityManager::setConnections()
     {
         connect(m_interface, SIGNAL(singleClickChanged(bool)), this, SLOT(onSingleClickChanged(bool)));
     }
+#endif
 }
 
 void AccessibilityManager::loadSettings()

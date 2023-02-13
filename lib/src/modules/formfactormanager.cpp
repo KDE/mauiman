@@ -10,6 +10,7 @@
 
 #if !defined Q_OS_ANDROID
 #include <QDBusInterface>
+#include <QtSystemInfo/qinputinfo.h>
 #endif
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -18,10 +19,9 @@
 #include <QInputDevice>
 #endif
 
-#include <QtSystemInfo/qinputinfo.h>
-
 using namespace MauiMan;
 
+#if !defined Q_OS_ANDROID
 static
 QString typeToString(QInputDevice::InputTypeFlags type)
 {
@@ -44,18 +44,21 @@ QString typeToString(QInputDevice::InputTypeFlags type)
         typeString << QStringLiteral("Unknown");
     return typeString.join((", "));
 }
-
+#endif
 
 void FormFactorManager::sync(const QString &key, const QVariant &value)
 {
+#if !defined Q_OS_ANDROID
     if (m_interface && m_interface->isValid())
     {
         m_interface->call(key, value);
     }
+#endif
 }
 
 void FormFactorManager::setConnections()
 {
+#if !defined Q_OS_ANDROID
     if(m_interface)
     {
         m_interface->disconnect();
@@ -72,6 +75,7 @@ void FormFactorManager::setConnections()
     {
         connect(m_interface, SIGNAL(preferredModeChanged(uint)), this, SLOT(onPreferredModeChanged(uint)));
     }
+#endif
 }
 
 void FormFactorManager::loadSettings()
@@ -232,6 +236,7 @@ void FormFactorInfo::findBestMode()
 
 void FormFactorInfo::checkInputs(const QInputInfoManager *inputManager)
 {
+#if !defined Q_OS_ANDROID
 
     //        qDebug() <<"Found"<<  inputDeviceManager->deviceMap().count() << "input devices";
     //        QMapIterator<QString, QInputDevice*> i(inputDeviceManager->deviceMap());
@@ -268,6 +273,7 @@ void FormFactorInfo::checkInputs(const QInputInfoManager *inputManager)
     qDebug() << "Number of mice:" << mouseCount;
     qDebug() << "Number of touchscreens:" << touchCount;
     qDebug() << "Number of touchpads:" << trackpadCount;
+#endif
 }
 
 QRect FormFactorInfo::screenSize()
@@ -287,6 +293,7 @@ FormFactorInfo::FormFactorInfo(QObject *parent) : QObject(parent)
 {
     qDebug( " INIT FORMFACTOR INFO");
 
+#if !defined Q_OS_ANDROID
     auto inputDeviceManager = new QInputInfoManager(this);
     connect(inputDeviceManager, &QInputInfoManager::ready,[ inputDeviceManager]()
     {
@@ -337,5 +344,6 @@ FormFactorInfo::FormFactorInfo(QObject *parent) : QObject(parent)
 
 
     findBestMode();
+#endif
 
 }

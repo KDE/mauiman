@@ -45,14 +45,14 @@ if(UNIX AND NOT APPLE AND NOT ANDROID)
     target_link_libraries(${PROJECT_NAME}
         PRIVATE
         Qt5::DBus
+        Qt5SystemInfo
         )
 endif()
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     Qt5::Core    
-    Qt5::Gui
-    Qt5SystemInfo
+    Qt5::Gui    
     )
 
 install(FILES

@@ -20,7 +20,11 @@ public:
     {
          static bool isMobile()
         {
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(UBUNTU_TOUCH)
+return true;
+#else
             return QByteArrayList{"1", "true"}.contains(qgetenv("QT_QUICK_CONTROLS_MOBILE"));
+#endif
         }
         static inline const bool singleClick = DefaultValues::isMobile();
     };
