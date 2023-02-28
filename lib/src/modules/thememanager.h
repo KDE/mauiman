@@ -62,9 +62,9 @@ public:
         static inline const uint iconSize = 16;
         static inline const bool enableEffects = true;
         static inline const uint paddingSize = 6;
-        static inline const uint marginSize = 8;
+        static inline const uint marginSize = 6;
         static inline const uint spacingSize = 6;
-    } ;
+    };
 
     explicit ThemeManager(QObject * parent = nullptr);
 
