@@ -19,6 +19,9 @@ class Theme : public QObject
     Q_PROPERTY(uint marginSize READ marginSize WRITE setMarginSize NOTIFY marginSizeChanged)
     Q_PROPERTY(uint spacingSize READ spacingSize WRITE setSpacingSize NOTIFY spacingSizeChanged)
     Q_PROPERTY(bool enableEffects READ enableEffects WRITE setEnableEffects NOTIFY enableEffectsChanged)
+    Q_PROPERTY(QString defaultFont READ defaultFont WRITE setDefaultFont NOTIFY defaultFontChanged)
+    Q_PROPERTY(QString smallFont READ smallFont WRITE setSmallFont NOTIFY smallFontChanged)
+    Q_PROPERTY(QString monospacedFont READ monospacedFont WRITE setMonospacedFont NOTIFY monospacedFontChanged)
 
 public:
     explicit Theme(QObject * parent = nullptr);
@@ -56,6 +59,15 @@ public:
     uint spacingSize() const;
     void setSpacingSize(uint spacingSize);
 
+    QString defaultFont() const;
+    void setDefaultFont(QString defaultFont);
+
+    QString smallFont() const;
+    void setSmallFont(QString smallFont);
+
+    QString monospacedFont() const;
+    void setMonospacedFont(QString monospacedFont);
+
 signals:
     void styleTypeChanged(int styleStype);
     void accentColorChanged(QString accentColor);
@@ -78,6 +90,12 @@ signals:
 
     void spacingSizeChanged(uint spacingSize);
 
+    void defaultFontChanged(QString defaultFont);
+
+    void smallFontChanged(QString smallFont);
+
+    void monospacedFontChanged(QString monospacedFont);
+
 private:
     int m_styleType = MauiMan::ThemeManager::DefaultValues::styleType;
     QString m_accentColor = MauiMan::ThemeManager::DefaultValues::accentColor;
@@ -90,4 +108,7 @@ private:
     uint m_paddingSize = MauiMan::ThemeManager::DefaultValues::paddingSize;
     uint m_marginSize = MauiMan::ThemeManager::DefaultValues::marginSize;
     uint m_spacingSize = MauiMan::ThemeManager::DefaultValues::spacingSize;
+    QString m_defaultFont = MauiMan::ThemeManager::DefaultValues::defaultFont;
+    QString m_smallFont = MauiMan::ThemeManager::DefaultValues::smallFont;
+    QString m_monospacedFont =  MauiMan::ThemeManager::DefaultValues::monospacedFont;
 };

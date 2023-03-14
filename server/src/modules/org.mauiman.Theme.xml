@@ -39,6 +39,19 @@
 <arg name="size" type="u" direction="in"/>
 </method>
 
+<method name="setDefaultFont">
+<arg name="font" type="s" direction="in"/>
+</method>
+
+<method name="setSmallFont">
+<arg name="font" type="s" direction="in"/>
+</method>
+
+<method name="setMonospacedFont">
+<arg name="font" type="s" direction="in"/>
+</method>
+
+
 <property name="accentColor" type="s" access="read"/>
 <property name="styleType" type="i" access="read"/>
 <property name="iconTheme" type="s" access="read"/>
@@ -50,6 +63,9 @@
 <property name="marginSize" type="u" access="read"/>
 <property name="spacingSize" type="u" access="read"/>
 <property name="enableEffects" type="b" access="read"/>
+<property name="defaultFont" type="s" access="read"/>
+<property name="smallFont" type="s" access="read"/>
+<property name="monospacedFont" type="s" access="read"/>
 
 <signal name="accentColorChanged">
 <arg type="s"/>
@@ -83,6 +99,15 @@
 </signal>
 <signal name="enableEffectsChanged">
 <arg type="b"/>
+</signal>
+<signal name="defaultFontChanged">
+<arg type="s"/>
+</signal>
+<signal name="smallFontChanged">
+<arg type="s"/>
+</signal>
+<signal name="monospacedFontChanged">
+<arg type="s"/>
 </signal>
 </interface>
 </node>

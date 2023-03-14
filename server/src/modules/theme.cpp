@@ -30,6 +30,9 @@ Theme::Theme(QObject *parent) : QObject(parent)
     m_marginSize = settings.load("MarginSize", m_marginSize).toUInt(&ok);
     m_spacingSize = settings.load("SpacingSize", m_spacingSize).toUInt(&ok);
     m_enableEffects = settings.load("EnableEffects", m_enableEffects).toBool();
+    m_defaultFont = settings.load("DefaultFont", m_defaultFont).toString();
+    m_smallFont = settings.load("SmallFont", m_smallFont).toString();
+    m_monospacedFont = settings.load("MonospacedFont", m_monospacedFont).toString();
     settings.endModule();
 }
 
@@ -160,7 +163,49 @@ void Theme::setSpacingSize(uint spacingSize)
         return;
 
     m_spacingSize = spacingSize;
-    emit spacingSizeChanged(m_spacingSize);
+    Q_EMIT spacingSizeChanged(m_spacingSize);
+}
+
+QString Theme::defaultFont() const
+{
+    return m_defaultFont;
+}
+
+QString Theme::smallFont() const
+{
+    return m_smallFont;
+}
+
+QString Theme::monospacedFont() const
+{
+    return m_monospacedFont;
+}
+
+void Theme::setDefaultFont(QString defaultFont)
+{
+    if (m_defaultFont == defaultFont)
+        return;
+
+    m_defaultFont = defaultFont;
+    emit defaultFontChanged(m_defaultFont);
+}
+
+void Theme::setSmallFont(QString smallFont)
+{
+    if (m_smallFont == smallFont)
+        return;
+
+    m_smallFont = smallFont;
+    Q_EMIT smallFontChanged(m_smallFont);
+}
+
+void Theme::setMonospacedFont(QString monospacedFont)
+{
+    if (m_monospacedFont == monospacedFont)
+        return;
+
+    m_monospacedFont = monospacedFont;
+    Q_EMIT monospacedFontChanged(m_monospacedFont);
 }
 
 void Theme::setPaddingSize(uint paddingSize)

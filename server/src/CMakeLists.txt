@@ -37,6 +37,7 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
     MauiMan
     Qt5::Core
+    Qt5::Gui
     Qt5::DBus
     )
 

@@ -2,6 +2,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QFont>
 
 #if !defined Q_OS_ANDROID
 #include <QDBusInterface>
@@ -33,6 +34,9 @@ class MAUIMAN_EXPORT ThemeManager : public QObject
     Q_PROPERTY(uint marginSize READ marginSize WRITE setMarginSize NOTIFY marginSizeChanged RESET resetMarginSize)
     Q_PROPERTY(uint spacingSize READ spacingSize WRITE setSpacingSize NOTIFY spacingSizeChanged RESET resetSPacingSize)
     Q_PROPERTY(bool enableEffects READ enableEffects WRITE setEnableEffects NOTIFY enableEffectsChanged)
+    Q_PROPERTY(QString defaultFont READ defaultFont WRITE setDefaultFont NOTIFY defaultFontChanged RESET resetDefaultFont)
+    Q_PROPERTY(QString smallFont READ smallFont WRITE setSmallFont NOTIFY smallFontChanged RESET resetSmallFont)
+    Q_PROPERTY(QString monospacedFont READ monospacedFont WRITE setMonospacedFont NOTIFY monospacedFontChanged RESET resetMonospacedFont)
 
 public:
 
@@ -53,6 +57,35 @@ public:
             return 0;
         }
 
+        static QString getDefaultFont()
+        {
+            QFont font {"Noto Sans", 10, QFont::Normal};
+             font.setStyleHint(QFont::SansSerif);
+             font.setStyle(QFont::StyleNormal);
+             font.setStyleName("Regular");
+             return font.toString();
+        }
+
+        static QString getSmallFont()
+        {
+            QFont font {"Noto Sans", 8, QFont::Normal};
+             font.setStyleHint(QFont::SansSerif);
+             font.setStyle(QFont::StyleNormal);
+             font.setStyleName("Regular");
+
+             return font.toString();
+        }
+
+        static QString getMonospacedFont()
+        {
+            QFont font {"Hack", 10, QFont::Normal};
+             font.setStyleHint(QFont::Monospace);
+             font.setStyle(QFont::StyleNormal);
+             font.setStyleName("Regular");
+
+             return font.toString();
+        }
+
         static inline const int styleType = ThemeManager::DefaultValues::preferredStyleType();
         static inline const QString accentColor = "#26c6da";
         static inline const QString iconTheme = "Luv";
@@ -64,6 +97,9 @@ public:
         static inline const uint paddingSize = 6;
         static inline const uint marginSize = 6;
         static inline const uint spacingSize = 6;
+        static inline const QString defaultFont = getDefaultFont();
+        static inline const QString smallFont = getSmallFont();
+        static inline const QString monospacedFont = getMonospacedFont();
     };
 
     explicit ThemeManager(QObject * parent = nullptr);
@@ -107,6 +143,18 @@ public:
     void setSpacingSize(uint spacingSize);
     void resetSPacingSize();
 
+    QString defaultFont() const;
+    void setDefaultFont(QString defaultFont);
+    void resetDefaultFont();
+
+    QString smallFont() const;
+    void setSmallFont(QString smallFont);
+    void resetSmallFont();
+
+    QString monospacedFont() const;
+    void setMonospacedFont(QString monospacedFont);
+    void resetMonospacedFont();
+
 private slots:
     void onStyleTypeChanged(const int &newStyleType);
     void onAccentColorChanged(const QString &newAccentColor);
@@ -119,6 +167,9 @@ private slots:
     void onMarginSizeChanged(const uint &marginSize);
     void onSpacingSizeChanged(const uint &spacingSize);
     void onEnableEffectsChanged(bool enableEffects);
+    void onDefaultFontChanged(const QString &font);
+    void onSmallFontChanged(const QString &font);
+    void onMonospacedFontChanged(const QString &font);
 
 signals:
 
@@ -131,8 +182,12 @@ signals:
     void iconSizeChanged(uint size);
     void enableEffectsChanged(bool enableEffects);
     void paddingSizeChanged(uint paddingSize);
-    void marginSizeChanged(uint marginSize);    
+    void marginSizeChanged(uint marginSize);
     void spacingSizeChanged(uint spacingSize);
+
+    void defaultFontChanged(QString defaultFont);
+    void smallFontChanged(QString smallFont);
+    void monospacedFontChanged(QString monospacedFont);
 
 private:
 #if !defined Q_OS_ANDROID
@@ -150,14 +205,17 @@ private:
     uint m_iconSize = ThemeManager::DefaultValues::iconSize;
     uint m_paddingSize = ThemeManager::DefaultValues::paddingSize;
     uint m_marginSize = ThemeManager::DefaultValues::marginSize;
-        uint m_spacingSize = ThemeManager::DefaultValues::spacingSize;
+    uint m_spacingSize = ThemeManager::DefaultValues::spacingSize;
 
     bool m_enableEffects = ThemeManager::DefaultValues::enableEffects;
+
+    QString m_defaultFont = MauiMan::ThemeManager::DefaultValues::defaultFont;
+    QString m_smallFont = MauiMan::ThemeManager::DefaultValues::smallFont;
+    QString m_monospacedFont =  MauiMan::ThemeManager::DefaultValues::monospacedFont;
 
     void sync(const QString &key, const QVariant &value);
     void setConnections();
     void loadSettings();
-    void updateGtk3Config();
 
 };
 }

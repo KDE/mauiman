@@ -4,43 +4,8 @@
 #include "mauimanutils.h"
 
 #include <QDebug>
-#include <QDir>
-#include <QStandardPaths>
-#include <QSettings>
 
 using namespace MauiMan;
-
-static QString gtkRc2Path()
-{
-    return QDir::homePath() + QLatin1String("/.gtkrc-2.0");
-}
-
-static QString gtk3SettingsIniPath()
-{
-    return QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1String("/gtk-3.0/settings.ini");
-}
-
-void ThemeManager::updateGtk3Config()
-{
-    qDebug() << "Request to update GTK3 configs";
-
-    QSettings settings(gtk3SettingsIniPath(), QSettings::IniFormat);
-    settings.clear();
-    settings.setIniCodec("UTF-8");
-    settings.beginGroup("Settings");
-
-    // font
-//    settings.setValue("gtk-font-name", QString("%1 %2").arg(systemFont()).arg(systemFontPointSize()));
-    // dark mode
-    settings.setValue("gtk-application-prefer-dark-theme", m_styleType == 1);
-    // icon theme
-    settings.setValue("gtk-icon-theme-name", m_iconTheme);
-    // other
-    settings.setValue("gtk-enable-animations", true);
-    // theme
-//    settings.setValue("gtk-theme-name", isDarkMode() ? "Cutefish-dark" : "Cutefish-light");
-    settings.sync();
-}
 
 
 ThemeManager::ThemeManager(QObject *parent) : QObject(parent)
@@ -70,12 +35,7 @@ ThemeManager::ThemeManager(QObject *parent) : QObject(parent)
 
     loadSettings();
 
-    connect(this, &ThemeManager::iconThemeChanged, [this](QString)
-    {
-        qDebug() << "Request to update IconTheme";
 
-       updateGtk3Config();
-    });
 }
 
 
@@ -120,6 +80,9 @@ void ThemeManager::setConnections()
         connect(m_interface, SIGNAL(marginSizeChanged(uint)), this, SLOT(onMarginSizeChanged(uint)));
         connect(m_interface, SIGNAL(spacingSizeChanged(uint)), this, SLOT(onSpacingSizeChanged(uint)));
         connect(m_interface, SIGNAL(enableEffectsChanged(bool)), this, SLOT(onEnableEffectsChanged(bool)));
+        connect(m_interface, SIGNAL(defaultFontChanged(QString)), this, SLOT(onDefaultFontChanged(QString)));
+        connect(m_interface, SIGNAL(smallFontChanged(QString)), this, SLOT(onSmallFontChanged(QString)));
+        connect(m_interface, SIGNAL(monospacedFontChanged(QString)), this, SLOT(onMonospacedFontChanged(QString)));
     }
 #endif
 }
@@ -142,6 +105,9 @@ void ThemeManager::loadSettings()
         m_marginSize = m_interface->property("marginSize").toUInt();
         m_spacingSize = m_interface->property("spacingSize").toUInt();
         m_enableEffects = m_interface->property("enableEffects").toBool();
+        m_defaultFont = m_interface->property("defaultFont").toString();
+        m_smallFont = m_interface->property("smallFont").toString();
+        m_monospacedFont = m_interface->property("monospacedFont").toString();
         return;
     }
 #endif
@@ -157,6 +123,9 @@ void ThemeManager::loadSettings()
     m_marginSize = m_settings->load("MarginSize", m_marginSize).toUInt();
     m_spacingSize = m_settings->load("SpacingSize", m_spacingSize).toUInt();
     m_enableEffects = m_settings->load("EnableEffects", m_enableEffects).toBool();
+    m_defaultFont = m_settings->load("DefaultFont", m_defaultFont).toString();
+    m_smallFont = m_settings->load("SmallFont", m_smallFont).toString();
+    m_monospacedFont = m_settings->load("MonospacedFont", m_monospacedFont).toString();
 }
 
 int ThemeManager::styleType() const
@@ -344,6 +313,33 @@ void ThemeManager::onEnableEffectsChanged(bool enableEffects)
     Q_EMIT enableEffectsChanged(m_enableEffects);
 }
 
+void ThemeManager::onDefaultFontChanged(const QString &font)
+{
+    if (m_defaultFont == font)
+        return;
+
+    m_defaultFont = font;
+    Q_EMIT defaultFontChanged(m_defaultFont);
+}
+
+void ThemeManager::onSmallFontChanged(const QString &font)
+{
+    if (m_smallFont == font)
+        return;
+
+    m_smallFont = font;
+    Q_EMIT smallFontChanged(m_smallFont);
+}
+
+void ThemeManager::onMonospacedFontChanged(const QString &font)
+{
+    if (m_monospacedFont == font)
+        return;
+
+    m_monospacedFont = font;
+    Q_EMIT monospacedFontChanged(m_monospacedFont);
+}
+
 uint ThemeManager::borderRadius() const
 {
     return m_borderRadius;
@@ -456,6 +452,69 @@ void ThemeManager::setSpacingSize(uint spacingSize)
 void ThemeManager::resetSPacingSize()
 {
     this->setSpacingSize(ThemeManager::DefaultValues::spacingSize);
+}
+
+QString ThemeManager::defaultFont() const
+{
+    return m_defaultFont;
+}
+
+QString ThemeManager::smallFont() const
+{
+    return m_smallFont;
+}
+
+QString ThemeManager::monospacedFont() const
+{
+    return m_monospacedFont;
+}
+
+void ThemeManager::setDefaultFont(QString defaultFont)
+{
+    if (m_defaultFont == defaultFont)
+        return;
+
+    m_defaultFont = defaultFont;
+    m_settings->save("DefaultFont", m_defaultFont);
+    sync("setDefaultFont", m_defaultFont);
+    Q_EMIT defaultFontChanged(m_defaultFont);
+}
+
+void ThemeManager::resetDefaultFont()
+{
+    setDefaultFont(ThemeManager::DefaultValues::defaultFont);
+}
+
+void ThemeManager::setSmallFont(QString smallFont)
+{
+    if (m_smallFont == smallFont)
+        return;
+
+    m_smallFont = smallFont;
+    m_settings->save("SmallFont", m_smallFont);
+    sync("setSmallFont", m_smallFont);
+    Q_EMIT smallFontChanged(m_smallFont);
+}
+
+void ThemeManager::resetSmallFont()
+{
+    setSmallFont(ThemeManager::DefaultValues::smallFont);
+}
+
+void ThemeManager::setMonospacedFont(QString monospacedFont)
+{
+    if (m_monospacedFont == monospacedFont)
+        return;
+
+    m_monospacedFont = monospacedFont;
+    m_settings->save("MonospacedFont", m_monospacedFont);
+    sync("setMonospacedFont", m_monospacedFont);
+    Q_EMIT monospacedFontChanged(m_monospacedFont);
+}
+
+void ThemeManager::resetMonospacedFont()
+{
+    setMonospacedFont(ThemeManager::DefaultValues::monospacedFont);
 }
 
 void MauiMan::ThemeManager::resetIconSize()
