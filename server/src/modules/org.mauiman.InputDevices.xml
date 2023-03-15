@@ -1,0 +1,42 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+<interface name="org.mauiman.InputDevices">
+<method name="setKeyaboardLayout">
+<arg name="layout" type="s" direction="in"/>
+</method>
+<method name="setKeyboardVariant">
+<arg name="variant" type="s" direction="in"/>
+</method>
+<method name="setKeyboardOptions">
+<arg name="options" type="s" direction="in"/>
+</method>
+<method name="setKeyboardRules">
+<arg name="rules" type="s" direction="in"/>
+</method>
+<method name="setKeyboardModel">
+<arg name="model" type="s" direction="in"/>
+</method>
+
+<property name="keyboardLayout" type="s" access="read"/>
+<property name="keyboardOptions" type="s" access="read"/>
+<property name="keyboardVariant" type="s" access="read"/>
+<property name="keyboardRules" type="s" access="read"/>
+<property name="keyboardModel" type="s" access="read"/>
+
+<signal name="keyboardLayoutChanged">
+<arg type="s"/>
+</signal>
+<signal name="keyboardVariantChanged">
+<arg type="s"/>
+</signal>
+<signal name="keyboardOptionsChanged">
+<arg type="s"/>
+</signal>
+<signal name="keyboardRulesChanged">
+<arg type="s"/>
+</signal>
+<signal name="keyboardModelChanged">
+<arg type="s"/>
+</signal>
+</interface>
+</node>
