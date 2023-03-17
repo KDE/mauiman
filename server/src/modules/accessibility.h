@@ -13,16 +13,13 @@ public:
     explicit Accessibility(QObject *parent = nullptr);
 
     bool singleClick() const;
-
-public slots:
     void setSingleClick(bool singleClick);
 
 private:
     bool m_singleClick = MauiMan::AccessibilityManager::DefaultValues::singleClick;
 
 
-signals:
-
+Q_SIGNALS:
     void singleClickChanged(bool singleClick);
 };
 

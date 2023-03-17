@@ -66,10 +66,10 @@ void FormFactorManager::setConnections()
         m_interface = nullptr;
     }
 
-    m_interface = new QDBusInterface("org.mauiman.Manager",
-                                       "/FormFactor",
-                                     "org.mauiman.FormFactor",
-                                       QDBusConnection::sessionBus(), this);
+    m_interface = new QDBusInterface(QStringLiteral("org.mauiman.Manager"),
+                                     QStringLiteral("/FormFactor"),
+                                     QStringLiteral("org.mauiman.FormFactor"),
+                                     QDBusConnection::sessionBus(), this);
 
     if (m_interface->isValid())
     {
@@ -80,7 +80,7 @@ void FormFactorManager::setConnections()
 
 void FormFactorManager::loadSettings()
 {
-    m_settings->beginModule("FormFactor");
+    m_settings->beginModule(QStringLiteral("FormFactor"));
 
 #if !defined Q_OS_ANDROID
     if(m_interface && m_interface->isValid())
@@ -90,7 +90,7 @@ void FormFactorManager::loadSettings()
     }
 #endif
 
-    m_preferredMode = m_settings->load("PreferredMode", m_preferredMode).toUInt();
+    m_preferredMode = m_settings->load(QStringLiteral("PreferredMode"), m_preferredMode).toUInt();
 }
 
 FormFactorManager::FormFactorManager(QObject *parent) : MauiMan::FormFactorInfo(parent)
@@ -161,8 +161,8 @@ void FormFactorManager::setPreferredMode(uint preferredMode)
 
     m_preferredMode = preferredMode;
 
-    sync("setPreferredMode", m_preferredMode);
-    m_settings->save("PreferredMode", m_preferredMode);
+    sync(QStringLiteral("setPreferredMode"), m_preferredMode);
+    m_settings->save(QStringLiteral("PreferredMode"), m_preferredMode);
 
     Q_EMIT preferredModeChanged(m_preferredMode);
 }
@@ -321,26 +321,26 @@ FormFactorInfo::FormFactorInfo(QObject *parent) : QObject(parent)
 
     //** Ask for screen sizes and dimension etc to Cask via CaskServer**//
 
-//    auto dummyApp = new QGuiApplication(0, []);
-//    QScreen *screen = QGuiApplication::primaryScreen();
-//    connect(screen, &QScreen::geometryChanged, [this](QRect rect)
-//    {
-//        m_screenSize = rect;
-//        Q_EMIT screenSizeChanged(m_screenSize);
+    //    auto dummyApp = new QGuiApplication(0, []);
+    //    QScreen *screen = QGuiApplication::primaryScreen();
+    //    connect(screen, &QScreen::geometryChanged, [this](QRect rect)
+    //    {
+    //        m_screenSize = rect;
+    //        Q_EMIT screenSizeChanged(m_screenSize);
 
-//        findBestMode();
-//    });
+    //        findBestMode();
+    //    });
 
-//    connect(screen, &QScreen::primaryOrientationChanged, [this](Qt::ScreenOrientation orientation)
-//    {
-//        m_screenOrientation = orientation;
-//        Q_EMIT screenOrientationChanged(m_screenOrientation);
+    //    connect(screen, &QScreen::primaryOrientationChanged, [this](Qt::ScreenOrientation orientation)
+    //    {
+    //        m_screenOrientation = orientation;
+    //        Q_EMIT screenOrientationChanged(m_screenOrientation);
 
-//        findBestMode();
-//    });
+    //        findBestMode();
+    //    });
 
-   // m_screenSize = screen->geometry();
-//    m_screenOrientation = screen->primaryOrientation();
+    // m_screenSize = screen->geometry();
+    //    m_screenOrientation = screen->primaryOrientation();
 
 
     findBestMode();

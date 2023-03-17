@@ -18,21 +18,22 @@ Theme::Theme(QObject *parent) : QObject(parent)
 
     bool ok = false;
     MauiMan::SettingsStore settings;
-    settings.beginModule("Theme");
-    m_accentColor = settings.load("AccentColor", m_accentColor).toString();
-    m_iconTheme = settings.load("IconTheme", m_iconTheme).toString();
-    m_windowControlsTheme = settings.load("WindowControlsTheme", m_windowControlsTheme).toString();
-    m_styleType = settings.load("StyleType", m_styleType).toInt(&ok);
-    m_enableCSD = settings.load("EnableCSD", m_enableCSD).toBool();
-    m_borderRadius = settings.load("BorderRadius", m_borderRadius).toUInt();
-    m_iconSize = settings.load("IconSize", m_iconSize).toUInt(&ok);
-    m_paddingSize = settings.load("PaddingSize", m_paddingSize).toUInt(&ok);
-    m_marginSize = settings.load("MarginSize", m_marginSize).toUInt(&ok);
-    m_spacingSize = settings.load("SpacingSize", m_spacingSize).toUInt(&ok);
-    m_enableEffects = settings.load("EnableEffects", m_enableEffects).toBool();
-    m_defaultFont = settings.load("DefaultFont", m_defaultFont).toString();
-    m_smallFont = settings.load("SmallFont", m_smallFont).toString();
-    m_monospacedFont = settings.load("MonospacedFont", m_monospacedFont).toString();
+    settings.beginModule(QStringLiteral("Theme"));
+    m_accentColor = settings.load(QStringLiteral("AccentColor"), m_accentColor).toString();
+    m_iconTheme = settings.load(QStringLiteral("IconTheme"), m_iconTheme).toString();
+    m_windowControlsTheme = settings.load(QStringLiteral("WindowControlsTheme"), m_windowControlsTheme).toString();
+    m_styleType = settings.load(QStringLiteral("StyleType"), m_styleType).toInt(&ok);
+    m_enableCSD = settings.load(QStringLiteral("EnableCSD"), m_enableCSD).toBool();
+    m_borderRadius = settings.load(QStringLiteral("BorderRadius"), m_borderRadius).toUInt();
+    m_iconSize = settings.load(QStringLiteral("IconSize"), m_iconSize).toUInt(&ok);
+    m_paddingSize = settings.load(QStringLiteral("PaddingSize"), m_paddingSize).toUInt(&ok);
+    m_marginSize = settings.load(QStringLiteral("MarginSize"), m_marginSize).toUInt(&ok);
+    m_spacingSize = settings.load(QStringLiteral("SpacingSize"), m_spacingSize).toUInt(&ok);
+    m_enableEffects = settings.load(QStringLiteral("EnableEffects"), m_enableEffects).toBool();
+    m_defaultFont = settings.load(QStringLiteral("DefaultFont"), m_defaultFont).toString();
+    m_smallFont = settings.load(QStringLiteral("SmallFont"), m_smallFont).toString();
+    m_monospacedFont = settings.load(QStringLiteral("MonospacedFont"), m_monospacedFont).toString();
+    m_customColorScheme = settings.load(QStringLiteral("CustomColorScheme"), m_customColorScheme).toString();
     settings.endModule();
 }
 
@@ -181,7 +182,7 @@ QString Theme::monospacedFont() const
     return m_monospacedFont;
 }
 
-void Theme::setDefaultFont(QString defaultFont)
+void Theme::setDefaultFont(const QString &defaultFont)
 {
     if (m_defaultFont == defaultFont)
         return;
@@ -190,7 +191,7 @@ void Theme::setDefaultFont(QString defaultFont)
     emit defaultFontChanged(m_defaultFont);
 }
 
-void Theme::setSmallFont(QString smallFont)
+void Theme::setSmallFont(const QString &smallFont)
 {
     if (m_smallFont == smallFont)
         return;
@@ -199,13 +200,27 @@ void Theme::setSmallFont(QString smallFont)
     Q_EMIT smallFontChanged(m_smallFont);
 }
 
-void Theme::setMonospacedFont(QString monospacedFont)
+void Theme::setMonospacedFont(const QString &monospacedFont)
 {
     if (m_monospacedFont == monospacedFont)
         return;
 
     m_monospacedFont = monospacedFont;
     Q_EMIT monospacedFontChanged(m_monospacedFont);
+}
+
+QString Theme::customColorScheme() const
+{
+    return m_customColorScheme;
+}
+
+void Theme::setCustomColorScheme(const QString &customColorScheme)
+{
+    if (m_customColorScheme == customColorScheme)
+        return;
+
+    m_customColorScheme = customColorScheme;
+    Q_EMIT customColorSchemeChanged(m_customColorScheme);
 }
 
 void Theme::setPaddingSize(uint paddingSize)

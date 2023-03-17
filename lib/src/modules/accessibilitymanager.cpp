@@ -46,8 +46,8 @@ void AccessibilityManager::setSingleClick(bool singleClick)
 
     m_singleClick = singleClick;
 
-    sync("setSingleClick", m_singleClick);
-    m_settings->save("SingleClick", m_singleClick);
+    sync(QStringLiteral("setSingleClick"), m_singleClick);
+    m_settings->save(QStringLiteral("SingleClick"), m_singleClick);
 
     emit singleClickChanged(m_singleClick);
 }
@@ -81,10 +81,10 @@ void AccessibilityManager::setConnections()
         m_interface = nullptr;
     }
 
-    m_interface = new QDBusInterface("org.mauiman.Manager",
-                                       "/Accessibility",
-                                     "org.mauiman.Accessibility",
-                                       QDBusConnection::sessionBus(), this);
+    m_interface = new QDBusInterface(QStringLiteral("org.mauiman.Manager"),
+                                     QStringLiteral("/Accessibility"),
+                                     QStringLiteral("org.mauiman.Accessibility"),
+                                     QDBusConnection::sessionBus(), this);
 
     if (m_interface->isValid())
     {
@@ -95,7 +95,7 @@ void AccessibilityManager::setConnections()
 
 void AccessibilityManager::loadSettings()
 {
-    m_settings->beginModule("Accessibility");
+    m_settings->beginModule(QStringLiteral("Accessibility"));
 
 #if !defined Q_OS_ANDROID
     if(m_interface && m_interface->isValid())
@@ -105,5 +105,5 @@ void AccessibilityManager::loadSettings()
     }
 #endif
 
-    m_singleClick = m_settings->load("SingleClick", m_singleClick).toBool();
+    m_singleClick = m_settings->load(QStringLiteral("SingleClick"), m_singleClick).toBool();
 }

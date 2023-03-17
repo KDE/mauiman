@@ -31,12 +31,12 @@ class MAUIMAN_EXPORT BackgroundManager : public QObject
 public:
     struct DefaultValues
     {
-        static inline const QString wallpaperSource = "qrc:/wallpapers/maui_shell_dev_bg.png";
+        static inline const QString wallpaperSource = QStringLiteral("qrc:/wallpapers/maui_shell_dev_bg.png");
         static inline const bool dimWallpaper = false;
         static inline const bool fitWallpaper = false; //false is to fill, true to fit
-        static inline const QString solidColor = "#333";
+        static inline const QString solidColor = QStringLiteral("#333");
         static inline const bool showWallpaper = true;
-        static inline const QString wallpaperSourceDir = "file:///usr/share/wallpapers/Cask";
+        static inline const QString wallpaperSourceDir = QStringLiteral("file:///usr/share/wallpapers/Cask");
     } ;
 
     explicit BackgroundManager(QObject * parent = nullptr);

@@ -29,6 +29,7 @@ public:
      * @return
      */
     uint preferredMode() const;
+    void setPreferredMode(uint preferredMode);
 
     /**
      * @brief bestMode
@@ -51,11 +52,8 @@ public:
 
     bool hasTouchpad() const;
 
-public slots:
-    void setPreferredMode(uint preferredMode);
-
     
-private slots:    
+private Q_SLOTS:
     void setBestMode(uint bestMode);
     void setHasKeyboard(bool value);
     void setHasMouse(bool value);
@@ -80,8 +78,7 @@ private:
 
     bool hasTouchScreen() const;
 
-
-signals:
+Q_SIGNALS:
     void preferredModeChanged(uint preferredMode);
     void bestModeChanged(uint bestMode);
     void defaultModeChanged(uint defaultMode);

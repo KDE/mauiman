@@ -14,6 +14,7 @@ set(mauiman_HDRS
     modules/screenmanager.h
     modules/formfactormanager.h
     modules/accessibilitymanager.h
+    modules/inputdevicesmanager.h
     mauimanutils.h
     )
 
@@ -24,6 +25,7 @@ set(mauiman_SRCS
     modules/screenmanager.cpp
     modules/formfactormanager.cpp
     modules/accessibilitymanager.cpp
+    modules/inputdevicesmanager.cpp
     mauimanutils.cpp
     )
 

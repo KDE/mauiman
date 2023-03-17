@@ -35,7 +35,6 @@ ThemeManager::ThemeManager(QObject *parent) : QObject(parent)
 
     loadSettings();
 
-
 }
 
 
@@ -62,9 +61,9 @@ void ThemeManager::setConnections()
         m_interface = nullptr;
     }
 
-    m_interface = new QDBusInterface  ("org.mauiman.Manager",
-                                       "/Theme",
-                                       "org.mauiman.Theme",
+    m_interface = new QDBusInterface  (QStringLiteral("org.mauiman.Manager"),
+                                       QStringLiteral("/Theme"),
+                                       QStringLiteral("org.mauiman.Theme"),
                                        QDBusConnection::sessionBus(), this);
 
     if (m_interface->isValid())
@@ -83,6 +82,7 @@ void ThemeManager::setConnections()
         connect(m_interface, SIGNAL(defaultFontChanged(QString)), this, SLOT(onDefaultFontChanged(QString)));
         connect(m_interface, SIGNAL(smallFontChanged(QString)), this, SLOT(onSmallFontChanged(QString)));
         connect(m_interface, SIGNAL(monospacedFontChanged(QString)), this, SLOT(onMonospacedFontChanged(QString)));
+        connect(m_interface, SIGNAL(customColorSchemeChanged(QString)), this, SLOT(onCustomColorSchemeChanged(QString)));
     }
 #endif
 }
@@ -108,24 +108,26 @@ void ThemeManager::loadSettings()
         m_defaultFont = m_interface->property("defaultFont").toString();
         m_smallFont = m_interface->property("smallFont").toString();
         m_monospacedFont = m_interface->property("monospacedFont").toString();
+        m_customColorScheme = m_interface->property("customColorScheme").toString();
         return;
     }
 #endif
 
-    m_accentColor = m_settings->load("AccentColor", m_accentColor).toString();
-    m_styleType = m_settings->load("StyleType", m_styleType).toInt();
-    m_iconTheme = m_settings->load("IconTheme", m_iconTheme).toString();
-    m_windowControlsTheme = m_settings->load("WindowControlsTheme", m_windowControlsTheme).toString();
-    m_enableCSD = m_settings->load("EnableCSD", m_enableCSD).toBool();
-    m_borderRadius = m_settings->load("BorderRadius", m_borderRadius).toUInt();
-    m_iconSize = m_settings->load("IconSize", m_iconSize).toUInt();
-    m_paddingSize = m_settings->load("PaddingSize", m_paddingSize).toUInt();
-    m_marginSize = m_settings->load("MarginSize", m_marginSize).toUInt();
-    m_spacingSize = m_settings->load("SpacingSize", m_spacingSize).toUInt();
-    m_enableEffects = m_settings->load("EnableEffects", m_enableEffects).toBool();
-    m_defaultFont = m_settings->load("DefaultFont", m_defaultFont).toString();
-    m_smallFont = m_settings->load("SmallFont", m_smallFont).toString();
-    m_monospacedFont = m_settings->load("MonospacedFont", m_monospacedFont).toString();
+    m_accentColor = m_settings->load(QStringLiteral("AccentColor"), m_accentColor).toString();
+    m_styleType = m_settings->load(QStringLiteral("StyleType"), m_styleType).toInt();
+    m_iconTheme = m_settings->load(QStringLiteral("IconTheme"), m_iconTheme).toString();
+    m_windowControlsTheme = m_settings->load(QStringLiteral("WindowControlsTheme"), m_windowControlsTheme).toString();
+    m_enableCSD = m_settings->load(QStringLiteral("EnableCSD"), m_enableCSD).toBool();
+    m_borderRadius = m_settings->load(QStringLiteral("BorderRadius"), m_borderRadius).toUInt();
+    m_iconSize = m_settings->load(QStringLiteral("IconSize"), m_iconSize).toUInt();
+    m_paddingSize = m_settings->load(QStringLiteral("PaddingSize"), m_paddingSize).toUInt();
+    m_marginSize = m_settings->load(QStringLiteral("MarginSize"), m_marginSize).toUInt();
+    m_spacingSize = m_settings->load(QStringLiteral("SpacingSize"), m_spacingSize).toUInt();
+    m_enableEffects = m_settings->load(QStringLiteral("EnableEffects"), m_enableEffects).toBool();
+    m_defaultFont = m_settings->load(QStringLiteral("DefaultFont"), m_defaultFont).toString();
+    m_smallFont = m_settings->load(QStringLiteral("SmallFont"), m_smallFont).toString();
+    m_monospacedFont = m_settings->load(QStringLiteral("MonospacedFont"), m_monospacedFont).toString();
+    m_customColorScheme = m_settings->load(QStringLiteral("CustomColorScheme"), m_customColorScheme).toString();
 }
 
 int ThemeManager::styleType() const
@@ -157,8 +159,8 @@ void ThemeManager::setAccentColor(const QString &newAccentColor)
     qDebug() << "Setting accent color" << m_accentColor;
 
     m_accentColor = newAccentColor;
-    m_settings->save("AccentColor", m_accentColor);
-    sync("setAccentColor", m_accentColor);
+    m_settings->save(QStringLiteral("AccentColor"), m_accentColor);
+    sync(QStringLiteral("setAccentColor"), m_accentColor);
     Q_EMIT accentColorChanged(m_accentColor);
 }
 
@@ -178,8 +180,8 @@ void ThemeManager::setIconTheme(const QString &newIconTheme)
         return;
 
     m_iconTheme = newIconTheme;
-    m_settings->save("IconTheme", m_iconTheme);
-    sync("setIconTheme", m_iconTheme);
+    m_settings->save(QStringLiteral("IconTheme"), m_iconTheme);
+    sync(QStringLiteral("setIconTheme"), m_iconTheme);
     Q_EMIT iconThemeChanged(m_iconTheme);
 }
 
@@ -194,8 +196,8 @@ void ThemeManager::setWindowControlsTheme(const QString &newWindowControlsTheme)
         return;
 
     m_windowControlsTheme = newWindowControlsTheme;
-    m_settings->save("WindowControlsTheme", m_windowControlsTheme);
-    sync("setWindowControlsTheme", m_windowControlsTheme);
+    m_settings->save(QStringLiteral("WindowControlsTheme"), m_windowControlsTheme);
+    sync(QStringLiteral("setWindowControlsTheme"), m_windowControlsTheme);
     Q_EMIT windowControlsThemeChanged(m_windowControlsTheme);
 }
 
@@ -210,8 +212,8 @@ void ThemeManager::setEnableCSD(bool enableCSD)
         return;
 
     m_enableCSD = enableCSD;
-    m_settings->save("EnableCSD", m_enableCSD);
-    sync("setEnableCSD", m_enableCSD);
+    m_settings->save(QStringLiteral("EnableCSD"), m_enableCSD);
+    sync(QStringLiteral("setEnableCSD"), m_enableCSD);
     Q_EMIT enableCSDChanged(m_enableCSD);
 }
 
@@ -340,6 +342,15 @@ void ThemeManager::onMonospacedFontChanged(const QString &font)
     Q_EMIT monospacedFontChanged(m_monospacedFont);
 }
 
+void ThemeManager::onCustomColorSchemeChanged(const QString &scheme)
+{
+    if (m_customColorScheme == scheme)
+        return;
+
+    m_customColorScheme = scheme;
+    Q_EMIT customColorSchemeChanged(m_customColorScheme);
+}
+
 uint ThemeManager::borderRadius() const
 {
     return m_borderRadius;
@@ -350,8 +361,8 @@ void ThemeManager::setBorderRadius(uint newBorderRadius)
     if (m_borderRadius == newBorderRadius)
         return;
     m_borderRadius = newBorderRadius;
-    m_settings->save("BorderRadius", m_borderRadius);
-    sync("setBorderRadius", m_borderRadius);
+    m_settings->save(QStringLiteral("BorderRadius"), m_borderRadius);
+    sync(QStringLiteral("setBorderRadius"), m_borderRadius);
     Q_EMIT borderRadiusChanged(m_borderRadius);
 }
 
@@ -370,8 +381,8 @@ void ThemeManager::setIconSize(uint newIconSize)
     if (m_iconSize == newIconSize)
         return;
     m_iconSize = newIconSize;
-    m_settings->save("IconSize", m_iconSize);
-    sync("setIconSize", m_iconSize);
+    m_settings->save(QStringLiteral("IconSize"), m_iconSize);
+    sync(QStringLiteral("setIconSize"), m_iconSize);
     Q_EMIT iconSizeChanged(m_iconSize);
 }
 
@@ -386,8 +397,8 @@ void ThemeManager::setEnableEffects(bool enableEffects)
         return;
 
     m_enableEffects = enableEffects;
-    m_settings->save("EnableEffects", m_enableEffects);
-    sync("setEnableEffects", m_enableEffects);
+    m_settings->save(QStringLiteral("EnableEffects"), m_enableEffects);
+    sync(QStringLiteral("setEnableEffects"), m_enableEffects);
     Q_EMIT enableEffectsChanged(m_enableEffects);
 }
 
@@ -407,8 +418,8 @@ void ThemeManager::setPaddingSize(uint paddingSize)
         return;
 
     m_paddingSize = paddingSize;
-    m_settings->save("PaddingSize", m_paddingSize);
-    sync("setPaddingSize", m_paddingSize);
+    m_settings->save(QStringLiteral("PaddingSize"), m_paddingSize);
+    sync(QStringLiteral("setPaddingSize"), m_paddingSize);
     Q_EMIT paddingSizeChanged(m_paddingSize);
 }
 
@@ -423,8 +434,8 @@ void ThemeManager::setMarginSize(uint marginSize)
         return;
 
     m_marginSize = marginSize;
-    m_settings->save("MarginSize", m_marginSize);
-    sync("setMarginSize", m_marginSize);
+    m_settings->save(QStringLiteral("MarginSize"), m_marginSize);
+    sync(QStringLiteral("setMarginSize"), m_marginSize);
     Q_EMIT marginSizeChanged(m_marginSize);
 }
 
@@ -444,8 +455,8 @@ void ThemeManager::setSpacingSize(uint spacingSize)
         return;
 
     m_spacingSize = spacingSize;
-    m_settings->save("SpacingSize", m_spacingSize);
-    sync("setSpacingSize", m_spacingSize);
+    m_settings->save(QStringLiteral("SpacingSize"), m_spacingSize);
+    sync(QStringLiteral("setSpacingSize"), m_spacingSize);
     emit spacingSizeChanged(m_spacingSize);
 }
 
@@ -469,14 +480,14 @@ QString ThemeManager::monospacedFont() const
     return m_monospacedFont;
 }
 
-void ThemeManager::setDefaultFont(QString defaultFont)
+void ThemeManager::setDefaultFont(const QString &defaultFont)
 {
     if (m_defaultFont == defaultFont)
         return;
 
     m_defaultFont = defaultFont;
-    m_settings->save("DefaultFont", m_defaultFont);
-    sync("setDefaultFont", m_defaultFont);
+    m_settings->save(QStringLiteral("DefaultFont"), m_defaultFont);
+    sync(QStringLiteral("setDefaultFont"), m_defaultFont);
     Q_EMIT defaultFontChanged(m_defaultFont);
 }
 
@@ -485,14 +496,14 @@ void ThemeManager::resetDefaultFont()
     setDefaultFont(ThemeManager::DefaultValues::defaultFont);
 }
 
-void ThemeManager::setSmallFont(QString smallFont)
+void ThemeManager::setSmallFont(const QString &smallFont)
 {
     if (m_smallFont == smallFont)
         return;
 
     m_smallFont = smallFont;
-    m_settings->save("SmallFont", m_smallFont);
-    sync("setSmallFont", m_smallFont);
+    m_settings->save(QStringLiteral("SmallFont"), m_smallFont);
+    sync(QStringLiteral("setSmallFont"), m_smallFont);
     Q_EMIT smallFontChanged(m_smallFont);
 }
 
@@ -501,20 +512,36 @@ void ThemeManager::resetSmallFont()
     setSmallFont(ThemeManager::DefaultValues::smallFont);
 }
 
-void ThemeManager::setMonospacedFont(QString monospacedFont)
+void ThemeManager::setMonospacedFont(const QString &monospacedFont)
 {
     if (m_monospacedFont == monospacedFont)
         return;
 
     m_monospacedFont = monospacedFont;
-    m_settings->save("MonospacedFont", m_monospacedFont);
-    sync("setMonospacedFont", m_monospacedFont);
+    m_settings->save(QStringLiteral("MonospacedFont"), m_monospacedFont);
+    sync(QStringLiteral("setMonospacedFont"), m_monospacedFont);
     Q_EMIT monospacedFontChanged(m_monospacedFont);
 }
 
 void ThemeManager::resetMonospacedFont()
 {
     setMonospacedFont(ThemeManager::DefaultValues::monospacedFont);
+}
+
+QString ThemeManager::customColorScheme() const
+{
+    return m_customColorScheme;
+}
+
+void ThemeManager::setCustomColorScheme(const QString &customColorScheme)
+{
+    if (m_customColorScheme == customColorScheme)
+        return;
+
+    m_customColorScheme = customColorScheme;
+    m_settings->save(QStringLiteral("CustomColorScheme"), m_customColorScheme);
+    sync(QStringLiteral("setCustomColorScheme"), m_customColorScheme);
+    Q_EMIT customColorSchemeChanged(m_customColorScheme);
 }
 
 void MauiMan::ThemeManager::resetIconSize()

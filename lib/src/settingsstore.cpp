@@ -1,8 +1,8 @@
 #include "settingsstore.h"
 #include <QSettings>
 
-static const QString ORG = "Maui";
-static const QString APP = "MauiMan";
+static const char * ORG = "Maui";
+static const char * APP = "MauiMan";
 
 using namespace MauiMan;
 SettingsStore::SettingsStore(QObject *parent) : QObject(parent)

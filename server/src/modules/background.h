@@ -26,17 +26,17 @@ public:
 
     bool showWallpaper() const;
 
-    void setWallpaperSource(QString wallpaperSource);
+    void setWallpaperSource(const QString &wallpaperSource);
 
     void setDimWallpaper(bool dimWallpaper);
 
     void setFitWallpaper(bool fitWallpaper);
 
-    void setSolidColor(QString solidColor);
+    void setSolidColor(const QString &solidColor);
 
     void setShowWallpaper(bool showWallpaper);
 
-signals:
+Q_SIGNALS:
     void wallpaperSourceChanged(QString wallpaperSource);
 
     void dimWallpaperChanged(bool dimWallpaper);

@@ -37,6 +37,7 @@ class MAUIMAN_EXPORT ThemeManager : public QObject
     Q_PROPERTY(QString defaultFont READ defaultFont WRITE setDefaultFont NOTIFY defaultFontChanged RESET resetDefaultFont)
     Q_PROPERTY(QString smallFont READ smallFont WRITE setSmallFont NOTIFY smallFontChanged RESET resetSmallFont)
     Q_PROPERTY(QString monospacedFont READ monospacedFont WRITE setMonospacedFont NOTIFY monospacedFontChanged RESET resetMonospacedFont)
+    Q_PROPERTY(QString customColorScheme READ customColorScheme WRITE setCustomColorScheme NOTIFY customColorSchemeChanged)
 
 public:
 
@@ -59,37 +60,37 @@ public:
 
         static QString getDefaultFont()
         {
-            QFont font {"Noto Sans", 10, QFont::Normal};
+            QFont font {QStringLiteral("Noto Sans"), 10, QFont::Normal};
              font.setStyleHint(QFont::SansSerif);
              font.setStyle(QFont::StyleNormal);
-             font.setStyleName("Regular");
+             font.setStyleName(QStringLiteral("Regular"));
              return font.toString();
         }
 
         static QString getSmallFont()
         {
-            QFont font {"Noto Sans", 8, QFont::Normal};
+            QFont font {QStringLiteral("Noto Sans"), 8, QFont::Normal};
              font.setStyleHint(QFont::SansSerif);
              font.setStyle(QFont::StyleNormal);
-             font.setStyleName("Regular");
+             font.setStyleName(QStringLiteral("Regular"));
 
              return font.toString();
         }
 
         static QString getMonospacedFont()
         {
-            QFont font {"Hack", 10, QFont::Normal};
+            QFont font {QStringLiteral("Hack"), 10, QFont::Normal};
              font.setStyleHint(QFont::Monospace);
              font.setStyle(QFont::StyleNormal);
-             font.setStyleName("Regular");
+             font.setStyleName(QStringLiteral("Regular"));
 
              return font.toString();
         }
 
         static inline const int styleType = ThemeManager::DefaultValues::preferredStyleType();
-        static inline const QString accentColor = "#26c6da";
-        static inline const QString iconTheme = "Luv";
-        static inline const QString windowControlsTheme = "Nitrux";
+        static inline const QString accentColor = QStringLiteral("#26c6da");
+        static inline const QString iconTheme = QStringLiteral("Luv");
+        static inline const QString windowControlsTheme = QStringLiteral("Nitrux");
         static inline const bool enableCSD = true;
         static inline const uint borderRadius = 6;
         static inline const uint iconSize = 16;
@@ -100,6 +101,7 @@ public:
         static inline const QString defaultFont = getDefaultFont();
         static inline const QString smallFont = getSmallFont();
         static inline const QString monospacedFont = getMonospacedFont();
+        static inline const QString customColorScheme = QStringLiteral("Nitrux");
     };
 
     explicit ThemeManager(QObject * parent = nullptr);
@@ -144,18 +146,21 @@ public:
     void resetSPacingSize();
 
     QString defaultFont() const;
-    void setDefaultFont(QString defaultFont);
+    void setDefaultFont(const QString &defaultFont);
     void resetDefaultFont();
 
     QString smallFont() const;
-    void setSmallFont(QString smallFont);
+    void setSmallFont(const QString &smallFont);
     void resetSmallFont();
 
     QString monospacedFont() const;
-    void setMonospacedFont(QString monospacedFont);
+    void setMonospacedFont(const QString &monospacedFont);
     void resetMonospacedFont();
 
-private slots:
+    QString customColorScheme() const;
+    void setCustomColorScheme(const QString &customColorScheme);
+
+private Q_SLOTS:
     void onStyleTypeChanged(const int &newStyleType);
     void onAccentColorChanged(const QString &newAccentColor);
     void onWindowControlsThemeChanged(const QString &newWindowControlsTheme);
@@ -170,9 +175,9 @@ private slots:
     void onDefaultFontChanged(const QString &font);
     void onSmallFontChanged(const QString &font);
     void onMonospacedFontChanged(const QString &font);
+    void onCustomColorSchemeChanged(const QString &scheme);
 
-signals:
-
+Q_SIGNALS:
     void styleTypeChanged(int styleType);
     void accentColorChanged(QString accentColor);
     void iconThemeChanged(QString iconTheme);
@@ -184,10 +189,10 @@ signals:
     void paddingSizeChanged(uint paddingSize);
     void marginSizeChanged(uint marginSize);
     void spacingSizeChanged(uint spacingSize);
-
     void defaultFontChanged(QString defaultFont);
     void smallFontChanged(QString smallFont);
-    void monospacedFontChanged(QString monospacedFont);
+    void monospacedFontChanged(QString monospacedFont);    
+    void customColorSchemeChanged(QString customColorScheme);
 
 private:
 #if !defined Q_OS_ANDROID
@@ -206,12 +211,11 @@ private:
     uint m_paddingSize = ThemeManager::DefaultValues::paddingSize;
     uint m_marginSize = ThemeManager::DefaultValues::marginSize;
     uint m_spacingSize = ThemeManager::DefaultValues::spacingSize;
-
     bool m_enableEffects = ThemeManager::DefaultValues::enableEffects;
-
     QString m_defaultFont = MauiMan::ThemeManager::DefaultValues::defaultFont;
     QString m_smallFont = MauiMan::ThemeManager::DefaultValues::smallFont;
-    QString m_monospacedFont =  MauiMan::ThemeManager::DefaultValues::monospacedFont;
+    QString m_monospacedFont = MauiMan::ThemeManager::DefaultValues::monospacedFont;
+    QString m_customColorScheme = MauiMan::ThemeManager::DefaultValues::customColorScheme;
 
     void sync(const QString &key, const QVariant &value);
     void setConnections();

@@ -16,12 +16,12 @@ Background::Background(QObject *parent) : QObject(parent)
         return;
     }
     MauiMan::SettingsStore settings;
-    settings.beginModule("Background");
-    m_wallpaperSource = settings.load("Wallpaper", m_wallpaperSource).toString();
-    m_dimWallpaper = settings.load("DimWallpaper", m_dimWallpaper).toBool();
-    m_fitWallpaper = settings.load("FitWallpaper", m_fitWallpaper).toBool();
-    m_showWallpaper = settings.load("ShowWallpaper", m_showWallpaper).toBool();
-    m_solidColor = settings.load("SolidColor", m_solidColor).toString();
+    settings.beginModule(QStringLiteral("Background"));
+    m_wallpaperSource = settings.load(QStringLiteral("Wallpaper"), m_wallpaperSource).toString();
+    m_dimWallpaper = settings.load(QStringLiteral("DimWallpaper"), m_dimWallpaper).toBool();
+    m_fitWallpaper = settings.load(QStringLiteral("FitWallpaper"), m_fitWallpaper).toBool();
+    m_showWallpaper = settings.load(QStringLiteral("ShowWallpaper"), m_showWallpaper).toBool();
+    m_solidColor = settings.load(QStringLiteral("SolidColor"), m_solidColor).toString();
     settings.endModule();
 }
 
@@ -50,7 +50,7 @@ bool Background::showWallpaper() const
     return m_showWallpaper;
 }
 
-void Background::setWallpaperSource(QString wallpaperSource)
+void Background::setWallpaperSource(const QString &wallpaperSource)
 {
     if (m_wallpaperSource == wallpaperSource)
         return;
@@ -77,7 +77,7 @@ void Background::setFitWallpaper(bool fitWallpaper)
     emit fitWallpaperChanged(m_fitWallpaper);
 }
 
-void Background::setSolidColor(QString solidColor)
+void Background::setSolidColor(const QString &solidColor)
 {
     if (m_solidColor == solidColor)
         return;

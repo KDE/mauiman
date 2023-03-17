@@ -22,6 +22,7 @@ class Theme : public QObject
     Q_PROPERTY(QString defaultFont READ defaultFont WRITE setDefaultFont NOTIFY defaultFontChanged)
     Q_PROPERTY(QString smallFont READ smallFont WRITE setSmallFont NOTIFY smallFontChanged)
     Q_PROPERTY(QString monospacedFont READ monospacedFont WRITE setMonospacedFont NOTIFY monospacedFontChanged)
+    Q_PROPERTY(QString customColorScheme READ customColorScheme WRITE setCustomColorScheme NOTIFY customColorSchemeChanged)
 
 public:
     explicit Theme(QObject * parent = nullptr);
@@ -60,15 +61,18 @@ public:
     void setSpacingSize(uint spacingSize);
 
     QString defaultFont() const;
-    void setDefaultFont(QString defaultFont);
+    void setDefaultFont(const QString &defaultFont);
 
     QString smallFont() const;
-    void setSmallFont(QString smallFont);
+    void setSmallFont(const QString &smallFont);
 
     QString monospacedFont() const;
-    void setMonospacedFont(QString monospacedFont);
+    void setMonospacedFont(const QString &monospacedFont);
 
-signals:
+    QString customColorScheme() const;
+    void setCustomColorScheme(const QString &customColorScheme);
+
+Q_SIGNALS:
     void styleTypeChanged(int styleStype);
     void accentColorChanged(QString accentColor);
 
@@ -96,6 +100,8 @@ signals:
 
     void monospacedFontChanged(QString monospacedFont);
 
+    void customColorSchemeChanged(QString customColorScheme);
+
 private:
     int m_styleType = MauiMan::ThemeManager::DefaultValues::styleType;
     QString m_accentColor = MauiMan::ThemeManager::DefaultValues::accentColor;
@@ -110,5 +116,6 @@ private:
     uint m_spacingSize = MauiMan::ThemeManager::DefaultValues::spacingSize;
     QString m_defaultFont = MauiMan::ThemeManager::DefaultValues::defaultFont;
     QString m_smallFont = MauiMan::ThemeManager::DefaultValues::smallFont;
-    QString m_monospacedFont =  MauiMan::ThemeManager::DefaultValues::monospacedFont;
+    QString m_monospacedFont = MauiMan::ThemeManager::DefaultValues::monospacedFont;
+    QString m_customColorScheme = MauiMan::ThemeManager::DefaultValues::customColorScheme;
 };

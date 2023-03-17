@@ -19,11 +19,9 @@ public:
     void setScaleFactor(double scaleFactor);
 
     uint orientation() const;
-
-public slots:
     void setOrientation(uint orientation);
 
-signals:
+Q_SIGNALS:
     void scaleFactorChanged(double scaleFactor);
 
     void orientationChanged(uint orientation);

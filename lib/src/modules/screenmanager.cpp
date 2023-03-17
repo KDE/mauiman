@@ -46,8 +46,8 @@ void ScreenManager::setScaleFactor(double scaleFactor)
         return;
 
     m_scaleFactor = scaleFactor;
-    sync("setScaleFactor", m_scaleFactor);
-    m_settings->save("ScaleFactor", m_scaleFactor);
+    sync(QStringLiteral("setScaleFactor"), m_scaleFactor);
+    m_settings->save(QStringLiteral("ScaleFactor"), m_scaleFactor);
     Q_EMIT scaleFactorChanged(m_scaleFactor);
 }
 
@@ -62,8 +62,8 @@ void ScreenManager::setOrientation(uint orientation)
         return;
 
     m_orientation = orientation;
-    sync("setOrientation", m_orientation);
-    m_settings->save("Orientation", m_orientation);
+    sync(QStringLiteral("setOrientation"), m_orientation);
+    m_settings->save(QStringLiteral("Orientation"), m_orientation);
     Q_EMIT orientationChanged(m_orientation);
 }
 
@@ -101,7 +101,6 @@ void ScreenManager::sync(const QString &key, const QVariant &value)
 void ScreenManager::setConnections()
 {
 #if !defined Q_OS_ANDROID
-
     if(m_interface)
     {
         m_interface->disconnect();
@@ -109,9 +108,9 @@ void ScreenManager::setConnections()
         m_interface = nullptr;
     }
 
-    m_interface = new QDBusInterface ("org.mauiman.Manager",
-                                      "/Screen",
-                                      "org.mauiman.Screen",
+    m_interface = new QDBusInterface (QStringLiteral("org.mauiman.Manager"),
+                                      QStringLiteral("/Screen"),
+                                      QStringLiteral("org.mauiman.Screen"),
                                       QDBusConnection::sessionBus(), this);
     if (m_interface->isValid())
     {
@@ -124,7 +123,7 @@ void ScreenManager::setConnections()
 
 void ScreenManager::loadSettings()
 {
-    m_settings->beginModule("Screen");
+    m_settings->beginModule(QStringLiteral("Screen"));
 
 #if !defined Q_OS_ANDROID
 
@@ -136,6 +135,6 @@ void ScreenManager::loadSettings()
     }
 #endif
 
-    m_scaleFactor = m_settings->load("ScaleFactor", m_scaleFactor).toDouble();
-    m_orientation = m_settings->load("Orientation", m_orientation).toUInt();
+    m_scaleFactor = m_settings->load(QStringLiteral("ScaleFactor"), m_scaleFactor).toDouble();
+    m_orientation = m_settings->load(QStringLiteral("Orientation"), m_orientation).toUInt();
 }

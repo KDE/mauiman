@@ -10,6 +10,8 @@
 
 Accessibility::Accessibility(QObject *parent) : QObject(parent)
 {
+    qDebug( " INIT ACCESSIBILITY MODULE");
+
     new AccessibilityAdaptor(this);
     if(!QDBusConnection::sessionBus().registerObject(QStringLiteral("/Accessibility"), this))
     {

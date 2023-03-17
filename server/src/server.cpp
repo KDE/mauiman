@@ -7,6 +7,7 @@
 #include "modules/screen.h"
 #include "modules/formfactor.h"
 #include "modules/accessibility.h"
+#include "modules/inputdevices.h"
 
 #include <signal.h>
 
@@ -40,7 +41,7 @@ bool Server::init()
 {
     QDBusConnectionInterface *iface = QDBusConnection::sessionBus().interface();
 
-    if(iface->isServiceRegistered("org.mauiman.Manager"))
+    if(iface->isServiceRegistered(QStringLiteral("org.mauiman.Manager")))
     {
         qWarning() << "Service is already registered";
         return false;
@@ -67,5 +68,6 @@ bool Server::init()
     m_modules << new Screen();
     m_modules << new FormFactor();
     m_modules << new Accessibility();
+    m_modules << new InputDevices();
     return true;
 }

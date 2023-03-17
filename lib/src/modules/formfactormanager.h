@@ -80,7 +80,6 @@ return true;
     Qt::ScreenOrientation screenOrientation();
 
 private:
-
     uint m_bestMode = FormFactorInfo::DefaultValues::defaultMode;
 
     uint m_defaultMode = FormFactorInfo::DefaultValues::defaultMode;
@@ -96,13 +95,11 @@ private:
     QRect m_screenSize;
     Qt::ScreenOrientation m_screenOrientation;
 
-
     void checkInputs(const QInputInfoManager *inputManager);
 
     void findBestMode();
-
     
-signals:
+Q_SIGNALS:
     void bestModeChanged(uint bestMode);
     void defaultModeChanged(uint defaultMode);
 
@@ -127,11 +124,9 @@ public:
     explicit FormFactorManager(QObject *parent = nullptr);
 
     uint preferredMode() const;
-
-public slots:
     void setPreferredMode(uint preferredMode);
 
-private slots:
+private Q_SLOTS:
     void onPreferredModeChanged(uint preferredMode);
 
 private:
@@ -147,7 +142,7 @@ private:
     void setConnections();
     void loadSettings();
 
-signals:
+Q_SIGNALS:
     void preferredModeChanged(uint preferredMode);
 
 };

@@ -1,5 +1,4 @@
-#ifndef SERVER_H
-#define SERVER_H
+#pragma once
 
 #include <QCoreApplication>
 #include <QObject>
@@ -16,4 +15,3 @@ private:
     QVector<QObject*> m_modules;
 };
 
-#endif // SERVER_H

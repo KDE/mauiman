@@ -16,9 +16,9 @@ Screen::Screen(QObject *parent) : QObject(parent)
         return;
     }
     MauiMan::SettingsStore settings;
-    settings.beginModule("Screen");
-    m_scaleFactor = settings.load("ScaleFactor", m_scaleFactor).toFloat();
-    m_orientation = settings.load("Orientation", m_scaleFactor).toUInt();
+    settings.beginModule(QStringLiteral("Screen"));
+    m_scaleFactor = settings.load(QStringLiteral("ScaleFactor"), m_scaleFactor).toFloat();
+    m_orientation = settings.load(QStringLiteral("Orientation"), m_scaleFactor).toUInt();
     settings.endModule();
 }
 

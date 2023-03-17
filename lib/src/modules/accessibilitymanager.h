@@ -32,11 +32,10 @@ return true;
     explicit AccessibilityManager(QObject *parent = nullptr);
 
     bool singleClick() const;
-
-public slots:
     void setSingleClick(bool singleClick);
 
-private slots:
+
+private Q_SLOTS:
     void onSingleClickChanged(bool singleClick);
 
 private:
@@ -47,13 +46,11 @@ private:
 
     bool m_singleClick = AccessibilityManager::DefaultValues::singleClick;
 
-
     void sync(const QString &key, const QVariant &value);
     void setConnections();
     void loadSettings();
 
-signals:
-
+Q_SIGNALS:
     void singleClickChanged(bool singleClick);
 };
 
