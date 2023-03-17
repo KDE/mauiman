@@ -6,7 +6,7 @@ class QDBusInterface;
 namespace MauiMan
 {
 class SettingsStore;
-class InputDevicesManager : public QObject
+class MAUIMAN_EXPORT InputDevicesManager : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString keyboardLayout READ keyboardLayout WRITE setKeyboardLayout NOTIFY keyboardLayoutChanged)
