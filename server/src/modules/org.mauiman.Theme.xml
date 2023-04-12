@@ -1,6 +1,7 @@
 <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 <node>
 <interface name="org.mauiman.Theme">
+
 <method name="setAccentColor">
 <arg name="accentColor" type="s" direction="in"/>
 </method>
@@ -8,15 +9,19 @@
 <method name="setStyleType">
 <arg name="styleType" type="i" direction="in"/>
 </method>
+
 <method name="setIconTheme">
 <arg name="iconTheme" type="s" direction="in"/>
 </method>
+
 <method name="setWindowControlsTheme">
 <arg name="windowControlsTheme" type="s" direction="in"/>
 </method>
+
 <method name="setEnableCSD">
 <arg name="enableCSD" type="b" direction="in"/>
 </method>
+
 <method name="setBorderRadius">
 <arg name="radius" type="u" direction="in"/>
 </method>
@@ -24,9 +29,11 @@
 <method name="setIconSize">
 <arg name="size" type="u" direction="in"/>
 </method>
+
 <method name="setEnableEffects">
 <arg name="enableEffects" type="b" direction="in"/>
 </method>
+
 <method name="setMarginSize">
 <arg name="size" type="u" direction="in"/>
 </method>

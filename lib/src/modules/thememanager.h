@@ -106,6 +106,17 @@ public:
 
     explicit ThemeManager(QObject * parent = nullptr);
 
+    /**
+     * @brief styleType
+     * The style stypes are:
+     * 0- Light
+     * 1- Dark
+     * 2- Adaptive
+     * 3- Custom
+     * 4- TrueBlack
+     * 5- Inverted
+     * @return
+     */
     int styleType() const;
     void setStyleType(int newStyleType);
 
@@ -159,6 +170,7 @@ public:
 
     QString customColorScheme() const;
     void setCustomColorScheme(const QString &customColorScheme);
+
 
 private Q_SLOTS:
     void onStyleTypeChanged(const int &newStyleType);

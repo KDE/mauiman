@@ -109,6 +109,7 @@ void ThemeManager::loadSettings()
         m_smallFont = m_interface->property("smallFont").toString();
         m_monospacedFont = m_interface->property("monospacedFont").toString();
         m_customColorScheme = m_interface->property("customColorScheme").toString();
+
         return;
     }
 #endif

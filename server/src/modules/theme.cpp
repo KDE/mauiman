@@ -17,8 +17,11 @@ Theme::Theme(QObject *parent) : QObject(parent)
     }
 
     bool ok = false;
+
     MauiMan::SettingsStore settings;
+
     settings.beginModule(QStringLiteral("Theme"));
+
     m_accentColor = settings.load(QStringLiteral("AccentColor"), m_accentColor).toString();
     m_iconTheme = settings.load(QStringLiteral("IconTheme"), m_iconTheme).toString();
     m_windowControlsTheme = settings.load(QStringLiteral("WindowControlsTheme"), m_windowControlsTheme).toString();
@@ -34,6 +37,7 @@ Theme::Theme(QObject *parent) : QObject(parent)
     m_smallFont = settings.load(QStringLiteral("SmallFont"), m_smallFont).toString();
     m_monospacedFont = settings.load(QStringLiteral("MonospacedFont"), m_monospacedFont).toString();
     m_customColorScheme = settings.load(QStringLiteral("CustomColorScheme"), m_customColorScheme).toString();
+
     settings.endModule();
 }
 
