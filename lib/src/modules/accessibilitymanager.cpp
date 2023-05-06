@@ -49,7 +49,7 @@ void AccessibilityManager::setSingleClick(bool singleClick)
     sync(QStringLiteral("setSingleClick"), m_singleClick);
     m_settings->save(QStringLiteral("SingleClick"), m_singleClick);
 
-    emit singleClickChanged(m_singleClick);
+    Q_EMIT singleClickChanged(m_singleClick);
 }
 
 void AccessibilityManager::onSingleClickChanged(bool singleClick)
@@ -58,7 +58,25 @@ void AccessibilityManager::onSingleClickChanged(bool singleClick)
         return;
 
     m_singleClick = singleClick;
-    emit singleClickChanged(m_singleClick);
+    Q_EMIT singleClickChanged(m_singleClick);
+}
+
+void AccessibilityManager::onScrollBarPolicyChanged(uint scrollBarPolicy)
+{
+    if (m_scrollBarPolicy == scrollBarPolicy)
+        return;
+
+    m_scrollBarPolicy = scrollBarPolicy;
+    Q_EMIT scrollBarPolicyChanged(m_scrollBarPolicy);
+}
+
+void AccessibilityManager::onPlaySoundsChanged(bool playSounds)
+{
+    if (m_playSounds == playSounds)
+        return;
+
+    m_playSounds = playSounds;
+    Q_EMIT playSoundsChanged(m_playSounds);
 }
 
 void AccessibilityManager::sync(const QString &key, const QVariant &value)
@@ -89,6 +107,8 @@ void AccessibilityManager::setConnections()
     if (m_interface->isValid())
     {
         connect(m_interface, SIGNAL(singleClickChanged(bool)), this, SLOT(onSingleClickChanged(bool)));
+        connect(m_interface, SIGNAL(playSoundsChanged(bool)), this, SLOT(onPlaySoundsChanged(bool)));
+        connect(m_interface, SIGNAL(scrollBarPolicyChanged(uint)), this, SLOT(onScrollBarPolicyChanged(uint)));
     }
 #endif
 }
@@ -101,9 +121,49 @@ void AccessibilityManager::loadSettings()
     if(m_interface && m_interface->isValid())
     {
         m_singleClick = m_interface->property("singleClick").toBool();
+        m_scrollBarPolicy = m_interface->property("scrollBarPolicy").toUInt();
+        m_playSounds = m_interface->property("playSounds").toBool();
         return;
     }
 #endif
 
     m_singleClick = m_settings->load(QStringLiteral("SingleClick"), m_singleClick).toBool();
+    m_scrollBarPolicy = m_settings->load(QStringLiteral("ScrollBarPolicy"), m_scrollBarPolicy).toUInt();
+    m_playSounds = m_settings->load(QStringLiteral("PlaySounds"), m_playSounds).toBool();
+}
+
+uint AccessibilityManager::scrollBarPolicy() const
+{
+    return m_scrollBarPolicy;
+}
+
+void AccessibilityManager::setScrollBarPolicy(uint newScrollBarPolicy)
+{
+    if (m_scrollBarPolicy == newScrollBarPolicy)
+        return;
+
+    m_scrollBarPolicy = newScrollBarPolicy;
+
+    sync(QStringLiteral("setScrollBarPolicy"), m_scrollBarPolicy);
+    m_settings->save(QStringLiteral("ScrollBarPolicy"), m_scrollBarPolicy);
+
+    Q_EMIT scrollBarPolicyChanged(m_scrollBarPolicy);
+}
+
+bool AccessibilityManager::playSounds() const
+{
+    return m_playSounds;
+}
+
+void AccessibilityManager::setPlaySounds(bool newPlaySounds)
+{
+    if (m_playSounds == newPlaySounds)
+        return;
+
+    m_playSounds = newPlaySounds;
+
+    sync(QStringLiteral("setPlaySounds"), m_playSounds);
+    m_settings->save(QStringLiteral("PlaySounds"), m_playSounds);
+
+    Q_EMIT playSoundsChanged(m_playSounds);
 }
