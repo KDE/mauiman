@@ -10,20 +10,23 @@
 
 #if !defined Q_OS_ANDROID
 #include <QDBusInterface>
-#include <QtSystemInfo/qinputinfo.h>
-#endif
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QTouchDevice>
+#include <QtSystemInfo/qinputinfo.h>
 #else
 #include <QInputDevice>
+#include <QInputEvent>
+#endif
+
 #endif
 
 using namespace MauiMan;
 
 #if !defined Q_OS_ANDROID
-static
-QString typeToString(QInputDevice::InputTypeFlags type)
+
+#ifdef QT5
+static QString typeToString(QInputDevice::InputTypeFlags type)
 {
     qDebug() << type;
     QStringList typeString;
@@ -42,8 +45,26 @@ QString typeToString(QInputDevice::InputTypeFlags type)
 
     if (typeString.isEmpty())
         typeString << QStringLiteral("Unknown");
-    return typeString.join((", "));
+    return typeString.join(QStringLiteral(", "));
 }
+#else
+static QString typeToString(QInputDevice::DeviceTypes type)
+{
+    qDebug() << type;
+    QStringList typeString;
+    if (type.testFlag(QInputDevice::DeviceType::Mouse))
+        typeString << QStringLiteral("Mouse");
+    if (type.testFlag(QInputDevice::DeviceType::TouchPad))
+        typeString << QStringLiteral("TouchPad");
+    if (type.testFlag(QInputDevice::DeviceType::TouchScreen))
+        typeString << QStringLiteral("TouchScreen");
+    if (type.testFlag(QInputDevice::DeviceType::Keyboard))
+        typeString << QStringLiteral("Keyboard");
+    if (typeString.isEmpty())
+        typeString << QStringLiteral("Unknown");
+    return typeString.join(QStringLiteral(", "));
+}
+#endif
 #endif
 
 void FormFactorManager::sync(const QString &key, const QVariant &value)
@@ -94,8 +115,8 @@ void FormFactorManager::loadSettings()
 }
 
 FormFactorManager::FormFactorManager(QObject *parent) : MauiMan::FormFactorInfo(parent)
-  ,m_settings(new MauiMan::SettingsStore(this))
-  ,m_info(new MauiMan::FormFactorInfo(this))
+    ,m_settings(new MauiMan::SettingsStore(this))
+    ,m_info(new MauiMan::FormFactorInfo(this))
 {
     qDebug( " INIT FORMFACTOR MANAGER");
 
@@ -107,12 +128,12 @@ FormFactorManager::FormFactorManager(QObject *parent) : MauiMan::FormFactorInfo(
     }
 
     connect(server, &MauiManUtils::serverRunningChanged, [this](bool state)
-    {
-        if(state)
-        {
-            this->setConnections();
-        }
-    });
+            {
+                if(state)
+                {
+                    this->setConnections();
+                }
+            });
 #endif
     m_preferredMode = defaultMode();
 
@@ -234,6 +255,7 @@ void FormFactorInfo::findBestMode()
     Q_EMIT bestModeChanged(m_bestMode);
 }
 
+#ifdef QT5
 void FormFactorInfo::checkInputs(const QInputInfoManager *inputManager)
 {
 #if !defined Q_OS_ANDROID
@@ -275,6 +297,42 @@ void FormFactorInfo::checkInputs(const QInputInfoManager *inputManager)
     qDebug() << "Number of touchpads:" << trackpadCount;
 #endif
 }
+#elif defined QT6
+void FormFactorInfo::checkInputs(const QList<const QInputDevice *> &devices)
+{
+    auto hasType = [devices](QInputDevice::DeviceType type) -> bool
+    {
+        auto result = std::find_if(devices.constBegin(), devices.constEnd(), [type](const QInputDevice *device)
+                                   {
+
+                                       if(device->type() == type)
+                                       {
+                                           return true;
+                                       }
+
+                                       return false;
+                                   });
+
+        return (result != std::end(devices));
+    };
+
+    m_hasKeyboard= hasType(QInputDevice::DeviceType::Keyboard);
+    m_hasMouse = hasType(QInputDevice::DeviceType::Mouse);
+    m_hasTouchscreen= hasType(QInputDevice::DeviceType::TouchScreen);
+    m_hasTouchpad = hasType(QInputDevice::DeviceType::TouchPad);
+
+    Q_EMIT hasKeyboardChanged(m_hasKeyboard);
+    Q_EMIT hasMouseChanged(m_hasMouse);
+    Q_EMIT hasTouchscreenChanged(m_hasTouchscreen);
+    Q_EMIT hasTouchpadChanged(m_hasTouchpad);
+
+    qDebug() << "Number of keyboards:" << m_hasKeyboard;
+    qDebug() << "Number of mice:" << m_hasMouse;
+    qDebug() << "Number of touchscreens:" << m_hasTouchscreen;
+    qDebug() << "Number of touchpads:" << m_hasTouchpad;
+}
+
+#endif
 
 QRect FormFactorInfo::screenSize()
 {
@@ -294,30 +352,35 @@ FormFactorInfo::FormFactorInfo(QObject *parent) : QObject(parent)
     qDebug( " INIT FORMFACTOR INFO");
 
 #if !defined Q_OS_ANDROID
+
+#ifdef QT5
     auto inputDeviceManager = new QInputInfoManager(this);
     connect(inputDeviceManager, &QInputInfoManager::ready,[ inputDeviceManager]()
-    {
-        inputDeviceManager->setFilter(QInputDevice::Mouse | QInputDevice::Keyboard | QInputDevice::TouchScreen | QInputDevice::TouchPad);
-    });
+            {
+                inputDeviceManager->setFilter(QInputDevice::Mouse | QInputDevice::Keyboard | QInputDevice::TouchScreen | QInputDevice::TouchPad);
+            });
 
     connect(inputDeviceManager, &QInputInfoManager::filterChanged,this,[this, inputDeviceManager](QInputDevice::InputTypeFlags )
-    {
-        checkInputs(inputDeviceManager);
-        findBestMode();
-    });
+            {
+                checkInputs(inputDeviceManager);
+                findBestMode();
+            });
 
     connect(inputDeviceManager, &QInputInfoManager::deviceAdded,[this, inputDeviceManager](QInputDevice *)
-    {
-        checkInputs(inputDeviceManager);
-        findBestMode();
-    });
+            {
+                checkInputs(inputDeviceManager);
+                findBestMode();
+            });
 
     connect(inputDeviceManager, &QInputInfoManager::deviceRemoved,[this, inputDeviceManager](QString)
-    {
-        checkInputs(inputDeviceManager);
-        findBestMode();
-    });
-
+            {
+                checkInputs(inputDeviceManager);
+                findBestMode();
+            });
+#elif defined QT6
+    checkInputs(QInputDevice::devices());
+    findBestMode();
+#endif
 
     //** Ask for screen sizes and dimension etc to Cask via CaskServer**//
 

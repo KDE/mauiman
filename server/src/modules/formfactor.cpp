@@ -8,7 +8,7 @@
 FormFactor::FormFactor(QObject *parent) : QObject(parent)
 ,m_manager(new MauiMan::FormFactorInfo(this))
 {
-    qDebug( " INIT FORMFACTOR MODULE");
+    qDebug("INIT FORMFACTOR MODULE");
     new FormFactorAdaptor(this);
     if(!QDBusConnection::sessionBus().registerObject(QStringLiteral("/FormFactor"), this))
     {
@@ -33,8 +33,8 @@ FormFactor::FormFactor(QObject *parent) : QObject(parent)
 
     //grab user preferences
     MauiMan::SettingsStore settings;
-    settings.beginModule("FormFactor");
-    m_preferredMode = settings.load("PreferredMode", m_preferredMode).toUInt();
+    settings.beginModule(QStringLiteral("FormFactor"));
+    m_preferredMode = settings.load(QStringLiteral("PreferredMode"), m_preferredMode).toUInt();
     settings.endModule();
 }
 
@@ -126,7 +126,6 @@ void FormFactor::setHasTouchscreen(bool value)
     m_hasTouchscreen = value;
     Q_EMIT hasTouchscreenChanged(m_hasTouchscreen);
 }
-
 
 bool FormFactor::hasTouchScreen() const
 {

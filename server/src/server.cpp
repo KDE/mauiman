@@ -54,7 +54,7 @@ bool Server::init()
     if (!registration.isValid())
     {
         qWarning("2 Failed to register D-Bus service \"%s\" on session bus: \"%s\"",
-                 qPrintable("org.mauiman.Manager"),
+                 qPrintable(QStringLiteral("org.mauiman.Manager")),
                  qPrintable(registration.error().message()));
 
         return false;

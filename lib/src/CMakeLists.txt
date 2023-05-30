@@ -1,11 +1,10 @@
-
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
 
     ${CMAKE_CURRENT_SOURCE_DIR}/modules
     ${CMAKE_CURRENT_BINARY_DIR}/modules
-    )
+)
 
 set(mauiman_HDRS
     settingsstore.h
@@ -16,7 +15,7 @@ set(mauiman_HDRS
     modules/accessibilitymanager.h
     modules/inputdevicesmanager.h
     mauimanutils.h
-    )
+)
 
 set(mauiman_SRCS
     settingsstore.cpp
@@ -27,12 +26,12 @@ set(mauiman_SRCS
     modules/accessibilitymanager.cpp
     modules/inputdevicesmanager.cpp
     mauimanutils.cpp
-    )
+)
 
 add_library(${PROJECT_NAME}
     SHARED
     ${mauiman_SRCS}
-    )
+)
 
 #add_library(MauiMan::MauiMan ALIAS MauiMan)
 
@@ -46,16 +45,23 @@ target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CUR
 if(UNIX AND NOT APPLE AND NOT ANDROID)
     target_link_libraries(${PROJECT_NAME}
         PRIVATE
-        Qt5::DBus
+        Qt${QT_MAJOR_VERSION}::DBus
+    )
+
+if(QT_MAJOR_VERSION STREQUAL "5")
+    target_link_libraries(${PROJECT_NAME}
+        PRIVATE
         Qt5SystemInfo
-        )
+    )
+endif()
+
 endif()
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-    Qt5::Core    
-    Qt5::Gui    
-    )
+    Qt${QT_MAJOR_VERSION}::Core
+    Qt${QT_MAJOR_VERSION}::Gui
+)
 
 install(FILES
     ${mauiman_HDRS}

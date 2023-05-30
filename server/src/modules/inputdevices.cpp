@@ -55,7 +55,7 @@ void InputDevices::setKeyboardLayout(const QString &keyboardLayout)
         return;
 
     m_keyboardLayout = keyboardLayout;
-    emit keyboardLayoutChanged(m_keyboardLayout);
+    Q_EMIT keyboardLayoutChanged(m_keyboardLayout);
 }
 
 void InputDevices::setKeyboardModel(const QString &keyboardModel)
@@ -64,7 +64,7 @@ void InputDevices::setKeyboardModel(const QString &keyboardModel)
         return;
 
     m_keyboardModel = keyboardModel;
-    emit keyboardModelChanged(m_keyboardModel);
+    Q_EMIT keyboardModelChanged(m_keyboardModel);
 }
 
 void InputDevices::setKeyboardVariant(const QString &keyboardVariant)
@@ -73,7 +73,7 @@ void InputDevices::setKeyboardVariant(const QString &keyboardVariant)
         return;
 
     m_keyboardVariant = keyboardVariant;
-    emit keyboardVariantChanged(m_keyboardVariant);
+    Q_EMIT keyboardVariantChanged(m_keyboardVariant);
 }
 
 void InputDevices::setKeyboardOptions(const QString &keyboardOptions)
@@ -82,7 +82,7 @@ void InputDevices::setKeyboardOptions(const QString &keyboardOptions)
         return;
 
     m_keyboardOptions = keyboardOptions;
-    emit keyboardOptionsChanged(m_keyboardOptions);
+    Q_EMIT keyboardOptionsChanged(m_keyboardOptions);
 }
 
 void InputDevices::setKeyboardRules(const QString &keyboardRules)
@@ -91,5 +91,5 @@ void InputDevices::setKeyboardRules(const QString &keyboardRules)
         return;
 
     m_keyboardRules = keyboardRules;
-    emit keyboardRulesChanged(m_keyboardRules);
+    Q_EMIT keyboardRulesChanged(m_keyboardRules);
 }

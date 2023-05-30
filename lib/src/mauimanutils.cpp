@@ -30,13 +30,13 @@ MauiManUtils::MauiManUtils(QObject *parent)
     connect(watcher, &QDBusServiceWatcher::serviceRegistered, [=](const QString &name) {
         qDebug() << "Connected to MauiMan server" << name;
         m_serverRunning = true;
-        emit serverRunningChanged(m_serverRunning);
+        Q_EMIT serverRunningChanged(m_serverRunning);
     });
 
     connect(watcher, &QDBusServiceWatcher::serviceUnregistered, [=](const QString &name) {
         qDebug() << "Disconnected to MauiMan server" << name;
         m_serverRunning = false;
-        emit serverRunningChanged(m_serverRunning);
+        Q_EMIT serverRunningChanged(m_serverRunning);
     });
 #endif
 }
@@ -49,20 +49,20 @@ bool MauiManUtils::serverRunning() const
 void MauiManUtils::startServer()
 {
 #if !defined Q_OS_ANDROID
-    QProcess::startDetached("MauiManServer", QStringList());
+    QProcess::startDetached(QStringLiteral("MauiManServer"), QStringList());
 #endif
 }
 
 void MauiManUtils::invokeManager(const QString &module)
 {
-    QProcess::startDetached("MauiSettings", QStringList() << "-m" << module);
+    QProcess::startDetached(QStringLiteral("MauiSettings"), QStringList {QString(QStringLiteral("-m")), module});
 }
 
 QString MauiManUtils::currentDesktopSession()
 {
     if(qEnvironmentVariableIsSet("XDG_CURRENT_DESKTOP"))
     {
-        const auto names = qEnvironmentVariable("XDG_CURRENT_DESKTOP").split(";");
+        const auto names = qEnvironmentVariable("XDG_CURRENT_DESKTOP").split(QStringLiteral(";"));
         return names.first();
     }
 
@@ -71,15 +71,15 @@ QString MauiManUtils::currentDesktopSession()
 
 bool MauiManUtils::isMauiSession()
 {
-  return currentDesktopSession() == "CASK";
+    return currentDesktopSession() == QStringLiteral("CASK");
 }
 
 bool MauiManUtils::isPlasmaSession()
 {
-    return currentDesktopSession() == "KDE";
+    return currentDesktopSession() == QStringLiteral("KDE");
 }
 
 bool MauiManUtils::isGnomeSession()
 {
-    return currentDesktopSession() == "Gnome";
+    return currentDesktopSession() == QStringLiteral("Gnome");
 }

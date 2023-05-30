@@ -3,7 +3,6 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     )
 
-
 set(mauimanserver_SRCS
     main.cpp
     server.cpp
@@ -16,12 +15,12 @@ set(mauimanserver_SRCS
     modules/inputdevices.cpp
     )
 
-qt5_add_dbus_adaptor(DBUS_SOURCES modules/org.mauiman.Background.xml modules/background.h Background)
-qt5_add_dbus_adaptor(DBUS_SOURCES modules/org.mauiman.Theme.xml modules/theme.h Theme)
-qt5_add_dbus_adaptor(DBUS_SOURCES modules/org.mauiman.Screen.xml modules/screen.h Screen)
-qt5_add_dbus_adaptor(DBUS_SOURCES modules/org.mauiman.FormFactor.xml modules/formfactor.h FormFactor)
-qt5_add_dbus_adaptor(DBUS_SOURCES modules/org.mauiman.Accessibility.xml modules/accessibility.h Accessibility)
-qt5_add_dbus_adaptor(DBUS_SOURCES modules/org.mauiman.InputDevices.xml modules/inputdevices.h InputDevices)
+qt_add_dbus_adaptor(DBUS_SOURCES modules/org.mauiman.Background.xml modules/background.h Background)
+qt_add_dbus_adaptor(DBUS_SOURCES modules/org.mauiman.Theme.xml modules/theme.h Theme)
+qt_add_dbus_adaptor(DBUS_SOURCES modules/org.mauiman.Screen.xml modules/screen.h Screen)
+qt_add_dbus_adaptor(DBUS_SOURCES modules/org.mauiman.FormFactor.xml modules/formfactor.h FormFactor)
+qt_add_dbus_adaptor(DBUS_SOURCES modules/org.mauiman.Accessibility.xml modules/accessibility.h Accessibility)
+qt_add_dbus_adaptor(DBUS_SOURCES modules/org.mauiman.InputDevices.xml modules/inputdevices.h InputDevices)
 
 set_source_files_properties(${DBUS_SOURCES} PROPERTIES SKIP_AUTOGEN ON)
 
@@ -38,9 +37,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CUR
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     MauiMan
-    Qt5::Core
-    Qt5::Gui
-    Qt5::DBus
+    Qt${QT_MAJOR_VERSION}::Core
+    Qt${QT_MAJOR_VERSION}::Gui
+    Qt${QT_MAJOR_VERSION}::DBus
     )
 
 install(TARGETS ${PROJECT_NAME} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

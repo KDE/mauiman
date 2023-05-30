@@ -216,7 +216,7 @@ void BackgroundManager::setConnections()
 
 void BackgroundManager::loadSettings()
 {
-    m_settings->beginModule("Background");
+    m_settings->beginModule(QStringLiteral("Background"));
 
 #if !defined Q_OS_ANDROID
 

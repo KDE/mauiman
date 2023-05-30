@@ -33,7 +33,7 @@ void Screen::setScaleFactor(double scaleFactor)
         return;
 
     m_scaleFactor = scaleFactor;
-    emit scaleFactorChanged(m_scaleFactor);
+    Q_EMIT scaleFactorChanged(m_scaleFactor);
 }
 
 uint Screen::orientation() const
@@ -47,5 +47,5 @@ void Screen::setOrientation(uint orientation)
         return;
 
     m_orientation = orientation;
-    emit orientationChanged(m_orientation);
+    Q_EMIT orientationChanged(m_orientation);
 }

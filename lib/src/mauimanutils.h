@@ -21,7 +21,7 @@ public:
     static bool isPlasmaSession();
     static bool isGnomeSession();
 
-signals:
+Q_SIGNALS:
     void serverRunningChanged(bool state);
 
 private:

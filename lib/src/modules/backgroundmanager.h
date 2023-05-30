@@ -64,14 +64,14 @@ public:
     QString wallpaperSourceDir() const;
     void setWallpaperSourceDir(QString wallpaperSourceDir);
 
-private slots:
+private Q_SLOTS:
     void onWallpaperChanged(const QString &wallpaperSource);
     void onSolidColorChanged(const QString &solidColor);
     void onFitWallpaperChanged(const bool &fitWallpaper);
     void onDimWallpaperChanged(const bool &dimWallpaper);
     void onShowWallpaperChanged(const bool &showWallpaper);
 
-signals:
+Q_SIGNALS:
     void wallpaperSourceChanged(QString wallpaperSource);
 
     void dimWallpaperChanged(bool dimWallpaper);

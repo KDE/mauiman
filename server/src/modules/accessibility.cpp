@@ -4,13 +4,11 @@
 
 #include "accessibilityadaptor.h"
 
-#include "modules/accessibilitymanager.h"
-
 #include "settingsstore.h"
 
 Accessibility::Accessibility(QObject *parent) : QObject(parent)
 {
-    qDebug( " INIT ACCESSIBILITY MODULE");
+    qDebug("INIT ACCESSIBILITY MODULE");
 
     new AccessibilityAdaptor(this);
     if(!QDBusConnection::sessionBus().registerObject(QStringLiteral("/Accessibility"), this))
@@ -20,10 +18,10 @@ Accessibility::Accessibility(QObject *parent) : QObject(parent)
     }
 
     MauiMan::SettingsStore settings;
-    settings.beginModule("Accessibility");
-    m_singleClick = settings.load("SingleClick", m_singleClick).toBool();
-    m_scrollBarPolicy = settings.load("ScrollBarPolicy", m_scrollBarPolicy).toUInt();
-    m_playSounds = settings.load("PlaySounds", m_playSounds).toBool();
+    settings.beginModule(QStringLiteral("Accessibility"));
+    m_singleClick = settings.load(QStringLiteral("SingleClick"), m_singleClick).toBool();
+    m_scrollBarPolicy = settings.load(QStringLiteral("ScrollBarPolicy"), m_scrollBarPolicy).toUInt();
+    m_playSounds = settings.load(QStringLiteral("PlaySounds"), m_playSounds).toBool();
     settings.endModule();
 }
 
