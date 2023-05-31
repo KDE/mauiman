@@ -2,10 +2,19 @@
 
 #include <QObject>
 #include <QRect>
+#include <QList>
 
 #include "mauiman_export.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QT5_BASE
+#include <QTouchDevice>
 class QInputInfoManager;
+#else
+#define QT6_BASE
+class QInputDevice;
+#endif
+
 class QDBusInterface;
 namespace MauiMan
 {
@@ -39,22 +48,22 @@ public:
         {
 
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(UBUNTU_TOUCH)
-return MauiMan::FormFactorInfo::Mode::Phone;
+            return MauiMan::FormFactorInfo::Mode::Phone;
 #else
 
             return QByteArrayList{"1", "true"}.contains(qgetenv("QT_QUICK_CONTROLS_MOBILE")) ? MauiMan::FormFactorInfo::Mode::Phone : MauiMan::FormFactorInfo::Mode::Desktop;
-            #endif
+#endif
         }
 
         static bool getHasTouchScreen()
         {
 
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(UBUNTU_TOUCH)
-return true;
+            return true;
 #else
 
             return false;
-            #endif
+#endif
         }
 
         static inline const uint defaultMode = DefaultValues::getDefaultMode();
@@ -64,27 +73,27 @@ return true;
 
     explicit FormFactorInfo(QObject *parent);
     
-     uint bestMode() const;
+    [[nodiscard]] uint bestMode() const;
 
-    uint defaultMode() const;
+    [[nodiscard]] uint defaultMode() const;
 
-    bool hasKeyboard() const;
+    [[nodiscard]] bool hasKeyboard() const;
 
-    bool hasTouchscreen() const;
+    [[nodiscard]] bool hasTouchscreen() const;
 
-    bool hasMouse() const;
+    [[nodiscard]] bool hasMouse() const;
 
-    bool hasTouchpad() const;    
+    [[nodiscard]] bool hasTouchpad() const;
 
-    QRect screenSize();
-    Qt::ScreenOrientation screenOrientation();
+    [[nodiscard]] QRect screenSize();
+    [[nodiscard]] Qt::ScreenOrientation screenOrientation();
 
 private:
     uint m_bestMode = FormFactorInfo::DefaultValues::defaultMode;
 
     uint m_defaultMode = FormFactorInfo::DefaultValues::defaultMode;
 
-     bool m_hasKeyboard = true;
+    bool m_hasKeyboard = true;
 
     bool m_hasTouchscreen = FormFactorInfo::DefaultValues::hasTouchscreen;
 
@@ -95,8 +104,11 @@ private:
     QRect m_screenSize;
     Qt::ScreenOrientation m_screenOrientation;
 
+#ifdef QT5_BASE
     void checkInputs(const QInputInfoManager *inputManager);
-
+#elif defined QT6_BASE
+    void checkInputs(const QList<const QInputDevice *> *devices);
+#endif
     void findBestMode();
     
 Q_SIGNALS:
@@ -106,12 +118,11 @@ Q_SIGNALS:
     void hasKeyboardChanged(bool hasKeyboard);
     void hasTouchscreenChanged(bool hasTouchscreen);
     void hasMouseChanged(bool hasMouse);
-    void hasTouchpadChanged(bool hasTouchpad);    
+    void hasTouchpadChanged(bool hasTouchpad);
     
     void screenSizeChanged(QRect screenSize);
     void screenOrientationChanged(Qt::ScreenOrientation screenOrientation);
 };
-
 
 class MAUIMAN_EXPORT FormFactorManager : public FormFactorInfo
 {
@@ -119,8 +130,6 @@ class MAUIMAN_EXPORT FormFactorManager : public FormFactorInfo
     Q_PROPERTY(uint preferredMode READ preferredMode WRITE setPreferredMode NOTIFY preferredModeChanged FINAL)
 
 public:
-//    Q_ENUM(FormFactorInfo::Mode)
-
     explicit FormFactorManager(QObject *parent = nullptr);
 
     uint preferredMode() const;

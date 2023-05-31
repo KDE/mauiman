@@ -192,7 +192,7 @@ void Theme::setDefaultFont(const QString &defaultFont)
         return;
 
     m_defaultFont = defaultFont;
-    emit defaultFontChanged(m_defaultFont);
+    Q_EMIT defaultFontChanged(m_defaultFont);
 }
 
 void Theme::setSmallFont(const QString &smallFont)

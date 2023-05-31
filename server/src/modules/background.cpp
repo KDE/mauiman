@@ -56,7 +56,7 @@ void Background::setWallpaperSource(const QString &wallpaperSource)
         return;
 
     m_wallpaperSource = wallpaperSource;
-    emit wallpaperSourceChanged(m_wallpaperSource);
+    Q_EMIT wallpaperSourceChanged(m_wallpaperSource);
 }
 
 void Background::setDimWallpaper(bool dimWallpaper)
@@ -65,7 +65,7 @@ void Background::setDimWallpaper(bool dimWallpaper)
         return;
 
     m_dimWallpaper = dimWallpaper;
-    emit dimWallpaperChanged(m_dimWallpaper);
+    Q_EMIT dimWallpaperChanged(m_dimWallpaper);
 }
 
 void Background::setFitWallpaper(bool fitWallpaper)
@@ -74,7 +74,7 @@ void Background::setFitWallpaper(bool fitWallpaper)
         return;
 
     m_fitWallpaper = fitWallpaper;
-    emit fitWallpaperChanged(m_fitWallpaper);
+    Q_EMIT fitWallpaperChanged(m_fitWallpaper);
 }
 
 void Background::setSolidColor(const QString &solidColor)
@@ -83,7 +83,7 @@ void Background::setSolidColor(const QString &solidColor)
         return;
 
     m_solidColor = solidColor;
-    emit solidColorChanged(m_solidColor);
+    Q_EMIT solidColorChanged(m_solidColor);
 }
 
 void Background::setShowWallpaper(bool showWallpaper)
@@ -92,7 +92,7 @@ void Background::setShowWallpaper(bool showWallpaper)
         return;
 
     m_showWallpaper = showWallpaper;
-    emit showWallpaperChanged(m_showWallpaper);
+    Q_EMIT showWallpaperChanged(m_showWallpaper);
 }
 
 

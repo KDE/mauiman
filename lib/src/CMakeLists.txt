@@ -34,8 +34,6 @@ add_library(${PROJECT_NAME}
     ${mauiman_SRCS}
     )
 
-#add_library(MauiMan::MauiMan ALIAS MauiMan)
-
 generate_export_header(${PROJECT_NAME} BASE_NAME MauiMan)
 
 target_include_directories(${PROJECT_NAME}
@@ -44,17 +42,17 @@ target_include_directories(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR};>")
 
 if(UNIX AND NOT APPLE AND NOT ANDROID)
-    target_link_libraries(${PROJECT_NAME}
-        PRIVATE
-        Qt5::DBus
-        Qt5SystemInfo
-        )
+    target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_MAJOR_VERSION}::DBus)
+
+    if (QT_MAJOR_VERSION STREQUAL "5")
+        target_link_libraries(${PROJECT_NAME} PRIVATE Qt5SystemInfo)
+    endif()
 endif()
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-    Qt5::Core    
-    Qt5::Gui    
+    Qt${QT_MAJOR_VERSION}::Core
+    Qt${QT_MAJOR_VERSION}::Gui
     )
 
 install(FILES

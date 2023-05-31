@@ -89,7 +89,7 @@ void ThemeManager::setConnections()
 
 void ThemeManager::loadSettings()
 {
-    m_settings->beginModule("Theme");
+    m_settings->beginModule(QStringLiteral("Theme"));
 
 #if !defined Q_OS_ANDROID
     if(m_interface && m_interface->isValid())
@@ -142,8 +142,8 @@ void ThemeManager::setStyleType(int newStyleType)
         return;
 
     m_styleType = newStyleType;
-    m_settings->save("StyleType", m_styleType);
-    sync("setStyleType", newStyleType);
+    m_settings->save(QStringLiteral("StyleType"), m_styleType);
+    sync(QStringLiteral("setStyleType"), newStyleType);
     Q_EMIT styleTypeChanged(m_styleType);
 }
 
@@ -458,7 +458,7 @@ void ThemeManager::setSpacingSize(uint spacingSize)
     m_spacingSize = spacingSize;
     m_settings->save(QStringLiteral("SpacingSize"), m_spacingSize);
     sync(QStringLiteral("setSpacingSize"), m_spacingSize);
-    emit spacingSizeChanged(m_spacingSize);
+    Q_EMIT spacingSizeChanged(m_spacingSize);
 }
 
 void ThemeManager::resetSPacingSize()

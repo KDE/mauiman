@@ -31,11 +31,11 @@ public:
     uint orientation() const;
     void setOrientation(uint orientation);
 
-private slots:
+private Q_SLOTS:
     void onScaleFactorChanged(double scale);
     void onOrientationChanged(uint orientation);
 
-signals:
+Q_SIGNALS:
     void scaleFactorChanged(double scaleFactor);
     void orientationChanged(uint orientation);
 

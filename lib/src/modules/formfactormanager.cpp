@@ -10,20 +10,18 @@
 
 #if !defined Q_OS_ANDROID
 #include <QDBusInterface>
-#include <QtSystemInfo/qinputinfo.h>
-#endif
-
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#include <QTouchDevice>
+#include <QtSystemInfo/qinputinfo.h>
 #else
 #include <QInputDevice>
+#endif
 #endif
 
 using namespace MauiMan;
 
 #if !defined Q_OS_ANDROID
-static
-QString typeToString(QInputDevice::InputTypeFlags type)
+#ifdef QT5_BASE
+static QString typeToString(QInputDevice::InputTypeFlags type)
 {
     qDebug() << type;
     QStringList typeString;
@@ -44,6 +42,7 @@ QString typeToString(QInputDevice::InputTypeFlags type)
         typeString << QStringLiteral("Unknown");
     return typeString.join((", "));
 }
+#endif
 #endif
 
 void FormFactorManager::sync(const QString &key, const QVariant &value)
@@ -234,6 +233,19 @@ void FormFactorInfo::findBestMode()
     Q_EMIT bestModeChanged(m_bestMode);
 }
 
+QRect FormFactorInfo::screenSize()
+{
+    QScreen *screen = qApp->primaryScreen();
+    return screen->geometry();
+}
+
+Qt::ScreenOrientation FormFactorInfo::screenOrientation()
+{
+    QScreen *screen = qApp->primaryScreen();
+    return screen->orientation();
+}
+
+#ifdef QT5_BASE
 void FormFactorInfo::checkInputs(const QInputInfoManager *inputManager)
 {
 #if !defined Q_OS_ANDROID
@@ -275,25 +287,19 @@ void FormFactorInfo::checkInputs(const QInputInfoManager *inputManager)
     qDebug() << "Number of touchpads:" << trackpadCount;
 #endif
 }
-
-QRect FormFactorInfo::screenSize()
+#elif defined QT6_BASE
+void FormFactorInfo::checkInputs(const QList<const QInputDevice *> *devices)
 {
-    QScreen *screen = qApp->primaryScreen();
-    return screen->geometry();
-}
 
-Qt::ScreenOrientation FormFactorInfo::screenOrientation()
-{
-    QScreen *screen = qApp->primaryScreen();
-    return screen->orientation();
 }
-
+#endif
 
 FormFactorInfo::FormFactorInfo(QObject *parent) : QObject(parent)
 {
     qDebug( " INIT FORMFACTOR INFO");
 
 #if !defined Q_OS_ANDROID
+   #ifdef QT5_BASED
     auto inputDeviceManager = new QInputInfoManager(this);
     connect(inputDeviceManager, &QInputInfoManager::ready,[ inputDeviceManager]()
     {
@@ -318,6 +324,7 @@ FormFactorInfo::FormFactorInfo(QObject *parent) : QObject(parent)
         findBestMode();
     });
 
+#endif
 
     //** Ask for screen sizes and dimension etc to Cask via CaskServer**//
 

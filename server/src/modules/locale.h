@@ -1,5 +1,4 @@
-#ifndef LOCALE_H
-#define LOCALE_H
+#pragma once
 
 #include <QObject>
 
@@ -9,8 +8,5 @@ class Locale : public QObject
 public:
     explicit Locale(QObject *parent = nullptr);
 
-signals:
-
 };
 
-#endif // LOCALE_H
