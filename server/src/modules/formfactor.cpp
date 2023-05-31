@@ -33,8 +33,8 @@ FormFactor::FormFactor(QObject *parent) : QObject(parent)
 
     //grab user preferences
     MauiMan::SettingsStore settings;
-    settings.beginModule("FormFactor");
-    m_preferredMode = settings.load("PreferredMode", m_preferredMode).toUInt();
+    settings.beginModule(QStringLiteral("FormFactor"));
+    m_preferredMode = settings.load(QStringLiteral("PreferredMode"), m_preferredMode).toUInt();
     settings.endModule();
 }
 

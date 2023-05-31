@@ -44,7 +44,7 @@ public:
 
     struct DefaultValues
     {
-        static uint getDefaultMode()
+        [[nodiscard]] static uint getDefaultMode()
         {
 
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(UBUNTU_TOUCH)
@@ -55,7 +55,7 @@ public:
 #endif
         }
 
-        static bool getHasTouchScreen()
+        [[nodiscard]] static bool getHasTouchScreen()
         {
 
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(UBUNTU_TOUCH)
@@ -67,7 +67,6 @@ public:
         }
 
         static inline const uint defaultMode = DefaultValues::getDefaultMode();
-
         static inline const bool hasTouchscreen = DefaultValues::getHasTouchScreen();
     } ;
 
@@ -99,15 +98,14 @@ private:
 
     bool m_hasMouse = true;
     bool m_hasTouchpad = true;
-    
-    
+        
     QRect m_screenSize;
     Qt::ScreenOrientation m_screenOrientation;
 
 #ifdef QT5_BASE
     void checkInputs(const QInputInfoManager *inputManager);
 #elif defined QT6_BASE
-    void checkInputs(const QList<const QInputDevice *> *devices);
+    void checkInputs(const QList<const QInputDevice *> &devices);
 #endif
     void findBestMode();
     
@@ -132,7 +130,7 @@ class MAUIMAN_EXPORT FormFactorManager : public FormFactorInfo
 public:
     explicit FormFactorManager(QObject *parent = nullptr);
 
-    uint preferredMode() const;
+    [[nodiscard]] uint preferredMode() const;
     void setPreferredMode(uint preferredMode);
 
 private Q_SLOTS:

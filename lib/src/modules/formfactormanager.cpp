@@ -42,6 +42,23 @@ static QString typeToString(QInputDevice::InputTypeFlags type)
         typeString << QStringLiteral("Unknown");
     return typeString.join((", "));
 }
+#elif defined QT6_BASE
+static QString typeToString(QInputDevice::DeviceTypes type)
+{
+    qDebug() << type;
+    QStringList typeString;
+    if (type.testFlag(QInputDevice::DeviceType::Mouse))
+        typeString << QStringLiteral("Mouse");
+    if (type.testFlag(QInputDevice::DeviceType::TouchPad))
+        typeString << QStringLiteral("TouchPad");
+    if (type.testFlag(QInputDevice::DeviceType::TouchScreen))
+        typeString << QStringLiteral("TouchScreen");
+    if (type.testFlag(QInputDevice::DeviceType::Keyboard))
+        typeString << QStringLiteral("Keyboard");
+    if (typeString.isEmpty())
+        typeString << QStringLiteral("Unknown");
+    return typeString.join((QStringLiteral(", ")));
+}
 #endif
 #endif
 
@@ -288,9 +305,27 @@ void FormFactorInfo::checkInputs(const QInputInfoManager *inputManager)
 #endif
 }
 #elif defined QT6_BASE
-void FormFactorInfo::checkInputs(const QList<const QInputDevice *> *devices)
+void FormFactorInfo::checkInputs(const QList<const QInputDevice *> &devices)
 {
+    auto hasType = [devices](QInputDevice::DeviceType type) -> bool
+    {
+        auto res= std::find_if(devices.constBegin(), devices.constEnd(), [type](const QInputDevice *device)
+        {
+            return device->type() == type;
+        });
 
+        return res != std::end(devices);
+    };
+
+    m_hasKeyboard = hasType(QInputDevice::DeviceType::Keyboard);
+    m_hasMouse =  hasType(QInputDevice::DeviceType::Mouse);
+    m_hasTouchscreen =  hasType(QInputDevice::DeviceType::TouchScreen);
+    m_hasTouchpad =  hasType(QInputDevice::DeviceType::TouchPad);
+
+    Q_EMIT hasKeyboardChanged(m_hasKeyboard);
+    Q_EMIT hasMouseChanged(m_hasMouse);
+    Q_EMIT hasTouchscreenChanged(m_hasTouchscreen);
+    Q_EMIT hasTouchpadChanged(m_hasTouchpad);
 }
 #endif
 
@@ -299,7 +334,8 @@ FormFactorInfo::FormFactorInfo(QObject *parent) : QObject(parent)
     qDebug( " INIT FORMFACTOR INFO");
 
 #if !defined Q_OS_ANDROID
-   #ifdef QT5_BASED
+
+#ifdef QT5_BASED
     auto inputDeviceManager = new QInputInfoManager(this);
     connect(inputDeviceManager, &QInputInfoManager::ready,[ inputDeviceManager]()
     {
@@ -323,33 +359,9 @@ FormFactorInfo::FormFactorInfo(QObject *parent) : QObject(parent)
         checkInputs(inputDeviceManager);
         findBestMode();
     });
-
+#elif defined QT6_BASE
+    checkInputs(QInputDevice::devices());
 #endif
-
-    //** Ask for screen sizes and dimension etc to Cask via CaskServer**//
-
-    //    auto dummyApp = new QGuiApplication(0, []);
-    //    QScreen *screen = QGuiApplication::primaryScreen();
-    //    connect(screen, &QScreen::geometryChanged, [this](QRect rect)
-    //    {
-    //        m_screenSize = rect;
-    //        Q_EMIT screenSizeChanged(m_screenSize);
-
-    //        findBestMode();
-    //    });
-
-    //    connect(screen, &QScreen::primaryOrientationChanged, [this](Qt::ScreenOrientation orientation)
-    //    {
-    //        m_screenOrientation = orientation;
-    //        Q_EMIT screenOrientationChanged(m_screenOrientation);
-
-    //        findBestMode();
-    //    });
-
-    // m_screenSize = screen->geometry();
-    //    m_screenOrientation = screen->primaryOrientation();
-
-
     findBestMode();
 #endif
 

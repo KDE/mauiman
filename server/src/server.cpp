@@ -14,10 +14,10 @@
 void sigtermHandler(int signalNumber)
 {
     qDebug() << "terminating cask session" << signalNumber;
-    if (QCoreApplication::instance()) {
+    if (QCoreApplication::instance())
+    {
         QCoreApplication::instance()->exit(-1);
         qDebug() << "terminating caks session FINISHED" << signalNumber;
-
     }
 }
 
@@ -54,7 +54,7 @@ bool Server::init()
     if (!registration.isValid())
     {
         qWarning("2 Failed to register D-Bus service \"%s\" on session bus: \"%s\"",
-                 qPrintable("org.mauiman.Manager"),
+                 qPrintable(QStringLiteral("org.mauiman.Manager")),
                  qPrintable(registration.error().message()));
 
         return false;
