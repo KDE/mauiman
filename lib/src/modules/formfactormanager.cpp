@@ -40,7 +40,7 @@ static QString typeToString(QInputDevice::InputTypeFlags type)
 
     if (typeString.isEmpty())
         typeString << QStringLiteral("Unknown");
-    return typeString.join((", "));
+    return typeString.join((QStringLiteral(", ")));
 }
 #elif defined QT6_BASE
 static QString typeToString(QInputDevice::DeviceTypes type)

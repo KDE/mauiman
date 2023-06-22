@@ -11,11 +11,10 @@ find_package(Qt${QT_MAJOR_VERSION} ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COM
 
 add_subdirectory(src)
 
-configure_file(org.mauiman.Manager.service.in
-    ${CMAKE_CURRENT_BINARY_DIR}/org.mauiman.Manager.service)
+configure_file(org.mauiman.Manager.service.in.${QT_MAJOR_VERSION}
+    ${CMAKE_CURRENT_BINARY_DIR}/org.mauiman.Manager${MAUI_MAJOR_VERSION}.service)
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.mauiman.Manager.service
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.mauiman.Manager${MAUI_MAJOR_VERSION}.service
     DESTINATION ${KDE_INSTALL_DBUSSERVICEDIR})
-
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
