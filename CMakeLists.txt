@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(MauiManGroup)
-set(MAUIMAN_VERSION 1.1.0)
 
 option(BUILD_WITH_QT5 "Use Qt 5" OFF)
 option(BUILD_WITH_QT6 "Use Qt 6" OFF)
@@ -19,11 +18,16 @@ if (QT_MAJOR_VERSION STREQUAL "6")
     set(REQUIRED_KF_VERSION 5.240.0)
     set(KF_MAJOR_VERSION 6)
     set(MAUI_MAJOR_VERSION 4)
+
+    set(MAUIMAN_VERSION 4.0.0)
+
 else()
     set(REQUIRED_QT_VERSION 5.15)
     set(REQUIRED_KF_VERSION 5.120.0)
     set(KF_MAJOR_VERSION 5)
     set(MAUI_MAJOR_VERSION 3)
+
+    set(MAUIMAN_VERSION 3.0.1)
 endif()
 
 set(CMAKE_CXX_STANDARD 17)
