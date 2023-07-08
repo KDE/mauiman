@@ -1,7 +1,6 @@
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}
-    )
+    ${CMAKE_CURRENT_BINARY_DIR})
 
 set(mauimanserver_SRCS
     main.cpp
@@ -12,8 +11,7 @@ set(mauimanserver_SRCS
     modules/locale.cpp
     modules/formfactor.cpp
     modules/accessibility.cpp
-    modules/inputdevices.cpp
-    )
+    modules/inputdevices.cpp)
 
 qt_add_dbus_adaptor(DBUS_SOURCES modules/org.mauiman.Background.xml modules/background.h Background)
 qt_add_dbus_adaptor(DBUS_SOURCES modules/org.mauiman.Theme.xml modules/theme.h Theme)
@@ -26,8 +24,7 @@ set_source_files_properties(${DBUS_SOURCES} PROPERTIES SKIP_AUTOGEN ON)
 
 add_executable(${PROJECT_NAME}${MAUI_MAJOR_VERSION}
     ${mauimanserver_SRCS}
-    ${DBUS_SOURCES}
-)
+    ${DBUS_SOURCES})
 
 target_include_directories(${PROJECT_NAME}${MAUI_MAJOR_VERSION}
     INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/MauiManServer${MAUI_MAJOR_VERSION}>")
@@ -39,7 +36,6 @@ target_link_libraries(${PROJECT_NAME}${MAUI_MAJOR_VERSION}
     MauiMan${MAUI_MAJOR_VERSION}
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Gui
-    Qt${QT_MAJOR_VERSION}::DBus
-    )
+    Qt${QT_MAJOR_VERSION}::DBus)
 
 install(TARGETS ${PROJECT_NAME}${MAUI_MAJOR_VERSION} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

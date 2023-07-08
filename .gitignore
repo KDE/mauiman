@@ -1,4 +1,6 @@
 build/
+build.5/
+build.6/
 demo/3rdparty/
 demo/mauikit/
 
@@ -12,7 +14,6 @@ demo/mauikit/
 
 #android stuff
 luv-icon-theme/
-
 
 #third party stuff
 src/utils/editor/KSyntaxHighlighting/

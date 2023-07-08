@@ -20,7 +20,6 @@ if (QT_MAJOR_VERSION STREQUAL "6")
     set(MAUI_MAJOR_VERSION 4)
 
     set(MAUIMAN_VERSION 4.0.0)
-
 else()
     set(REQUIRED_QT_VERSION 5.15)
     set(REQUIRED_KF_VERSION 5.120.0)
@@ -55,5 +54,5 @@ include(KDECMakeSettings)
 add_subdirectory(lib) #adds mauiman libs
 
 if(UNIX AND NOT APPLE AND NOT ANDROID)
-add_subdirectory(server) #adds and installs the dbus service and is a server
+    add_subdirectory(server) #adds and installs the dbus service and is a server
 endif()
