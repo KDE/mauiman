@@ -1,10 +1,9 @@
+
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/modules
-    ${CMAKE_CURRENT_BINARY_DIR}/modules
-)
+    ${CMAKE_CURRENT_SOURCE_DIR}/modules)
 
 set(mauiman_HDRS
     settingsstore.h
@@ -14,8 +13,7 @@ set(mauiman_HDRS
     modules/formfactormanager.h
     modules/accessibilitymanager.h
     modules/inputdevicesmanager.h
-    mauimanutils.h
-)
+    mauimanutils.h)
 
 set(mauiman_SRCS
     settingsstore.cpp
@@ -25,48 +23,36 @@ set(mauiman_SRCS
     modules/formfactormanager.cpp
     modules/accessibilitymanager.cpp
     modules/inputdevicesmanager.cpp
-    mauimanutils.cpp
-)
+    mauimanutils.cpp)
 
-add_library(${PROJECT_NAME}
+add_library(${PROJECT_NAME}${MAUI_MAJOR_VERSION}
     SHARED
-    ${mauiman_SRCS}
-)
+    ${mauiman_SRCS})
 
-#add_library(MauiMan::MauiMan ALIAS MauiMan)
+generate_export_header(${PROJECT_NAME}${MAUI_MAJOR_VERSION} BASE_NAME MauiMan)
 
-generate_export_header(${PROJECT_NAME} BASE_NAME MauiMan)
+target_include_directories(${PROJECT_NAME}${MAUI_MAJOR_VERSION}
+    INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/MauiMan${MAUI_MAJOR_VERSION}>")
 
-target_include_directories(${PROJECT_NAME}
-    INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/MauiMan>")
-
-target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR};>")
+target_include_directories(${PROJECT_NAME}${MAUI_MAJOR_VERSION} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR};>")
 
 if(UNIX AND NOT APPLE AND NOT ANDROID)
-    target_link_libraries(${PROJECT_NAME}
-        PRIVATE
-        Qt${QT_MAJOR_VERSION}::DBus
-    )
+    target_link_libraries(${PROJECT_NAME}${MAUI_MAJOR_VERSION} PRIVATE Qt${QT_MAJOR_VERSION}::DBus)
 
-if(QT_MAJOR_VERSION STREQUAL "5")
-    target_link_libraries(${PROJECT_NAME}
-        PRIVATE
-        Qt5SystemInfo
-    )
+    if (QT_MAJOR_VERSION STREQUAL "5")
+        target_link_libraries(${PROJECT_NAME}${MAUI_MAJOR_VERSION} PRIVATE Qt5SystemInfo)
+    endif()
 endif()
 
-endif()
-
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(${PROJECT_NAME}${MAUI_MAJOR_VERSION}
     PRIVATE
     Qt${QT_MAJOR_VERSION}::Core
-    Qt${QT_MAJOR_VERSION}::Gui
-)
+    Qt${QT_MAJOR_VERSION}::Gui)
 
 install(FILES
     ${mauiman_HDRS}
     ${CMAKE_CURRENT_BINARY_DIR}/mauiman_export.h
-    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiMan
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/MauiMan${MAUI_MAJOR_VERSION}
     COMPONENT Devel)
 
-install(TARGETS ${PROJECT_NAME} EXPORT MauiManTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS ${PROJECT_NAME}${MAUI_MAJOR_VERSION} EXPORT MauiMan${MAUI_MAJOR_VERSION}Targets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

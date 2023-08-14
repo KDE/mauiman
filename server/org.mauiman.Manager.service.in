@@ -1,3 +1,0 @@
-[D-BUS Service]
-Name=org.mauiman.Manager
-Exec=@CMAKE_INSTALL_PREFIX@/bin/MauiManServer

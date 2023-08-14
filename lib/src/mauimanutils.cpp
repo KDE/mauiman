@@ -14,9 +14,9 @@
 static const QString mauimanInterface(QStringLiteral("org.mauiman.Manager"));
 
 MauiManUtils::MauiManUtils(QObject *parent)
-    : QObject{parent}
+: QObject{parent}
 {
-#if !defined Q_OS_ANDROID
+    #if !defined Q_OS_ANDROID
     const QDBusConnection bus = QDBusConnection::sessionBus();
     const auto registeredServices = bus.interface()->registeredServiceNames();
 
@@ -38,7 +38,7 @@ MauiManUtils::MauiManUtils(QObject *parent)
         m_serverRunning = false;
         Q_EMIT serverRunningChanged(m_serverRunning);
     });
-#endif
+    #endif
 }
 
 bool MauiManUtils::serverRunning() const
@@ -48,14 +48,14 @@ bool MauiManUtils::serverRunning() const
 
 void MauiManUtils::startServer()
 {
-#if !defined Q_OS_ANDROID
+    #if !defined Q_OS_ANDROID
     QProcess::startDetached(QStringLiteral("MauiManServer"), QStringList());
-#endif
+    #endif
 }
 
 void MauiManUtils::invokeManager(const QString &module)
 {
-    QProcess::startDetached(QStringLiteral("MauiSettings"), QStringList {QString(QStringLiteral("-m")), module});
+    QProcess::startDetached(QStringLiteral("MauiSettings"), QStringList {QStringLiteral("-m"), module});
 }
 
 QString MauiManUtils::currentDesktopSession()

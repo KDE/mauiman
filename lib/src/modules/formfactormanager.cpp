@@ -10,22 +10,17 @@
 
 #if !defined Q_OS_ANDROID
 #include <QDBusInterface>
-
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#include <QTouchDevice>
 #include <QtSystemInfo/qinputinfo.h>
 #else
 #include <QInputDevice>
-#include <QInputEvent>
 #endif
-
 #endif
 
 using namespace MauiMan;
 
 #if !defined Q_OS_ANDROID
-
-#ifdef QT5
+#ifdef QT5_BASE
 static QString typeToString(QInputDevice::InputTypeFlags type)
 {
     qDebug() << type;
@@ -45,9 +40,9 @@ static QString typeToString(QInputDevice::InputTypeFlags type)
 
     if (typeString.isEmpty())
         typeString << QStringLiteral("Unknown");
-    return typeString.join(QStringLiteral(", "));
+    return typeString.join((QStringLiteral(", ")));
 }
-#else
+#elif defined QT6_BASE
 static QString typeToString(QInputDevice::DeviceTypes type)
 {
     qDebug() << type;
@@ -62,24 +57,24 @@ static QString typeToString(QInputDevice::DeviceTypes type)
         typeString << QStringLiteral("Keyboard");
     if (typeString.isEmpty())
         typeString << QStringLiteral("Unknown");
-    return typeString.join(QStringLiteral(", "));
+    return typeString.join((QStringLiteral(", ")));
 }
 #endif
 #endif
 
 void FormFactorManager::sync(const QString &key, const QVariant &value)
 {
-#if !defined Q_OS_ANDROID
+    #if !defined Q_OS_ANDROID
     if (m_interface && m_interface->isValid())
     {
         m_interface->call(key, value);
     }
-#endif
+    #endif
 }
 
 void FormFactorManager::setConnections()
 {
-#if !defined Q_OS_ANDROID
+    #if !defined Q_OS_ANDROID
     if(m_interface)
     {
         m_interface->disconnect();
@@ -96,31 +91,31 @@ void FormFactorManager::setConnections()
     {
         connect(m_interface, SIGNAL(preferredModeChanged(uint)), this, SLOT(onPreferredModeChanged(uint)));
     }
-#endif
+    #endif
 }
 
 void FormFactorManager::loadSettings()
 {
     m_settings->beginModule(QStringLiteral("FormFactor"));
 
-#if !defined Q_OS_ANDROID
+    #if !defined Q_OS_ANDROID
     if(m_interface && m_interface->isValid())
     {
         m_preferredMode = m_interface->property("preferredMode").toUInt();
         return;
     }
-#endif
+    #endif
 
     m_preferredMode = m_settings->load(QStringLiteral("PreferredMode"), m_preferredMode).toUInt();
 }
 
 FormFactorManager::FormFactorManager(QObject *parent) : MauiMan::FormFactorInfo(parent)
-    ,m_settings(new MauiMan::SettingsStore(this))
-    ,m_info(new MauiMan::FormFactorInfo(this))
+,m_settings(new MauiMan::SettingsStore(this))
+,m_info(new MauiMan::FormFactorInfo(this))
 {
     qDebug( " INIT FORMFACTOR MANAGER");
 
-#if !defined Q_OS_ANDROID
+    #if !defined Q_OS_ANDROID
     auto server = new MauiManUtils(this);
     if(server->serverRunning())
     {
@@ -128,13 +123,13 @@ FormFactorManager::FormFactorManager(QObject *parent) : MauiMan::FormFactorInfo(
     }
 
     connect(server, &MauiManUtils::serverRunningChanged, [this](bool state)
-            {
-                if(state)
-                {
-                    this->setConnections();
-                }
-            });
-#endif
+    {
+        if(state)
+        {
+            this->setConnections();
+        }
+    });
+    #endif
     m_preferredMode = defaultMode();
 
     loadSettings();
@@ -255,10 +250,22 @@ void FormFactorInfo::findBestMode()
     Q_EMIT bestModeChanged(m_bestMode);
 }
 
-#ifdef QT5
+QRect FormFactorInfo::screenSize()
+{
+    QScreen *screen = qApp->primaryScreen();
+    return screen->geometry();
+}
+
+Qt::ScreenOrientation FormFactorInfo::screenOrientation()
+{
+    QScreen *screen = qApp->primaryScreen();
+    return screen->orientation();
+}
+
+#ifdef QT5_BASE
 void FormFactorInfo::checkInputs(const QInputInfoManager *inputManager)
 {
-#if !defined Q_OS_ANDROID
+    #if !defined Q_OS_ANDROID
 
     //        qDebug() <<"Found"<<  inputDeviceManager->deviceMap().count() << "input devices";
     //        QMapIterator<QString, QInputDevice*> i(inputDeviceManager->deviceMap());
@@ -295,118 +302,67 @@ void FormFactorInfo::checkInputs(const QInputInfoManager *inputManager)
     qDebug() << "Number of mice:" << mouseCount;
     qDebug() << "Number of touchscreens:" << touchCount;
     qDebug() << "Number of touchpads:" << trackpadCount;
-#endif
+    #endif
 }
-#elif defined QT6
+#elif defined QT6_BASE
 void FormFactorInfo::checkInputs(const QList<const QInputDevice *> &devices)
 {
     auto hasType = [devices](QInputDevice::DeviceType type) -> bool
     {
-        auto result = std::find_if(devices.constBegin(), devices.constEnd(), [type](const QInputDevice *device)
-                                   {
+        auto res= std::find_if(devices.constBegin(), devices.constEnd(), [type](const QInputDevice *device)
+        {
+            return device->type() == type;
+        });
 
-                                       if(device->type() == type)
-                                       {
-                                           return true;
-                                       }
-
-                                       return false;
-                                   });
-
-        return (result != std::end(devices));
+        return res != std::end(devices);
     };
 
-    m_hasKeyboard= hasType(QInputDevice::DeviceType::Keyboard);
-    m_hasMouse = hasType(QInputDevice::DeviceType::Mouse);
-    m_hasTouchscreen= hasType(QInputDevice::DeviceType::TouchScreen);
-    m_hasTouchpad = hasType(QInputDevice::DeviceType::TouchPad);
+    m_hasKeyboard = hasType(QInputDevice::DeviceType::Keyboard);
+    m_hasMouse =  hasType(QInputDevice::DeviceType::Mouse);
+    m_hasTouchscreen =  hasType(QInputDevice::DeviceType::TouchScreen);
+    m_hasTouchpad =  hasType(QInputDevice::DeviceType::TouchPad);
 
     Q_EMIT hasKeyboardChanged(m_hasKeyboard);
     Q_EMIT hasMouseChanged(m_hasMouse);
     Q_EMIT hasTouchscreenChanged(m_hasTouchscreen);
     Q_EMIT hasTouchpadChanged(m_hasTouchpad);
-
-    qDebug() << "Number of keyboards:" << m_hasKeyboard;
-    qDebug() << "Number of mice:" << m_hasMouse;
-    qDebug() << "Number of touchscreens:" << m_hasTouchscreen;
-    qDebug() << "Number of touchpads:" << m_hasTouchpad;
 }
-
 #endif
-
-QRect FormFactorInfo::screenSize()
-{
-    QScreen *screen = qApp->primaryScreen();
-    return screen->geometry();
-}
-
-Qt::ScreenOrientation FormFactorInfo::screenOrientation()
-{
-    QScreen *screen = qApp->primaryScreen();
-    return screen->orientation();
-}
-
 
 FormFactorInfo::FormFactorInfo(QObject *parent) : QObject(parent)
 {
     qDebug( " INIT FORMFACTOR INFO");
 
-#if !defined Q_OS_ANDROID
+    #if !defined Q_OS_ANDROID
 
-#ifdef QT5
+    #ifdef QT5_BASED
     auto inputDeviceManager = new QInputInfoManager(this);
     connect(inputDeviceManager, &QInputInfoManager::ready,[ inputDeviceManager]()
-            {
-                inputDeviceManager->setFilter(QInputDevice::Mouse | QInputDevice::Keyboard | QInputDevice::TouchScreen | QInputDevice::TouchPad);
-            });
+    {
+        inputDeviceManager->setFilter(QInputDevice::Mouse | QInputDevice::Keyboard | QInputDevice::TouchScreen | QInputDevice::TouchPad);
+    });
 
     connect(inputDeviceManager, &QInputInfoManager::filterChanged,this,[this, inputDeviceManager](QInputDevice::InputTypeFlags )
-            {
-                checkInputs(inputDeviceManager);
-                findBestMode();
-            });
+    {
+        checkInputs(inputDeviceManager);
+        findBestMode();
+    });
 
     connect(inputDeviceManager, &QInputInfoManager::deviceAdded,[this, inputDeviceManager](QInputDevice *)
-            {
-                checkInputs(inputDeviceManager);
-                findBestMode();
-            });
+    {
+        checkInputs(inputDeviceManager);
+        findBestMode();
+    });
 
     connect(inputDeviceManager, &QInputInfoManager::deviceRemoved,[this, inputDeviceManager](QString)
-            {
-                checkInputs(inputDeviceManager);
-                findBestMode();
-            });
-#elif defined QT6
+    {
+        checkInputs(inputDeviceManager);
+        findBestMode();
+    });
+    #elif defined QT6_BASE
     checkInputs(QInputDevice::devices());
+    #endif
     findBestMode();
-#endif
-
-    //** Ask for screen sizes and dimension etc to Cask via CaskServer**//
-
-    //    auto dummyApp = new QGuiApplication(0, []);
-    //    QScreen *screen = QGuiApplication::primaryScreen();
-    //    connect(screen, &QScreen::geometryChanged, [this](QRect rect)
-    //    {
-    //        m_screenSize = rect;
-    //        Q_EMIT screenSizeChanged(m_screenSize);
-
-    //        findBestMode();
-    //    });
-
-    //    connect(screen, &QScreen::primaryOrientationChanged, [this](Qt::ScreenOrientation orientation)
-    //    {
-    //        m_screenOrientation = orientation;
-    //        Q_EMIT screenOrientationChanged(m_screenOrientation);
-
-    //        findBestMode();
-    //    });
-
-    // m_screenSize = screen->geometry();
-    //    m_screenOrientation = screen->primaryOrientation();
-
-
-    findBestMode();
-#endif
+    #endif
 
 }
