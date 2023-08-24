@@ -11,8 +11,10 @@
 #if !defined Q_OS_ANDROID
 #include <QDBusInterface>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define QT5_BASED
 #include <QtSystemInfo/qinputinfo.h>
 #else
+#define QT6_BASED
 #include <QInputDevice>
 #endif
 #endif
