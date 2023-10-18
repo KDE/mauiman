@@ -26,7 +26,7 @@ else()
     set(KF_MAJOR_VERSION 5)
     set(MAUI_MAJOR_VERSION 3)
 
-    set(MAUIMAN_VERSION 3.0.1)
+    set(MAUIMAN_VERSION 3.0.2)
 endif()
 
 set(CMAKE_CXX_STANDARD 17)
