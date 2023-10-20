@@ -11,7 +11,7 @@ class MAUIMAN_EXPORT MauiManUtils : public QObject
     Q_OBJECT
     /**
      * Whether the server application is running and listening and broadcasting events.
-     * /
+     */
     Q_PROPERTY(bool serverRunning READ serverRunning NOTIFY serverRunningChanged)
 
 public:

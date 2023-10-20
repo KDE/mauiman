@@ -21,35 +21,35 @@ class SettingsStore;
 class MAUIMAN_EXPORT BackgroundManager : public QObject
 {
     Q_OBJECT
+
     /**
-     *
-     * /
+     * The image file path to be used as the wallpaper background
+     */
     Q_PROPERTY(QString wallpaperSource READ wallpaperSource WRITE setWallpaperSource NOTIFY wallpaperSourceChanged)
 
     /**
-     *
-     * /
+     * Whether the wallpaper background should have a dimmed effect. This could be used to reduce eye strain, or for a night mode effect
+     */
     Q_PROPERTY(bool dimWallpaper READ dimWallpaper WRITE setDimWallpaper NOTIFY dimWallpaperChanged)
 
     /**
-     *
-     * /
+     * Whether the wallpaper image should fit the screen area, preserving its aspect ratio, instead of filling it
+     */
     Q_PROPERTY(bool fitWallpaper READ fitWallpaper WRITE setFitWallpaper NOTIFY fitWallpaperChanged)
 
     /**
-     *
-     * /
+     * A color to be used in the background. If not wallpaper image is shown then, this is the color visible
+     */
     Q_PROPERTY(QString solidColor READ solidColor WRITE setSolidColor NOTIFY solidColorChanged)
 
     /**
-     *
-     * /
+     * Whether to display the wallpaper image
+     */
     Q_PROPERTY(bool showWallpaper READ showWallpaper WRITE setShowWallpaper NOTIFY showWallpaperChanged)
 
-
     /**
-     *
-     * /
+     * The preferred file path to the directory containing the wallpaper images
+     */
     Q_PROPERTY(QString wallpaperSourceDir READ wallpaperSourceDir WRITE setWallpaperSourceDir NOTIFY wallpaperSourceDirChanged)
 
 public:
