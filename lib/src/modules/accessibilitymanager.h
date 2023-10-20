@@ -9,6 +9,9 @@ namespace MauiMan
 
 class SettingsStore;
 
+/**
+ * @brief The AccessibilityManager class
+ */
 class MAUIMAN_EXPORT AccessibilityManager : public QObject
 {
     Q_OBJECT

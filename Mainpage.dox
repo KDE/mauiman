@@ -1,0 +1,191 @@
+/*
+ *  This file is part of MauiKit
+ *  SPDX-FileCopyrightText: 2023 Camilo Higuita <milo.h@aol.com>
+ *
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
+ */
+
+
+/** @mainpage mauiman
+
+
+@subsection overview Introduction
+MauiMan stands for Maui Manager, and exists for setting, saving, and syncing the configuration preferences for the Maui Apps & Shell ecosystem. These configurations are global, and some of them can be overridden by the apps themselves, but more about that later. To store the configurations MauiMan uses the `MauiMan.conf` config file, located at your system local config path: for example `~/.config/Maui/MauiMan.conf.`
+
+@note The settings modifications are only written/saved when using the MauiMan API directly.
+
+MauiMan consists of two parts, a (1) background server that syncs and broadcasts the preference properties changes to all the running Maui Apps, and a (2) public API, that allows app developers to easily hook their apps to the system preferences. The MauiMan server program is named MauiManServer and uses the DBus IPC.
+
+The public API and the server are divided into modules: for different setting categories, such as Theme, Background, Accessibility, FormFactor, etc…
+
+@image html mauiman.png "MauiMan configuration interfaces"
+
+@subsection tutorial Tutorial
+To configure existing preferences, there are different ways to do it, from a graphical interface to editing a text file or even hooking to the public API directly (for developers), in the following sections we’ll cover all the possible ways.
+
+The ideal way to set the configurations, from a user perspective, is to use the Maui Settings application, which exposes all the MauiMan preferences in a graphical manner; although, some of the settings presented are “curated” to use predefined sane values, for example, not allowing to set the border-radius of elements to an unfitting value rendering the interface unusable. This means that with this approach you dont get full control over the values of the properties in all the cases, but you are less prompt to mess up.
+
+Maui Settings also exposes other settings for other system stuff, such as Networks, Sound, Notifications, etc. If any of the needed servers to sync configurations are offline, Maui Settings warns you about it and allows you to launch the server daemon with a single click.
+
+@warning Keep in mind that Maui Settings is still under heavy development and most modules are still not implemented.
+
+@image html mauisettings.gif "Maui Settings"
+
+@section usage Usage
+
+Another way to do interact with MauiMan is by using DBus directly. For this one can use a graphical application and navigate to org.mauiman.Manager and then dive into the existing modules for modifying the properties.
+
+(!) Using this approach will not save the changes made: it will keep the changes in memory as long as the MauiManServer daemon is running, but once the process is restarted those changes will be lost since changes to the MauiMan properties are only saved when using the MauiMan public API.
+
+Another apporach is to manually edit the MauiMan.conf file. It has a couple downsides:
+
+@warning The changes won’t be made live. Changes won’t be loaded until MauiManServer process has been restarted since MauiManServer saves in memory the properties and only loads preferences from the config file on startup.
+
+Using this config file is a convenient way to set default values for distributions shipping Maui apps, so they can be styled for the distribution. This config file is located at:
+
+`~/.config/Maui/MauiMan.conf`
+
+Here’s a snapshot of the config file contents:
+
+@code
+[Accessibility]
+SingleClick=false
+
+[Background]
+DimWallpaper=false
+FitWallpaper=false
+ShowWallpaper=true
+SolidColor=#ffff00
+SourceDir=file:///usr/share/wallpapers/Cask
+Wallpaper=file:///usr/share/wallpapers/Cask/Cloudy Noon - 5K (16:10).jpg
+
+[FormFactor]
+PreferredMode=0
+
+[InputDevices]
+KeyboardLayout=us
+
+[Screen]
+Orientation=1
+ScaleFactor=1
+
+[Theme]
+AccentColor=#000
+BorderRadius=12
+CustomColorScheme=Amethyst
+DefaultFont="Noto Sans,10,-1,0,50,0,0,0,0,0,Regular"
+EnableCSD=true
+EnableEffects=true
+IconSize=16
+IconTheme=Colloid
+MarginSize=4
+MonospacedFont="xos4 Terminus,12,-1,7,50,0,0,0,0,0,Regular"
+PaddingSize=4
+SpacingSize=4
+StyleType=1
+WindowControlsTheme=CadiumGloss
+@endcode
+
+Accessing these MauiMan properties is also possible from an application side too: for developers there is the MauiMan public library which exposes all the properties trough a public API. So if you need to know about the current workspace background image source, you could hook to MauiMan::BackgroundManager::wallpaper()  and even connect to wallpaperChanged signal to know in real time when the wallpaper has been changed.
+
+@code
+#include <MauiMan/backgroundmanager.h>
+
+void func()
+{
+auto wallpaper = MauiMan::BackgroundManager().wallpaperSource();
+}
+@endcode
+
+Most of the properties are already quickly accessible via MauiKit Style object,  (for apps developed using MauiKit) which besides syncing to MauiMan changes can also override these properties with in-app specific values and if needed clear those using undefined to return using the MauiMan values.
+
+For example, for setting the style type as dark for an app, despite the global preference being different:
+@code
+​​​​Maui.ApplicationWindow
+{
+    Maui.Style.styleType: Maui.Style.Dark
+}
+@endcode
+
+​and to reset the value back to the global system preference:
+
+@code
+​​​​Maui.ApplicationWindow
+{
+    Maui.Style.styleType: undefined
+}​
+@endcode
+
+@section component Components
+The MauiKit Controls could be divided into a few sections: there are the container views, the browsers, the delegates, and the common elements, such as buttons, cards, etc.
+
+@subsection views Main Views Components
+
+- @link ApplicationWindow  ApplicationWindow @endlink
+- @link AppViews AppViews @endlink
+- @link SideBarView SideBarView @endlink
+- @link TabView TabView @endlink
+- @link Page Page  @endlink
+- @link PageLayout Page  @endlink
+
+Another views include:
+- @link SplitView  SplitView @endlink
+
+@subsection browsers Browsing Views
+
+- @link GridBrowser  GridBrowser @endlink
+- @link ListBrowser ListBrowser @endlink
+- @link AltBrowser AltBrowser @endlink
+- @link ScrollColumn ScrollColumn @endlink
+
+@subsection delegates Delegates & Templates
+
+- @link ListBrowserDelegate  ListBrowserDelegate @endlink
+- @link GridBrowserDelegate GridBrowserDelegate @endlink
+- @link GalleryRollItem GalleryRollItem @endlink
+- @link ListItemTemplate ListItemTemplate @endlink
+- @link GridItemTemplate GridItemTemplate @endlink
+
+@subsection common Common Controls
+
+- @link ToolActions  ToolActions @endlink
+- @link ContextualMenu ContextualMenu @endlink
+- @link Holder Holder @endlink
+- @link PopupPage PopupPage @endlink
+- @link TextFieldPopup TextFieldPopup @endlink
+- @link InfoDialog InfoDialog @endlink
+- @link MenuItemActionRow MenuItemActionRow @endlink
+
+
+@subsection usage Usage
+The simplest and recommended way to use MauiKit is to just use the packages provided by your Linux distribution, or build it as a module and deploy it together with the main application.
+
+Once MauiKit has been installed you can start using it in your QML files. Checkout the ApplicationWindow for a quick example.
+
+@subsection examples Examples
+
+@subsection android Android
+
+@section notes Notes
+
+@subsection contributing Contributing
+
+If you find any syntax errors, missing documentation, or not working code snippets or examples, please consider reporting the issue at 
+<a href="https://invent.kde.org/maui/mauikit/-/issues">MauiKit</a> issues page, with the **documentation** tag.
+
+If you want to contribute with the documentation efforts, you can contact the Maui Project at Telegram [at]mauiproject.
+
+@authors
+Camilo Higuita \<milo.h@aol.com.com\><br>
+
+@maintainers
+Camilo Higuita \<milo.h@aol.com.com\><br>
+
+@licenses
+@lgpl
+*/
+
+// DOXYGEN_SET_RECURSIVE = YES
+// DOXYGEN_SET_EXCLUDE_PATTERNS += *_p.h */private/* */examples/* */doc/* */styles/*
+// DOXYGEN_SET_PROJECT_NAME = MauiKit
+// vim:ts=4:sw=4:expandtab:filetype=doxygen

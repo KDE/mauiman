@@ -9,26 +9,53 @@
 class QDBusInterface;
 #endif
 
-/**
- * @brief The BackgroundManager class
- * Helpfull for third parties to connect to property cahnges form the Background module setting changes.
- */
+
 namespace MauiMan
 {
 class SettingsStore;
 
+/**
+ * @brief The BackgroundManager class
+ * Helpfull for third parties to connect to property cahnges from the Background module setting changes.
+ */
 class MAUIMAN_EXPORT BackgroundManager : public QObject
 {
     Q_OBJECT
+    /**
+     *
+     * /
     Q_PROPERTY(QString wallpaperSource READ wallpaperSource WRITE setWallpaperSource NOTIFY wallpaperSourceChanged)
+
+    /**
+     *
+     * /
     Q_PROPERTY(bool dimWallpaper READ dimWallpaper WRITE setDimWallpaper NOTIFY dimWallpaperChanged)
+
+    /**
+     *
+     * /
     Q_PROPERTY(bool fitWallpaper READ fitWallpaper WRITE setFitWallpaper NOTIFY fitWallpaperChanged)
+
+    /**
+     *
+     * /
     Q_PROPERTY(QString solidColor READ solidColor WRITE setSolidColor NOTIFY solidColorChanged)
+
+    /**
+     *
+     * /
     Q_PROPERTY(bool showWallpaper READ showWallpaper WRITE setShowWallpaper NOTIFY showWallpaperChanged)
 
+
+    /**
+     *
+     * /
     Q_PROPERTY(QString wallpaperSourceDir READ wallpaperSourceDir WRITE setWallpaperSourceDir NOTIFY wallpaperSourceDirChanged)
 
 public:
+/**
+     * @brief The DefaultValues class
+     */
     struct DefaultValues
     {
         static inline const QString wallpaperSource = QStringLiteral("qrc:/wallpapers/maui_shell_dev_bg.png");
@@ -37,7 +64,7 @@ public:
         static inline const QString solidColor = QStringLiteral("#333");
         static inline const bool showWallpaper = true;
         static inline const QString wallpaperSourceDir = QStringLiteral("file:///usr/share/wallpapers/Cask");
-    } ;
+    };
 
     explicit BackgroundManager(QObject * parent = nullptr);
 
@@ -73,15 +100,10 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     void wallpaperSourceChanged(QString wallpaperSource);
-
     void dimWallpaperChanged(bool dimWallpaper);
-
     void fitWallpaperChanged(bool fitWallpaper);
-
     void solidColorChanged(QString solidColor);
-
     void showWallpaperChanged(bool showWallpaper);
-
     void wallpaperSourceDirChanged(QString wallpaperSourceDir);
 
 private:
