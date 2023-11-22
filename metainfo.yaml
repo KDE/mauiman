@@ -1,6 +1,6 @@
 maintainer: milohr
 fancyname: MauiMan
-description: Maui Project preferences manager
+description: Maui preferences manager
 platforms:
     - name: Linux
     - name: FreeBSD

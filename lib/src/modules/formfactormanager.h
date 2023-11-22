@@ -20,25 +20,71 @@ namespace MauiMan
 {
     class SettingsStore;
 
+    /**
+     * @brief The FormFactoInfo class contains information about the input devices available in the current system.
+     */
     class MAUIMAN_EXPORT FormFactorInfo : public QObject
     {
         Q_OBJECT
+        /**
+         * The best fitted mode according to the available input devices and the screen size.
+         */
         Q_PROPERTY(uint bestMode READ bestMode NOTIFY bestModeChanged FINAL)
+        
+        /**
+         * The system preferred mode. This is picked up from the env var `QT_QUICK_CONTROLS_MOBILE`
+         */
         Q_PROPERTY(uint defaultMode READ defaultMode CONSTANT FINAL)
 
+        /**
+         * Whether the device has a physical keyboard.
+         */
         Q_PROPERTY(bool hasKeyboard READ hasKeyboard NOTIFY hasKeyboardChanged FINAL)
+        
+        /**
+         * Whether the device has a touch screen.
+         */
         Q_PROPERTY(bool hasTouchscreen READ hasTouchscreen NOTIFY hasTouchscreenChanged FINAL)
+        
+        /**
+         * Whether the device has a physical mouse.
+         */
         Q_PROPERTY(bool hasMouse READ hasMouse  NOTIFY hasMouseChanged FINAL)
+        
+        /**
+         * Whether the device has a trackpad or touchpad 
+         */
         Q_PROPERTY(bool hasTouchpad READ hasTouchpad NOTIFY hasTouchpadChanged)
 
+        /**
+         * The size of the main screen.
+         */
         Q_PROPERTY(QRect screenSize READ screenSize NOTIFY screenSizeChanged)
+        
+        /**
+         * The current orientation of the main screen.
+         */
         Q_PROPERTY(Qt::ScreenOrientation screenOrientation READ screenOrientation NOTIFY screenOrientationChanged)
 
     public:
+        /**
+         * @brief The possible form factor modes the system can have based on the device capabilities.
+         */
         enum Mode
         {
+            /**
+             * Is a desktop when the screen size if relative big, has a physical keyboard, mouse.
+             */
             Desktop = 0,
+            
+            /**
+             * Is a tablet when the devices has a relative big screen size, and it is a touch screen. There is not mouse present.
+             */
             Tablet,
+            
+            /**
+             * Is a mobile phone, the the screen size is small, has a touch screen and not peripheral input devices such as a a keyboard or mouse.
+             */
             Phone
         };
 
@@ -122,9 +168,18 @@ namespace MauiMan
         void screenOrientationChanged(Qt::ScreenOrientation screenOrientation);
     };
 
+    /**
+     * @brief The FormFactorManager class exposes all the system form factor properties.
+     */
     class MAUIMAN_EXPORT FormFactorManager : public FormFactorInfo
     {
         Q_OBJECT
+        /**
+         * The preferred mode to display information. The possible values are:
+         * - 0 Desktop 
+         * - 1 Tablet
+         * - 2 Phone
+         */
         Q_PROPERTY(uint preferredMode READ preferredMode WRITE setPreferredMode NOTIFY preferredModeChanged FINAL)
 
     public:

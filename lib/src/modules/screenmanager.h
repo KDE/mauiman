@@ -10,13 +10,30 @@ namespace MauiMan
 {
 class SettingsStore;
 
+/**
+ * The ScreenManager class exposes all the system screen properties.
+ */
 class MAUIMAN_EXPORT ScreenManager : public QObject
 {
     Q_OBJECT
+    /**
+     * The preferred scale factor for the main screen.
+     */
     Q_PROPERTY(double scaleFactor READ scaleFactor WRITE setScaleFactor NOTIFY scaleFactorChanged)
+    
+    /**
+     * The preferred orientation of the main screen.
+     * Possible values are:
+     * - 0 Horizontal - Landscape
+     * - 1 Vertical - Portrait
+     */
     Q_PROPERTY(uint orientation READ orientation WRITE setOrientation NOTIFY orientationChanged)
 
 public:
+    
+    /**
+     * @brief The Screen module default values.
+     */
     struct DefaultValues
     {
         static inline const double scaleFactor = 1;
