@@ -10,13 +10,29 @@ namespace MauiMan
 class SettingsStore;
 
 /**
- * @brief The AccessibilityManager class
+ * @brief The AccessibilityManager class contains properties for changing visual and hearing clues.
  */
 class MAUIMAN_EXPORT AccessibilityManager : public QObject
 {
     Q_OBJECT
+    /**
+     * Whether to open items with a single click.
+     * By default this is set to `true` for mobile, and `false` for desktop.
+     */
     Q_PROPERTY(bool singleClick READ singleClick WRITE setSingleClick NOTIFY singleClickChanged)
+    
+    /**
+     * The policy for showing the scroll bars. The possible values are:
+     * - 0 Always visible
+     * - 1 Visible when needed
+     * - 2 Auto Hide
+     * - 3 Always hidden
+     */
     Q_PROPERTY(uint scrollBarPolicy READ scrollBarPolicy WRITE setScrollBarPolicy NOTIFY scrollBarPolicyChanged)
+    
+    /**
+     * Whether the user prefers the application to emit notification or alarm sounds.
+     */
     Q_PROPERTY(bool playSounds READ playSounds WRITE setPlaySounds NOTIFY playSoundsChanged)
 
 public:
@@ -65,7 +81,6 @@ private:
     void sync(const QString &key, const QVariant &value);
     void setConnections();
     void loadSettings();
-
 
 Q_SIGNALS:
     void singleClickChanged(bool);

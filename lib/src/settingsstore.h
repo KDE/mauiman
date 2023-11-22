@@ -6,15 +6,12 @@
 
 class QSettings;
 
-/**
- *
- */
 namespace MauiMan
 {
 
 /**
  * @brief The SettingsStore class
- * Allows to store and read settings from MauiMan.
+ * Allows to store and read settings for MauiMan from the local conf file.
  */
 class MAUIMAN_EXPORT SettingsStore : public QObject
 {
@@ -29,28 +26,28 @@ public:
     ~SettingsStore();
 
     /**
-     * @brief load
-     * @param key
-     * @param defaultValue
+     * @brief Load the value of a conf entry, with a possible default value
+     * @param key the key name of the value
+     * @param defaultValue the default fallback value in case the value with the given key does not exists
      * @return
      */
     QVariant load(const QString &key, const QVariant &defaultValue);
 
     /**
-     * @brief save
-     * @param key
-     * @param value
+     * @brief Save a conf value entry to the local file
+     * @param key the key name of the value
+     * @param value the entry value
      */
     void save(const QString &key, const QVariant &value);
 
     /**
-     * @brief beginModule
-     * @param module
+     * @brief Set up the module section to write to
+     * @param module the module name
      */
     void beginModule(const QString &module);
 
     /**
-     * @brief endModule
+     * @brief Finish writing or reading from a module section.
      */
     void endModule();
 

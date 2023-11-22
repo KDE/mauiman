@@ -10,7 +10,7 @@ class MAUIMAN_EXPORT MauiManUtils : public QObject
 {
     Q_OBJECT
     /**
-     * Whether the server application is running and listening and broadcasting events.
+     * Whether the server application is running, listening and broadcasting events.
      */
     Q_PROPERTY(bool serverRunning READ serverRunning NOTIFY serverRunningChanged)
 
@@ -20,36 +20,36 @@ public:
     bool serverRunning() const;
 
     /**
-     * @brief startServer
+     * @brief Invoke the `MauiManServer4` application to be launched.
      */
     static void startServer();
 
     /**
-     * @brief invokeManager
-     * @param module
+     * @brief Invoke the `MauiSettings` application to be launched at a given module name
+     * @param module the name of the module to be launched
      */
     static void invokeManager(const QString &module);
 
     /**
-     * @brief currentDesktopSession
-     * @return
+     * @brief The name of the current desktop environment. Possible values are KDE, GNOME, or CASK
+     * @return the name of the desktop environment as parsed form the env var `XDG_CURRENT_DESKTOP`
      */
     static QString currentDesktopSession();
 
     /**
-     * @brief isMauiSession
+     * @brief Whether the current desktop environment session is running Maui Shell
      * @return
      */
     static bool isMauiSession();
 
     /**
-     * @brief isPlasmaSession
+     * @brief Whether the current desktop environment session is Plasma from KDE
      * @return
      */
     static bool isPlasmaSession();
 
     /**
-     * @brief isGnomeSession
+     * @brief Whether the current desktop environment is GNOME Shell
      * @return
      */
     static bool isGnomeSession();

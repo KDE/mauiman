@@ -16,7 +16,7 @@ class SettingsStore;
 
 /**
  * @brief The BackgroundManager class
- * Helpfull for third parties to connect to property cahnges from the Background module setting changes.
+ * Helpfull for third parties to connect to property changes from the Background module setting changes.
  */
 class MAUIMAN_EXPORT BackgroundManager : public QObject
 {
