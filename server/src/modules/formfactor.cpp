@@ -35,6 +35,7 @@ FormFactor::FormFactor(QObject *parent) : QObject(parent)
     MauiMan::SettingsStore settings;
     settings.beginModule(QStringLiteral("FormFactor"));
     m_preferredMode = settings.load(QStringLiteral("PreferredMode"), m_preferredMode).toUInt();
+    m_forceTouchScreen = settings.load(QStringLiteral("ForceTouchScreen"), m_forceTouchScreen).toBool();
     settings.endModule();
 }
 
@@ -132,5 +133,16 @@ bool FormFactor::hasTouchScreen() const
     return m_hasTouchscreen;
 }
 
+bool FormFactor::forceTouchScreen() const
+{
+    return m_forceTouchScreen;
+}
 
+void FormFactor::setForceTouchScreen(bool newForceTouchScreen)
+{
+    if (m_forceTouchScreen == newForceTouchScreen)
+        return;
 
+    m_forceTouchScreen = newForceTouchScreen;
+    Q_EMIT forceTouchScreenChanged(m_forceTouchScreen);
+}

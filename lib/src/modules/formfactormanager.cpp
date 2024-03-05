@@ -92,6 +92,7 @@ void FormFactorManager::setConnections()
     if (m_interface->isValid())
     {
         connect(m_interface, SIGNAL(preferredModeChanged(uint)), this, SLOT(onPreferredModeChanged(uint)));
+        connect(m_interface, SIGNAL(forceTouchScreenChanged(bool)), this, SLOT(onForceTouchScreenChanged(bool)));
     }
     #endif
 }
@@ -104,11 +105,13 @@ void FormFactorManager::loadSettings()
     if(m_interface && m_interface->isValid())
     {
         m_preferredMode = m_interface->property("preferredMode").toUInt();
+        m_forceTouchScreen = m_interface->property("forceTouchScreen").toBool();
         return;
     }
     #endif
 
     m_preferredMode = m_settings->load(QStringLiteral("PreferredMode"), m_preferredMode).toUInt();
+    m_forceTouchScreen = m_settings->load(QStringLiteral("ForceTouchScreen"), m_forceTouchScreen).toBool();
 }
 
 FormFactorManager::FormFactorManager(QObject *parent) : MauiMan::FormFactorInfo(parent)
@@ -185,6 +188,24 @@ void FormFactorManager::setPreferredMode(uint preferredMode)
     Q_EMIT preferredModeChanged(m_preferredMode);
 }
 
+bool FormFactorManager::forceTouchScreen() const
+{
+    return m_forceTouchScreen;
+}
+
+void FormFactorManager::setForceTouchScreen(bool newForceTouchScreen)
+{
+    if (m_forceTouchScreen == newForceTouchScreen)
+        return;
+
+    m_forceTouchScreen = newForceTouchScreen;
+
+    sync(QStringLiteral("forceTouchScreen"), m_forceTouchScreen);
+    m_settings->save(QStringLiteral("ForceTouchScreen"), m_forceTouchScreen);
+
+    Q_EMIT forceTouchScreenChanged(m_forceTouchScreen);
+}
+
 void FormFactorManager::onPreferredModeChanged(uint preferredMode)
 {
     if (m_preferredMode == preferredMode)
@@ -192,6 +213,15 @@ void FormFactorManager::onPreferredModeChanged(uint preferredMode)
 
     m_preferredMode = preferredMode;
     Q_EMIT preferredModeChanged(m_preferredMode);
+}
+
+void FormFactorManager::onForceTouchScreenChanged(bool value)
+{
+    if (m_forceTouchScreen == value)
+        return;
+
+    m_forceTouchScreen = value;
+    Q_EMIT forceTouchScreenChanged(m_forceTouchScreen);
 }
 
 void FormFactorInfo::findBestMode()

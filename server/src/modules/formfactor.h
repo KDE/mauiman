@@ -15,7 +15,7 @@ class FormFactor : public QObject
     Q_PROPERTY(bool hasTouchscreen READ hasTouchscreen NOTIFY hasTouchscreenChanged)
     Q_PROPERTY(bool hasMouse READ hasMouse NOTIFY hasMouseChanged)
     Q_PROPERTY(bool hasTouchpad READ hasTouchpad NOTIFY hasTouchpadChanged)
-
+    Q_PROPERTY(bool forceTouchScreen READ forceTouchScreen WRITE setForceTouchScreen NOTIFY forceTouchScreenChanged)
 
 public:
     explicit FormFactor(QObject *parent = nullptr);
@@ -53,6 +53,10 @@ public:
     bool hasTouchpad() const;
 
     
+    bool forceTouchScreen() const;
+
+    void setForceTouchScreen(bool newForceTouchScreen);
+
 private Q_SLOTS:
     void setBestMode(uint bestMode);
     void setHasKeyboard(bool value);
@@ -78,6 +82,8 @@ private:
 
     bool hasTouchScreen() const;
 
+    bool m_forceTouchScreen = false;
+
 Q_SIGNALS:
     void preferredModeChanged(uint preferredMode);
     void bestModeChanged(uint bestMode);
@@ -86,5 +92,6 @@ Q_SIGNALS:
     void hasTouchscreenChanged(bool hasTouchscreen);
     void hasMouseChanged(bool hasMouse);
     void hasTouchpadChanged(bool hasTouchpad);
+    void forceTouchScreenChanged(bool forceTouchScreen);
 };
 

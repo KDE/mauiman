@@ -182,14 +182,24 @@ namespace MauiMan
          */
         Q_PROPERTY(uint preferredMode READ preferredMode WRITE setPreferredMode NOTIFY preferredModeChanged FINAL)
 
+        /**
+         * If a device is not detected to have a touch screen , and still it has it, this property can be used to force allow the touch screen interactions.
+         */
+        Q_PROPERTY(bool forceTouchScreen READ forceTouchScreen WRITE setForceTouchScreen NOTIFY forceTouchScreenChanged)
+
+
     public:
         explicit FormFactorManager(QObject *parent = nullptr);
 
         [[nodiscard]] uint preferredMode() const;
-        void setPreferredMode(uint preferredMode);
+        void setPreferredMode(uint preferredMode);        
+
+        [[nodiscard]] bool forceTouchScreen() const;
+        void setForceTouchScreen(bool newForceTouchScreen);
 
     private Q_SLOTS:
         void onPreferredModeChanged(uint preferredMode);
+        void onForceTouchScreenChanged(bool value);
 
     private:
         #if !defined Q_OS_ANDROID
@@ -199,6 +209,7 @@ namespace MauiMan
         FormFactorInfo *m_info;
 
         uint m_preferredMode;
+        bool m_forceTouchScreen = false;
 
         void sync(const QString &key, const QVariant &value);
         void setConnections();
@@ -206,6 +217,6 @@ namespace MauiMan
 
     Q_SIGNALS:
         void preferredModeChanged(uint preferredMode);
-
+        void forceTouchScreenChanged(bool forceTouchScreen);
     };
 }
