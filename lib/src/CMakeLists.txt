@@ -1,4 +1,3 @@
-
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
@@ -48,6 +47,11 @@ target_link_libraries(${PROJECT_NAME}${MAUI_MAJOR_VERSION}
     PRIVATE
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Gui)
+
+set_target_properties(${PROJECT_NAME}${MAUI_MAJOR_VERSION}
+    PROPERTIES
+    VERSION ${MAUIMAN_VERSION}
+    SOVERSION ${MAUI_MAJOR_VERSION})
 
 install(FILES
     ${mauiman_HDRS}
