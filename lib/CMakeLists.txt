@@ -37,15 +37,6 @@ find_package(Qt${QT_MAJOR_VERSION} ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COM
 
 if(UNIX AND NOT APPLE AND NOT ANDROID)
     find_package(Qt${QT_MAJOR_VERSION} ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS DBus)
-
-    if (QT_MAJOR_VERSION STREQUAL "5")
-        find_package(Qt5SystemInfo 5.4.0 REQUIRED)
-        set_package_properties(Qt5SystemInfo PROPERTIES
-            TYPE REQUIRED
-            DESCRIPTION "Qt Systems."
-            URL "https://github.com/qt/qtsystems"
-            PURPOSE "Qt5SystemInfo is needed to detect the system form factor based on the input methods.")
-    endif()
 endif()
 
 add_subdirectory(src)

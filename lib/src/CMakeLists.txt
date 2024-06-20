@@ -37,10 +37,6 @@ target_include_directories(${PROJECT_NAME}${MAUI_MAJOR_VERSION} PUBLIC "$<BUILD_
 
 if(UNIX AND NOT APPLE AND NOT ANDROID)
     target_link_libraries(${PROJECT_NAME}${MAUI_MAJOR_VERSION} PRIVATE Qt${QT_MAJOR_VERSION}::DBus)
-
-    if (QT_MAJOR_VERSION STREQUAL "5")
-        target_link_libraries(${PROJECT_NAME}${MAUI_MAJOR_VERSION} PRIVATE Qt5SystemInfo)
-    endif()
 endif()
 
 target_link_libraries(${PROJECT_NAME}${MAUI_MAJOR_VERSION}

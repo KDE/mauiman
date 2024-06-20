@@ -6,14 +6,7 @@
 
 #include "mauiman_export.h"
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#define QT5_BASE
-#include <QTouchDevice>
-class QInputInfoManager;
-#else
-#define QT6_BASE
 class QInputDevice;
-#endif
 
 class QDBusInterface;
 namespace MauiMan
@@ -148,11 +141,7 @@ namespace MauiMan
         QRect m_screenSize;
         Qt::ScreenOrientation m_screenOrientation;
 
-        #ifdef QT5_BASE
-        void checkInputs(const QInputInfoManager *inputManager);
-        #elif defined QT6_BASE
         void checkInputs(const QList<const QInputDevice *> &devices);
-        #endif
         void findBestMode();
 
     Q_SIGNALS:
