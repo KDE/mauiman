@@ -42,6 +42,9 @@ void FormFactorManager::sync(const QString &key, const QVariant &value)
     {
         m_interface->call(key, value);
     }
+#else
+    Q_UNUSED(key)
+    Q_UNUSED(value)
 #endif
 }
 

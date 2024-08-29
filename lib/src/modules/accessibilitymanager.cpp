@@ -1,6 +1,5 @@
 #include "accessibilitymanager.h"
 #include "settingsstore.h"
-#include "mauimanutils.h"
 
 #include <QDebug>
 
@@ -86,6 +85,9 @@ void AccessibilityManager::sync(const QString &key, const QVariant &value)
     {
         m_interface->call(key, value);
     }
+#else
+    Q_UNUSED(key)
+    Q_UNUSED(value)
 #endif
 }
 
