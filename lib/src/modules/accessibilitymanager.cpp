@@ -1,5 +1,6 @@
 #include "accessibilitymanager.h"
 #include "settingsstore.h"
+#include "mauimanutils.h"
 
 #include <QDebug>
 
