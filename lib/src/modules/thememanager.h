@@ -4,12 +4,10 @@
 #include <QString>
 #include <QFont>
 
-#if !defined Q_OS_ANDROID
-#include <QDBusInterface>
-#endif
-
 #include "mauiman_export.h"
 #include "mauimanutils.h"
+
+class QDBusInterface;
 
 /**
  * @brief The MauiMan name-space contains all of the available modules for configuring the Maui Applications and Shell properties.

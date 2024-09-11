@@ -5,11 +5,7 @@
 
 #include "mauiman_export.h"
 
-#if !defined Q_OS_ANDROID
 class QDBusInterface;
-#endif
-
-
 namespace MauiMan
 {
 class SettingsStore;
