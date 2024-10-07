@@ -270,8 +270,13 @@ Qt::ScreenOrientation FormFactorInfo::screenOrientation()
 
 void FormFactorInfo::checkInputs(const QList<const QInputDevice *> &devices)
 {
+
+for(const auto &dev : devices)
+    qDebug() << "DEVICE:::" << dev->type();
+
     auto hasType = [devices](QInputDevice::DeviceType type) -> bool
     {
+        qDebug() << "CHECXKING IF DEVICE HAS TYPE" << type;
         auto res= std::find_if(devices.constBegin(), devices.constEnd(), [type](const QInputDevice *device)
         {
             return device->type() == type;
@@ -280,10 +285,13 @@ void FormFactorInfo::checkInputs(const QList<const QInputDevice *> &devices)
         return res != std::end(devices);
     };
 
-    m_hasKeyboard = hasType(QInputDevice::DeviceType::Keyboard);
+    m_hasKeyboard = QInputDevice::primaryKeyboard() ? true :  false;
     m_hasMouse =  hasType(QInputDevice::DeviceType::Mouse);
     m_hasTouchscreen =  hasType(QInputDevice::DeviceType::TouchScreen);
     m_hasTouchpad =  hasType(QInputDevice::DeviceType::TouchPad);
+
+    qDebug() << "CHECXKING IF DEVICE HAS TYPE" << m_hasKeyboard;
+
 
     Q_EMIT hasKeyboardChanged(m_hasKeyboard);
     Q_EMIT hasMouseChanged(m_hasMouse);
@@ -293,11 +301,11 @@ void FormFactorInfo::checkInputs(const QList<const QInputDevice *> &devices)
 
 FormFactorInfo::FormFactorInfo(QObject *parent) : QObject(parent)
 {
-    qDebug( " INIT FORMFACTOR INFO");
+    qDebug( "INIT FORMFACTOR INFO");
 
 #if !defined Q_OS_ANDROID
     checkInputs(QInputDevice::devices());
-
+qDebug() << "HAS KEYBOARD?" << QInputDevice::primaryKeyboard();
     findBestMode();
 #endif
 
