@@ -13,7 +13,7 @@ foreach(PKG IN LISTS MauiMan4_FIND_COMPONENTS)
         set_package_properties(MauiMan4${PKG} PROPERTIES TYPE OPTIONAL)
     endif()
 
-    set(MauiMan46_${PKG}_FOUND ${MauiMan4${PKG}_FOUND})
+    set(MauiMan4_${PKG}_FOUND ${MauiMan4${PKG}_FOUND})
 endforeach()
 
 include("${CMAKE_CURRENT_LIST_DIR}/MauiMan4Targets.cmake")
