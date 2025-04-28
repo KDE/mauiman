@@ -62,6 +62,10 @@
 <arg name="scheme" type="s" direction="in"/>
 </method>
 
+<method name="allowCustomStyling">
+    <arg name="allow" type="b" direction="in"/>
+</method>
+
 <property name="accentColor" type="s" access="read"/>
 <property name="styleType" type="i" access="read"/>
 <property name="iconTheme" type="s" access="read"/>
@@ -77,6 +81,7 @@
 <property name="smallFont" type="s" access="read"/>
 <property name="monospacedFont" type="s" access="read"/>
 <property name="customColorScheme" type="s" access="read"/>
+<property name="allowCustomStyling" type="b" access="read"/>
 
 <signal name="accentColorChanged">
 <arg type="s"/>
@@ -122,6 +127,9 @@
 </signal>
 <signal name="customColorSchemeChanged">
 <arg type="s"/>
+</signal>
+<signal name="allowCustomStylingChanged">
+    <arg type="b"/>
 </signal>
 </interface>
 </node>
