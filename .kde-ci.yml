@@ -5,4 +5,4 @@ Dependencies:
 - 'on': ['Linux/Qt6']
 
   'require':
-    'frameworks/extra-cmake-modules': '@latest'
+    'frameworks/extra-cmake-modules': '@latest-kf6'
