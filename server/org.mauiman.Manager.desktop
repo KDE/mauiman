@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=MauiManServer
+Name[ar]=خادم مدير ماوي
 Name[ca]=MauiManServer
 Name[ca@valencia]=MauiManServer
 Name[cs]=MauiManServer
@@ -34,6 +35,7 @@ Name[zh_TW]=MauiManServer
 Exec=MauiManServer
 Icon=settings-configure
 Comment=MauiManServer autostart at login
+Comment[ar]=التشغيل الآلي لخادم مدير ماوي عند الولوج
 Comment[ca]=Inici automàtic del MauiManServer en iniciar la sessió
 Comment[ca@valencia]=Inici automàtic de MauiManServer en iniciar la sessió
 Comment[cs]=Automaticky spustit MauiManServer při přihlášení
