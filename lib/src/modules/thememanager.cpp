@@ -37,9 +37,7 @@ ThemeManager::ThemeManager(QObject *parent) : QObject(parent)
 #endif
 
     loadSettings();
-
 }
-
 
 void ThemeManager::sync(const QString &key, const QVariant &value)
 {
@@ -546,6 +544,22 @@ void ThemeManager::setCustomColorScheme(const QString &customColorScheme)
     m_settings->save(QStringLiteral("CustomColorScheme"), m_customColorScheme);
     sync(QStringLiteral("setCustomColorScheme"), m_customColorScheme);
     Q_EMIT customColorSchemeChanged(m_customColorScheme);
+}
+
+bool ThemeManager::allowCustomStyling() const
+{
+    return m_allowCustomStyling;
+}
+
+void ThemeManager::setAllowCustomStyling(bool value)
+{
+    if (m_allowCustomStyling == value)
+        return;
+
+    m_allowCustomStyling = value;
+    m_settings->save(QStringLiteral("AllowCustomStyling"), m_allowCustomStyling);
+    sync(QStringLiteral("setAllowCustomStyling"), m_allowCustomStyling);
+    Q_EMIT allowCustomStylingChanged(m_allowCustomStyling);
 }
 
 void MauiMan::ThemeManager::resetIconSize()

@@ -289,7 +289,7 @@ namespace MauiMan
         void smallFontChanged(QString smallFont);
         void monospacedFontChanged(QString monospacedFont);
         void customColorSchemeChanged(QString customColorScheme);
-        void allowCustomStyling(bool customStyling);
+        void allowCustomStylingChanged(bool customStyling);
 
     private:
         #if !defined Q_OS_ANDROID
