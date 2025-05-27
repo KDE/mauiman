@@ -62,7 +62,7 @@
 <arg name="scheme" type="s" direction="in"/>
 </method>
 
-<method name="allowCustomStyling">
+<method name="setAllowCustomStyling">
     <arg name="allow" type="b" direction="in"/>
 </method>
 

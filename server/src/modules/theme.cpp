@@ -37,6 +37,7 @@ Theme::Theme(QObject *parent) : QObject(parent)
     m_smallFont = settings.load(QStringLiteral("SmallFont"), m_smallFont).toString();
     m_monospacedFont = settings.load(QStringLiteral("MonospacedFont"), m_monospacedFont).toString();
     m_customColorScheme = settings.load(QStringLiteral("CustomColorScheme"), m_customColorScheme).toString();
+    m_allowCustomStyling = settings.load(QStringLiteral("AllowCustomStyling"), m_allowCustomStyling).toBool();
 
     settings.endModule();
 }
@@ -243,4 +244,18 @@ void Theme::setMarginSize(uint marginSize)
 
     m_marginSize = marginSize;
     Q_EMIT marginSizeChanged(m_marginSize);
+}
+
+bool Theme::allowCustomStyling() const
+{
+    return m_allowCustomStyling;
+}
+
+void Theme::setAllowCustomStyling(bool newAllowCustomStyling)
+{
+    if (m_allowCustomStyling == newAllowCustomStyling)
+        return;
+
+    m_allowCustomStyling = newAllowCustomStyling;
+    Q_EMIT allowCustomStylingChanged(m_allowCustomStyling);
 }
