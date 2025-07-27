@@ -68,8 +68,8 @@ target_wrapper.*
 *.qmlproject.user
 *.qmlproject.user.*
 
-# QtCreator CMake
 CMakeLists.txt.user*
+/compile_commands.json
 
 # Bazaar files
 .bzr
